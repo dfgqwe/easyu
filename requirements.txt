@@ -1,3 +1,2 @@
 pyperclip
-sudo apt-get install xsel
-
+subprocess
