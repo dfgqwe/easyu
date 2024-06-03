@@ -1,5 +1,5 @@
 import streamlit as st
-import subprocess
+import pyperclip
 import re
 
 # 포맷 데이터 포함
@@ -103,24 +103,40 @@ def main():
         "기타(간단히 내용입력)"
     ]
     selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
-     # "전기작업 확인(전화)"가 선택된 경우 <출동예방>에도 추가
-    if "전기작업 확인(전화)" in selected_actions:
-        results.append("전기작업 확인(전화)")
+
+    # [현장TM] 선택 시 입력란 추가
+    현장TM_내용 = ""
+    if "[현장TM]" in selected_locations:
+        현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+        if "[현장TM]" in 현장TM_내용:
+            formatted_TM = 현장TM_내용  # [현장TM]이 포함되어 있으면 그대로 사용
+        else:
+            formatted_TM = f"[현장TM] {현장TM_내용}"  # 포함되어 있지 않으면 [현장TM] 추가
+        selected_locations.remove("[현장TM]")
+        formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+    else:
+        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
     
-    if "포장" in user_input:
-        results.append("[포장요청]")
+    if selected_locations or "[현장TM]" in locals():
+        results.append(f"<현장> {formatted_locations} 수정요청")
+
+    출동예방_actions = []
+    # [현장TM] 내용에 특정 키워드가 포함되거나 숫자나 한국 전화번호 형태가 있는 경우 <출동예방>에도 추가
+    if 현장TM_내용 and (any(keyword in 현장TM_내용 for keyword in ["연락", "전화", "건물주", "확인", "통화"]) or re.search(r"\d", 현장TM_내용) or re.search(r"\d{3}-\d{4}-\d{4}", 현장TM_내용)):
+        출동예방_actions.append(formatted_TM)
+
+    # "전기작업 확인(전화)"가 선택된 경우 <출동예방>에도 추가
+    if "전기작업 확인(전화)" in selected_actions:
+        출동예방_actions.append("전기작업 확인(전화)")
+    
+    if 출동예방_actions:
+        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
     copy_activated = st.checkbox("복사 기능 활성화", key="copy_activated")
     if st.button("출력"):
         output_text = "\n".join(results)
         if copy_activated:
-            # 클립보드에 복사
-            try:
-                subprocess.run(['xclip', '-selection', 'clipboard'], input=output_text.encode('utf-8'), check=True)
-            except subprocess.CalledProcessError as e:
-                st.error(f"클립보드 복사 오류: {e}")
-            else:
-                st.success("클립보드에 복사되었습니다.")
+            pyperclip.copy(output_text)
         st.text(output_text)
 
 if __name__ == "__main__":
