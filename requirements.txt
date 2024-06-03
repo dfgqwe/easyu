@@ -1,3 +1,2 @@
 pyperclip
 re
-PyQt4
