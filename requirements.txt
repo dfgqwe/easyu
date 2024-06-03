@@ -1,2 +1,2 @@
 pyperclip
-PyQt4
+gtk
