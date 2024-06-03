@@ -1,3 +1,4 @@
 pyperclip
+re
 gtk
 PyQt4
