@@ -1,4 +1,3 @@
 pyperclip
---upgrade pyperclip
 pygobject
---upgrade pygobject
+
