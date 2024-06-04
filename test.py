@@ -83,7 +83,7 @@ def get_format(text):
     return None
 
 def main():
-    st.title("회복 문구")
+    st.title("MOSS 회복 문구")
 
     # 초기값 설정
     if "user_input" not in st.session_state:
