@@ -12,6 +12,7 @@ formats = {
     "출동 중 자동복구": "[사설정전복구]",
     "출동중자동복구": "[사설정전복구]",
     "자동": "[사설정전복구]",
+    "한전": "[한전정전복구]",
     "차단기 on": "[사설차단기복구]",
     "trip": "[사설차단기복구]",
     "TRIP": "[사설차단기복구]",
@@ -37,9 +38,6 @@ formats = {
     "점검": "[고객측작업]",
     "검사": "[고객측작업]",
     "공사": "[고객측작업]",
-    "한전": "[한전정전복구]",
-    "한전 작업": "[한전정전복구]",
-    "한전 조치": "[한전정전복구]",
     "장비철거": "[장비철거]",
     "타사전환": "[타사전환]",
     "감쇄기": "[광커넥터복구]", 
@@ -53,7 +51,7 @@ formats = {
     "장비교체": "[장비교체]",
     "장비 대개체": "[장비교체]",
     "대개체": "[장비교체]",
-    "교체": "[장비교체]",
+    "장교체": "[장비교체]",
     "리셋": "[장비리셋]",
     "익일": "[기타]",
     "담당조": "[기타]",
@@ -124,7 +122,12 @@ B_S_head_formats = {
 
 def get_format(text):
     matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
-    return matched_formats[-1] if matched_formats else None
+    if "[기타]" in matched_formats or "[폐문]" in matched_formats:
+        return matched_formats[-1]
+    else:
+        selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
+        return selected_formats[-1] if selected_formats else None
+
 
 def main():
     st.title("MOSS 회복 문구")
