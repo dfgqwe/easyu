@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 import pyperclip
 import re
 
@@ -130,6 +131,11 @@ def get_format(text):
 
 
 def main():
+    df = pd.read_csv('head.csv')
+    df = df.reset_index(drop=True)
+    with st.expander('MOSS 회복 항목 표준') :
+        st.dataframe(df)
+
     st.title("MOSS 회복 문구")
 
     # 초기값 설정
