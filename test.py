@@ -220,7 +220,8 @@ def main():
 
     # "전기작업 확인(전화)"가 선택된 경우 <출동예방>에도 추가
     if "전기작업 확인(전화)" in selected_actions:
-        출동예방_actions.append("전기작업 확인(전화)")
+        출동예방_actions.append("[NOC]전기작업 확인(전화)")
+
     
     if 출동예방_actions:
         results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
