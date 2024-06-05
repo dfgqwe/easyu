@@ -125,6 +125,8 @@ def get_format(text):
     return None
 
 def main():
+    
+
     st.title("MOSS 회복 문구")
 
     # 초기값 설정
@@ -196,15 +198,13 @@ def main():
     if "[현장TM]" in selected_locations:
         현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
         현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
-
-        # 현장TM_내용에 [현장TM]와 [TM활동]이 모두 포함된 경우 [현장TM]을 [TM활동]으로 대체
-        if "[현장TM]" in 현장TM_내용 and "[TM활동]" in 현장TM_내용:
-            formatted_TM = re.sub(r'\[현장TM\]', '[TM활동]', 현장TM_내용)
+        if "[현장TM]" in 현장TM_내용:
+            formatted_TM = 현장TM_내용  # [현장TM]이 포함되어 있으면 그대로 사용
         else:
-            formatted_TM = f"[현장TM] {현장TM_내용}"
-
+            formatted_TM = f"[현장TM] {현장TM_내용}"  # 포함되어 있지 않으면 [현장TM] 추가
+        selected_locations.remove("[현장TM]")
         if selected_locations:
-            formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations if location != "[현장TM]"]) + " 수정요청"
+            formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations]) + " 수정요청"
         else:
             formatted_locations = f"{formatted_TM}"
     else:
@@ -230,7 +230,7 @@ def main():
 
     copy_activated = False
     if st.button("출력"):
-        output_text = "\n":join(results)
+        output_text = "\n".join(results)
         if copy_activated:
             pyperclip.copy(output_text)
         st.text(output_text)
