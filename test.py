@@ -212,7 +212,7 @@ def main():
 
     출동예방_actions = []
     # [현장TM] 내용에 특정 키워드가 포함되거나 숫자나 한국 전화번호 형태가 있는 경우 <출동예방>에도 추가
-    if 현장TM_내용 and (any(keyword in 현장TM_내용 for keyword in ["연락", "전화", "건물주", "통화"]) or re.search(r"\d", 현장TM_내용) or re.search(r"\d{3}-\d{4}-\d{4}", 현장TM_내용)):
+    if 현장TM_내용 and (any(keyword in 현장TM_내용 for keyword in ["연락", "전화", "건물주","확인" ,"통화"]) or re.search(r"\d", 현장TM_내용) or re.search(r"\d{3}-\d{4}-\d{4}", 현장TM_내용)):
         출동예방_actions.append(formatted_TM)
 
     # "전기작업 확인(전화)"가 선택된 경우 <출동예방>에도 추가
