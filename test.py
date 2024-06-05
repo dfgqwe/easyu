@@ -131,8 +131,7 @@ def get_format(text):
 
 
 def main():
-    df = pd.read_csv('head.csv')
-    df = df.reset_index(drop=True)
+    df = pd.read_csv('head.csv', index_col=0)
     with st.expander('MOSS 회복 항목 표준') :
         st.dataframe(df)
 
