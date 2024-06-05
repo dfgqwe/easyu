@@ -219,12 +219,11 @@ def main():
         출동예방_actions.append(formatted_TM)
 
     # "전기작업 확인(전화)"가 선택된 경우 <출동예방>에도 추가
-    if "전기작업 확인(전화)" in selected_actions:
+   if "전기작업 확인(전화)" in selected_actions:
         출동예방_actions.append("[NOC]전기작업 확인(전화)")
 
     if "출동보류" in selected_actions:
         출동예방_actions.append("[NOC]출동보류")
-
     
     if 출동예방_actions:
         results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
