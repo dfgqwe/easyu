@@ -197,6 +197,7 @@ def main():
     현장TM_내용 = ""
     if "[현장TM]" in selected_locations:
         현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+        현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
         if "[현장TM]" in 현장TM_내용:
             formatted_TM = 현장TM_내용  # [현장TM]이 포함되어 있으면 그대로 사용
         else:
@@ -214,7 +215,7 @@ def main():
 
     출동예방_actions = []
     # [현장TM] 내용에 특정 키워드가 포함되거나 숫자나 한국 전화번호 형태가 있는 경우 <출동예방>에도 추가
-    if 현장TM_내용 and (any(keyword in 현장TM_내용 for keyword in ["연락", "전화", "건물주","확인" ,"통화"]) or re.search(r"\d", 현장TM_내용) or re.search(r"\d{3}-\d{4}-\d{4}", 현장TM_내용)):
+    if 현장TM_내용 and 현장TM_출동예방:
         출동예방_actions.append(formatted_TM)
 
     # "전기작업 확인(전화)"가 선택된 경우 <출동예방>에도 추가
