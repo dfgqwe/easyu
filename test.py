@@ -1,6 +1,5 @@
 import streamlit as st
 import pyperclip
-import base64
 import re
 
 # 포맷 데이터 포함
@@ -127,8 +126,6 @@ def get_format(text):
     return None
 
 def main():
-    
-
     st.title("MOSS 회복 문구")
 
     # 초기값 설정
@@ -211,6 +208,8 @@ def main():
             formatted_locations = f"{formatted_TM}"
     else:
         formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+        if selected_locations:
+            formatted_locations += " 수정요청"
     
     if selected_locations or 현장TM_내용:
         results.append(f"<현장> {formatted_locations}")
