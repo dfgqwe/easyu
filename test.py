@@ -124,7 +124,11 @@ B_S_head_formats = {
 
 def get_format(text):
     matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
-    if "[기타]" in matched_formats or "[폐문]" in matched_formats:
+    if "[한전정전복구]" in matched_formats and ("[기타]" in matched_formats or "[폐문]" in matched_formats):
+        return "[폐문]" if "[폐문]" in matched_formats else "[기타]"
+    elif "[한전정전복구]" in matched_formats:
+        return "[한전정전복구]"
+    elif "[기타]" in matched_formats or "[폐문]" in matched_formats:
         return matched_formats[-1]
     else:
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
