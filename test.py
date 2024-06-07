@@ -142,7 +142,17 @@ def main():
     df = pd.read_csv('head.csv', index_col=0)
     with st.expander('MOSS 회복 항목 표준') :
         st.dataframe(df)
+        
+    df1 = pd.read_csv('bs_head.csv')
 
+    # 인덱스를 제거한 새로운 데이터프레임 생성
+    df1_reset = df1.reset_index(drop=True)
+
+# Streamlit 애플리케이션
+    with st.expander('MOSS BS 발행 HEAD'):
+        st.dataframe(df1_reset)
+    
+    
     st.title("MOSS 회복 문구")
 
     # 초기값 설정
