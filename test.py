@@ -134,6 +134,8 @@ def get_format(text):
         return "[폐문]" if "[폐문]" in matched_formats else "[기타]"
     elif "[한전정전복구]" in matched_formats:
         return "[한전정전복구]"
+    elif "[전원어댑터교체]" in matched_formats:
+        return "[전원어댑터교체]"
     elif "[기타]" in matched_formats or "[폐문]" in matched_formats:
         return matched_formats[-1]
     else:
