@@ -143,6 +143,17 @@ def get_format(text):
         return selected_formats[-1] if selected_formats else None
 
 
+
+
+def clear_tm_content(content):
+    keywords_to_remove = ["[현장TM]", "[TM활동]", "[TM 활동]", "[현장 TM]"]
+    for keyword in keywords_to_remove:
+        content = content.replace(keyword, "")
+    return content.strip()
+
+
+
+
 def main():
     df = pd.read_csv('head.csv', index_col=0)
     with st.expander('MOSS 회복 항목 표준') :
@@ -220,11 +231,9 @@ def main():
     if "[현장TM]" in selected_locations:
         현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
         현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
-        if "[TM활동]" in 현장TM_내용:
-            formatted_TM = 현장TM_내용.replace("[현장TM]", "[TM활동]")
-        else:
-            formatted_TM = f"[현장TM] {현장TM_내용}"
-        selected_locations.remove("[현장TM]")
+        cleaned_TM_내용 = clear_tm_content(현장TM_내용)
+        formatted_TM = f"[현장TM] {cleaned_TM_내용}" if cleaned_TM_내용 else "[현장TM]"
+        
         if selected_locations:
             formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations]) + " 수정요청"
         else:
