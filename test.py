@@ -234,7 +234,7 @@ def main():
         cleaned_TM_내용 = clear_tm_content(현장TM_내용)
         formatted_TM = f"[현장TM] {cleaned_TM_내용}" if cleaned_TM_내용 else "[현장TM]"
         
-         if selected_locations:
+        if selected_locations:
             formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations if location != "[현장TM]"]) + " 수정요청"
         else:
             formatted_locations = f"{formatted_TM}"
