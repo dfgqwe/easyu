@@ -142,17 +142,11 @@ def get_format(text):
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
         return selected_formats[-1] if selected_formats else None
 
-
-
-
 def clear_tm_content(content):
     keywords_to_remove = ["[현장TM]", "[TM활동]", "[TM 활동]", "[현장 TM]"]
     for keyword in keywords_to_remove:
         content = content.replace(keyword, "")
     return content.strip()
-
-
-
 
 def main():
     df = pd.read_csv('head.csv', index_col=0)
@@ -164,10 +158,9 @@ def main():
     # 인덱스를 제거한 새로운 데이터프레임 생성
     df1_reset = df1.reset_index(drop=True)
 
-# Streamlit 애플리케이션
+    # Streamlit 애플리케이션
     with st.expander('MOSS BS 발행 HEAD'):
         st.dataframe(df1_reset)
-    
     
     st.title("MOSS 회복 문구")
 
@@ -211,10 +204,15 @@ def main():
     results.append(user_input)
     results.append("수고하셨습니다")
 
+    출동예방_actions = []
     selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
     if selected_actions:
         formatted_actions = ", ".join(selected_actions)
         results.append(f"<선조치_NOC> {formatted_actions}")
+        if "전기작업 확인(전화)" in selected_actions:
+            출동예방_actions.append("[NOC]전기작업 확인(전화)")
+        if "출동보류" in selected_actions:
+            출동예방_actions.append("[NOC]출동보류")
 
     현장_options = [
         "[현장TM]",
@@ -234,7 +232,7 @@ def main():
         cleaned_TM_내용 = clear_tm_content(현장TM_내용)
         formatted_TM = f"[현장TM] {cleaned_TM_내용}" if cleaned_TM_내용 else "[현장TM]"
         
-        if selected_locations:
+        if len(selected_locations) > 1:  # selected_locations에 [현장TM] 이외의 항목이 포함된 경우에만 수정요청 추가
             formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations if location != "[현장TM]"]) + " 수정요청"
         else:
             formatted_locations = f"{formatted_TM}"
@@ -246,16 +244,11 @@ def main():
     if selected_locations or 현장TM_내용:
         results.append(f"<현장> {formatted_locations}")
 
-    출동예방_actions = []
     if 현장TM_내용 and 현장TM_출동예방:
         출동예방_actions.append(formatted_TM)
-    if "전기작업 확인(전화)" in selected_actions:
-        출동예방_actions.append("[NOC]전기작업 확인(전화)")
-    if "출동보류" in selected_actions:
-        출동예방_actions.append("[NOC]출동보류")
 
     if 출동예방_actions:
-        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
+        results.insert(2, f"<출동예방>{', '.join(출동예방_actions)}")
 
     copy_activated = False
     if st.button("출력"):
