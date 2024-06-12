@@ -143,6 +143,15 @@ def get_format(text):
     else:
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
         return selected_formats[-1] if selected_formats else None
+# Load the CSV file
+df = pd.read_csv('head.csv', index_col=0)
+
+# Sidebar for MOSS recovery items
+st.sidebar.title("Menu")
+
+# Expander in sidebar
+with st.sidebar.expander('MOSS 회복 항목 표준'):
+    st.dataframe(df)
 
 def clear_tm_content(content):
     keywords_to_remove = ["[현장TM]", "[TM활동]", "[TM 활동]", "[현장 TM]"]
@@ -151,9 +160,7 @@ def clear_tm_content(content):
     return content.strip()
 
 def main():
-    df = pd.read_csv('head.csv', index_col=0)
-    with st.expander('MOSS 회복 항목 표준') :
-        st.dataframe(df)
+
         
     df1 = pd.read_csv('bs_head.csv')
 
