@@ -273,6 +273,7 @@ def main():
     if st.button("입력란 초기화"):
         clear_text()
 
+    st.write("입력란 버튼 2번 눌러야 입력란 삭제되는 버그 수정중.../Worksync 프로토타입 제작...")
     st.title("Worksync 페이지 준비중...")
     
     # 데이터 파일 불러오기
