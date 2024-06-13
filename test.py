@@ -144,6 +144,29 @@ def get_format(text):
     else:
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
         return selected_formats[-1] if selected_formats else None
+
+
+def get_sidebar_state():
+    if "sidebar_expanded" not in st.session_state:
+        st.session_state.sidebar_expanded = False
+    return st.session_state.sidebar_expanded
+
+# Streamlit 애플리케이션
+st.sidebar.title('Menu')
+
+# 체크박스를 사용하여 사이드바의 확장 또는 축소 상태를 토글
+sidebar_expanded = st.sidebar.checkbox("Expand Sidebar", key="sidebar_expanded", value=get_sidebar_state())
+
+# 세션 상태를 업데이트하여 사이드바의 상태를 유지
+st.session_state.sidebar_expanded = sidebar_expanded
+
+
+def clear_tm_content(content):
+    keywords_to_remove = ["[현장TM]", "[TM활동]", "[TM 활동]", "[현장 TM]"]
+    for keyword in keywords_to_remove:
+        content = content.replace(keyword, "")
+    return content.strip()
+
 # Load the CSV file
 df = pd.read_csv('head.csv', index_col=0)
 
@@ -153,43 +176,6 @@ st.sidebar.title("Menu")
 # Expander in sidebar
 with st.sidebar.expander('MOSS 회복 항목 표준'):
     st.dataframe(df)
-
-
-# 세션 상태에서 사이드바의 상태를 가져오는 함수
-def get_sidebar_state():
-    if "sidebar_expanded" not in st.session_state:
-        st.session_state.sidebar_expanded = False
-    return st.session_state.sidebar_expanded
-
-# 세션 상태에 사이드바의 상태를 설정하는 함수
-def set_sidebar_state(expanded):
-    st.session_state.sidebar_expanded = expanded
-
-# Streamlit 애플리케이션
-sidebar_expander = st.sidebar.expander('Menu')
-# 사이드바의 상태를 가져옴
-sidebar_expanded = get_sidebar_state()
-
-# 세션 상태를 기반으로 사이드바의 상태를 설정
-if sidebar_expanded:
-    sidebar_expander._visible = True
-else:
-    sidebar_expander._visible = False
-
-# expander를 클릭하여 확장 또는 축소될 때마다 상태 업데이트
-sidebar_expanded = sidebar_expander._visible
-
-# 상태 업데이트
-set_sidebar_state(sidebar_expanded)
-
-
-def clear_tm_content(content):
-    keywords_to_remove = ["[현장TM]", "[TM활동]", "[TM 활동]", "[현장 TM]"]
-    for keyword in keywords_to_remove:
-        content = content.replace(keyword, "")
-    return content.strip()
-
-
 
 def main():
 
