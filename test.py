@@ -186,9 +186,7 @@ def main():
 
     # 텍스트 입력 초기화 함수
     def clear_text():
-        st.session_state.clear()  # 모든 상태를 초기화
-        st.session_state.user_input = ""  # 다시 설정
-        st.experimental_rerun()  # 상태를 초기화하고 재실행
+        st.session_state.user_input = ""  # 입력란 초기화
 
    
 
