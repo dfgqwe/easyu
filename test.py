@@ -165,22 +165,10 @@ def clear_tm_content(content):
     return content.strip()
 
 
-class SessionState:
-    def __init__(self, **kwargs):
-        self.__dict__.update(kwargs)
 
-def get_session_state(**kwargs):
-    session_state = SessionState(**kwargs)
-    return session_state
+def main():
 
-def clear_text():
-    try:
-        st.session_state.user_input = ""
-    except Exception as e:
-        st.error(f"오류 발생: {e}")
-
-
-def main(): 
+        
     df1 = pd.read_csv('bs_head.csv')
 
     # 인덱스를 제거한 새로운 데이터프레임 생성
@@ -196,6 +184,13 @@ def main():
     if "user_input" not in st.session_state:
         st.session_state.user_input = ""
 
+    # 텍스트 입력 초기화 함수
+    def clear_text():
+        st.session_state.clear()  # 모든 상태를 초기화
+        st.session_state.user_input = ""  # 다시 설정
+        st.experimental_rerun()  # 상태를 초기화하고 재실행
+
+   
 
     results = []
 
@@ -217,7 +212,7 @@ def main():
         if selected_complaint_format:
             results.append(selected_complaint_format)
 
-    user_input = st.text_area("입력란")
+    user_input = st.text_input("입력란", key="user_input")
 
     if not is_bs_checked and not is_complaint_checked:
         head_format = get_format(user_input)
@@ -282,7 +277,7 @@ def main():
 
 
     if st.button("입력란 초기화"):
-        user_input = ""
+        clear_text()
 
     
 
