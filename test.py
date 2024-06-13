@@ -165,10 +165,19 @@ def clear_tm_content(content):
     return content.strip()
 
 
+class SessionState:
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
 
-def main():
+def get_session_state(**kwargs):
+    session_state = SessionState(**kwargs)
+    return session_state
 
-        
+def clear_text():
+    session_state = get_session_state(user_input="")
+
+
+def main(): 
     df1 = pd.read_csv('bs_head.csv')
 
     # 인덱스를 제거한 새로운 데이터프레임 생성
@@ -184,11 +193,6 @@ def main():
     if "user_input" not in st.session_state:
         st.session_state.user_input = ""
 
-   # 텍스트 입력 초기화 함수
-    def clear_text():
-        st.session_state.user_input = ""
- 
-   
 
     results = []
 
