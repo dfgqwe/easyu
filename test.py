@@ -160,6 +160,10 @@ def clear_tm_content(content):
         content = content.replace(keyword, "")
     return content.strip()
 
+if st.button("입력란 초기화"):
+        clear_text()
+
+
 def main():
 
         
@@ -178,10 +182,7 @@ def main():
     if "user_input" not in st.session_state:
         st.session_state.user_input = ""
 
-    # 텍스트 입력 초기화 함수
-    def clear_text():
-        st.session_state.clear()  # 세션 상태 전체를 초기화하여 모든 입력을 지웁니다.
-        
+   
 
     results = []
 
