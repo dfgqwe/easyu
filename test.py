@@ -266,8 +266,9 @@ def main():
         if copy_activated:
             pyperclip.copy(output_text)
 
-    if st.button("입력란 초기화"):
-        clear_text()
+    
 
 if __name__ == "__main__":
     main()
+if st.button("입력란 초기화"):
+        clear_text()
