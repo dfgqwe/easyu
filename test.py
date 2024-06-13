@@ -291,7 +291,7 @@ def main():
         # 입력된 IP에 해당되는 주소 찾기
         if ip_input in df_no_duplicates['ip'].values:
             address = df_no_duplicates[df_no_duplicates['ip'] == ip_input]['주소'].values[0]
-            st.write("입력된 IP에 해당하는 주소")
+            st.write("입력 IP와 동일 주소 내 업무")
             
             # 동일 주소지의 업무 찾기
             same_address_work = df_no_duplicates[df_no_duplicates['주소'] == address]
