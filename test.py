@@ -270,8 +270,8 @@ def main():
 
 
     if st.button("입력란 초기화"):
-        for _ in range(2):
-            clear_text()
+        clear_text() 
+        clear_text()
 
     
 
