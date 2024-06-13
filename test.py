@@ -144,6 +144,7 @@ def get_format(text):
     else:
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
         return selected_formats[-1] if selected_formats else None
+
 # Load the CSV file
 df = pd.read_csv('head.csv', index_col=0)
 
@@ -160,40 +161,32 @@ def clear_tm_content(content):
         content = content.replace(keyword, "")
     return content.strip()
 
-
+def clear_text():
+    st.session_state.user_input = ""
+    st.session_state.results = []
 
 def main():
-
-        
     df1 = pd.read_csv('bs_head.csv')
-
-    # 인덱스를 제거한 새로운 데이터프레임 생성
     df1_reset = df1.reset_index(drop=True)
 
-    # Streamlit 애플리케이션
     with st.expander('MOSS BS 발행 HEAD'):
         st.dataframe(df1_reset)
     
     st.title("MOSS 회복 문구")
 
-    # 초기값 설정
     if "user_input" not in st.session_state:
         st.session_state.user_input = ""
+    
+    if "results" not in st.session_state:
+        st.session_state.results = []
 
-    def clear_text():
-        st.session_state.clear()  # 모든 상태를 초기화
-
-   
-
-    results = []
-
-    # B/S 및 민원처리 체크박스
     col1, col2 = st.columns(2)
-
     with col1:
         is_bs_checked = st.checkbox("B/S")
     with col2:
         is_complaint_checked = st.checkbox("민원처리")
+
+    results = st.session_state.results
 
     if is_bs_checked:
         selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
@@ -243,7 +236,7 @@ def main():
         cleaned_TM_내용 = clear_tm_content(현장TM_내용)
         formatted_TM = f"[현장TM] {cleaned_TM_내용}" if cleaned_TM_내용 else "[현장TM]"
         
-        if len(selected_locations) > 1:  # selected_locations에 [현장TM] 이외의 항목이 포함된 경우에만 수정요청 추가
+        if len(selected_locations) > 1:
             formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations if location != "[현장TM]"]) + " 수정요청"
         else:
             formatted_locations = f"{formatted_TM}"
@@ -263,16 +256,14 @@ def main():
 
     copy_activated = False
     if st.button("출력"):
-        output_text = "\n".join(results)  # Join results with new lines for the desired format
-        st.text(output_text)  # Print output_text when the "출력" button is pressed
+        output_text = "\n".join(results)
+        st.text(output_text)
         if copy_activated:
             pyperclip.copy(output_text)
 
-
     if st.button("입력란 초기화"):
-        clear_text()
-
-    
+        st.session_state.results = []
+        st.experimental_rerun()
 
 if __name__ == "__main__":
     main()
