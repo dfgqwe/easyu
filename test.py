@@ -160,8 +160,7 @@ def clear_tm_content(content):
         content = content.replace(keyword, "")
     return content.strip()
 
-def clear_text():
-        st.session_state.clear()  # 모든 상태를 초기화
+
 
 def main():
 
@@ -180,6 +179,9 @@ def main():
     # 초기값 설정
     if "user_input" not in st.session_state:
         st.session_state.user_input = ""
+
+    def clear_text():
+        st.session_state.clear()  # 모든 상태를 초기화
 
    
 
