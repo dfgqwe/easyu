@@ -177,12 +177,12 @@ def main():
     st.title("MOSS 회복 문구")
 
     # 초기값 설정
-    if "user_input" not in st.session_state:
-        st.session_state.user_input = ""
+    if "button_clicked" not in st.session_state:
+        st.session_state.button_clicked = False
 
     def clear_text():
         st.session_state.clear()  # 모든 상태를 초기화
-        st.session_state.clear()
+        pass
 
 
     results = []
@@ -270,7 +270,10 @@ def main():
 
 
     if st.button("입력란 초기화"):
-        clear_text() 
+        if not st.session_state.button_clicked:
+            clear_text()  # 첫 번째 호출
+            clear_text()  # 두 번째 호출
+            st.session_state.button_clicked = True  # 버튼이 클릭되었음을 기록
 
 
     
