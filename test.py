@@ -153,9 +153,7 @@ st.sidebar.title("Menu")
 # Expander in sidebar
 with st.sidebar.expander('MOSS 회복 항목 표준'):
     st.dataframe(df)
-
-
-sidebar_expanded = st.sidebar.expander('Menu')._visible
+    sidebar_expanded = st.sidebar.expander('Menu')._visible
 
 
 def clear_tm_content(content):
