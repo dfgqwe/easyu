@@ -182,6 +182,7 @@ def main():
     def clear_text():
         st.session_state.clear()  # 세션 상태 전체를 초기화하여 모든 입력을 지웁니다.
         st.session_state.user_input = ""
+        st.experimental_rerun()
 
     results = []
 
