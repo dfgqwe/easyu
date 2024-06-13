@@ -153,18 +153,34 @@ st.sidebar.title("Menu")
 # Expander in sidebar
 with st.sidebar.expander('MOSS 회복 항목 표준'):
     st.dataframe(df)
-# 초기값 설정
-if "sidebar_expanded" not in st.session_state:
-    st.session_state.sidebar_expanded = False
+
+
+# 세션 상태에서 사이드바의 상태를 가져오는 함수
+def get_sidebar_state():
+    if "sidebar_expanded" not in st.session_state:
+        st.session_state.sidebar_expanded = False
+    return st.session_state.sidebar_expanded
+
+# 세션 상태에 사이드바의 상태를 설정하는 함수
+def set_sidebar_state(expanded):
+    st.session_state.sidebar_expanded = expanded
 
 # Streamlit 애플리케이션
-with st.sidebar.expander('Menu'):
-    # expander를 클릭하여 확장 또는 축소될 때마다 상태 업데이트
-    sidebar_expander = st.sidebar.expander('Menu')._visible
-    # 상태 업데이트
-    st.session_state.sidebar_expanded = sidebar_expander
+sidebar_expander = st.sidebar.expander('Menu')
+# 사이드바의 상태를 가져옴
+sidebar_expanded = get_sidebar_state()
 
-sidebar_expanded = st.sidebar.expander('Menu')._visible
+# 세션 상태를 기반으로 사이드바의 상태를 설정
+if sidebar_expanded:
+    sidebar_expander._visible = True
+else:
+    sidebar_expander._visible = False
+
+# expander를 클릭하여 확장 또는 축소될 때마다 상태 업데이트
+sidebar_expanded = sidebar_expander._visible
+
+# 상태 업데이트
+set_sidebar_state(sidebar_expanded)
 
 
 def clear_tm_content(content):
