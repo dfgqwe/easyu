@@ -2,9 +2,6 @@ import streamlit as st
 import pandas as pd
 import pyperclip
 import re
-import openpyxl
-from openpyxl.utils.dataframe import dataframe_to_rows
-from io import BytesIO
 
 # 포맷 데이터 포함
 formats = {
