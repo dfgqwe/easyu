@@ -273,7 +273,33 @@ def main():
     if st.button("입력란 초기화"):
         clear_text()
 
+    st.title("Worksync 페이지 준비중...")
     
+    # 데이터 파일 불러오기
+    work = pd.read_csv("데이터.csv")  # 파일 경로를 실제 파일 경로로 변경해주세요
+
+    # 'ip'와 '업무'가 동일한 경우 중복된 행 제거
+    df_no_duplicates = work.drop_duplicates(subset=['ip', '업무'])
+
+    # IP 입력 받기
+    ip_input = st.text_input("IP 입력", "")
+    
+    # IP 입력이 있을 경우
+    if ip_input:
+        # 입력된 IP에 해당되는 주소 찾기
+        if ip_input in df_no_duplicates['ip'].values:
+            address = df_no_duplicates[df_no_duplicates['ip'] == ip_input]['주소'].values[0]
+            st.write("입력된 IP에 해당하는 주소")
+            
+            # 동일 주소지의 업무 찾기
+            same_address_work = df_no_duplicates[df_no_duplicates['주소'] == address]
+            
+            # 장비명-업무 형식으로 보여주기
+            for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
+                st.write(f"{idx}. {row['장비명']} - {row['업무']}")
+        else:
+            st.write("Work-Sync 없습니다.")
+
 
 if __name__ == "__main__":
     main()
