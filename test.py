@@ -154,6 +154,10 @@ st.sidebar.title("Menu")
 with st.sidebar.expander('MOSS 회복 항목 표준'):
     st.dataframe(df)
 
+
+sidebar_expanded = st.sidebar.expander('Menu')._visible
+
+
 def clear_tm_content(content):
     keywords_to_remove = ["[현장TM]", "[TM활동]", "[TM 활동]", "[현장 TM]"]
     for keyword in keywords_to_remove:
@@ -177,13 +181,16 @@ def main():
     st.title("MOSS 회복 문구")
 
     # 초기값 설정
-    if "button_clicked" not in st.session_state:
-        st.session_state.button_clicked = False
+    if "user_input" not in st.session_state:
+        st.session_state.user_input = ""
 
+    # 텍스트 입력 초기화 함수
     def clear_text():
         st.session_state.clear()  # 모든 상태를 초기화
-        pass
+        st.session_state.user_input = ""  # 다시 설정
+        st.experimental_rerun()  # 상태를 초기화하고 재실행
 
+   
 
     results = []
 
@@ -270,12 +277,7 @@ def main():
 
 
     if st.button("입력란 초기화"):
-        if not st.session_state.button_clicked:
-            clear_text()  # 첫 번째 호출
-            st.session_state.button_clicked = True  # 버튼이 클릭되었음을 기록
-        else:
-            clear_text()  # 이미 클릭된 상태이므로 두 번째 호출
-
+        clear_text()
 
     
 
