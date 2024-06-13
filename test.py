@@ -270,7 +270,7 @@ def main():
 
 
     if st.button("입력란 초기화"):
-        if clear_text():
+        for _ in range(2):
             clear_text()
 
     
