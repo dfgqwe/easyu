@@ -217,7 +217,7 @@ def main():
         if selected_complaint_format:
             results.append(selected_complaint_format)
 
-    user_input = st.text_input("입력란", key="user_input")
+   user_input = st.text_area("입력란")
 
     if not is_bs_checked and not is_complaint_checked:
         head_format = get_format(user_input)
@@ -282,7 +282,7 @@ def main():
 
 
     if st.button("입력란 초기화"):
-        clear_text()
+        user_input = ""
 
     
 
