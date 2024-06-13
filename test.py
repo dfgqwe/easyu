@@ -174,7 +174,10 @@ def get_session_state(**kwargs):
     return session_state
 
 def clear_text():
-    st.session_state["user_input"] = ""
+    try:
+        st.session_state.user_input = ""
+    except Exception as e:
+        st.error(f"오류 발생: {e}")
 
 
 def main(): 
