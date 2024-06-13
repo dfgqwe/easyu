@@ -160,9 +160,8 @@ def clear_tm_content(content):
         content = content.replace(keyword, "")
     return content.strip()
 
-if st.button("입력란 초기화"):
-        clear_text()
-
+def clear_text():
+        st.session_state.clear()  # 모든 상태를 초기화
 
 def main():
 
@@ -267,9 +266,11 @@ def main():
         if copy_activated:
             pyperclip.copy(output_text)
 
+
+     if st.button("입력란 초기화"):
+        clear_text()
+
     
 
 if __name__ == "__main__":
     main()
-if st.button("입력란 초기화"):
-        clear_text()
