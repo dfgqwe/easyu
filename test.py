@@ -131,19 +131,6 @@ B_S_head_formats = {
     "고객홍보"
 ]
 
-# Load the CSV file
-df = pd.read_csv('head.csv', index_col=0)
-
-# Sidebar for MOSS recovery items
-st.sidebar.title("Menu")
-
-# Expander in sidebar
-with st.sidebar.expander('MOSS 회복 항목 표준'):
-    st.dataframe(df)
-
-
-
-
 def get_format(text):
     matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
     if "[한전정전복구]" in matched_formats and ("[기타]" in matched_formats or "[폐문]" in matched_formats):
@@ -157,21 +144,18 @@ def get_format(text):
     else:
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
         return selected_formats[-1] if selected_formats else None
+# Load the CSV file
+df = pd.read_csv('head.csv', index_col=0)
+
+# Sidebar for MOSS recovery items
+st.sidebar.title("Menu")
+
+# Expander in sidebar
+with st.sidebar.expander('MOSS 회복 항목 표준'):
+    st.dataframe(df)
 
 
-def get_sidebar_state():
-    if "sidebar_expanded" not in st.session_state:
-        st.session_state.sidebar_expanded = False
-    return st.session_state.sidebar_expanded
-
-# Streamlit 애플리케이션
-st.sidebar.title('Menu')
-
-# 체크박스를 사용하여 사이드바의 확장 또는 축소 상태를 토글
-sidebar_expanded = st.sidebar.checkbox("Expand Sidebar", key="sidebar_expanded", value=get_sidebar_state())
-
-# 세션 상태를 업데이트하여 사이드바의 상태를 유지
-st.session_state.sidebar_expanded = sidebar_expanded
+sidebar_expanded = st.sidebar.expander('Menu')._visible
 
 
 def clear_tm_content(content):
@@ -202,12 +186,9 @@ def main():
 
     # 텍스트 입력 초기화 함수
     def clear_text():
-        if 'user_input' in st.session_state:
-            del st.session_state['user_input']
-    # UI를 새로 고침하여 변경 사항을 즉시 반영
-        st.experimental_rerun()
-
-
+        st.session_state.clear()  # 모든 상태를 초기화
+        st.session_state.user_input = ""  # 다시 설정
+        st.experimental_rerun()  # 상태를 초기화하고 재실행
 
    
 
