@@ -153,7 +153,16 @@ st.sidebar.title("Menu")
 # Expander in sidebar
 with st.sidebar.expander('MOSS 회복 항목 표준'):
     st.dataframe(df)
+# 초기값 설정
+if "sidebar_expanded" not in st.session_state:
+    st.session_state.sidebar_expanded = False
 
+# Streamlit 애플리케이션
+with st.sidebar.expander('Menu'):
+    # expander를 클릭하여 확장 또는 축소될 때마다 상태 업데이트
+    sidebar_expander = st.sidebar.expander('Menu')._visible
+    # 상태 업데이트
+    st.session_state.sidebar_expanded = sidebar_expander
 
 sidebar_expanded = st.sidebar.expander('Menu')._visible
 
@@ -188,6 +197,8 @@ def main():
     def clear_text():
         if 'user_input' in st.session_state:
             del st.session_state['user_input']
+    # UI를 새로 고침하여 변경 사항을 즉시 반영
+        st.experimental_rerun()
 
 
 
