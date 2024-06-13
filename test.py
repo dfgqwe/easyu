@@ -182,8 +182,8 @@ def main():
 
     def clear_text():
         st.session_state.clear()  # 모든 상태를 초기화
+        st.session_state.clear()
 
-   
 
     results = []
 
@@ -271,7 +271,7 @@ def main():
 
     if st.button("입력란 초기화"):
         clear_text() 
-        clear_text()
+
 
     
 
