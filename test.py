@@ -1,4 +1,4 @@
-import streamlit as st
+mport streamlit as st
 import pandas as pd
 import pyperclip
 import re
@@ -154,10 +154,6 @@ st.sidebar.title("Menu")
 with st.sidebar.expander('MOSS 회복 항목 표준'):
     st.dataframe(df)
 
-
-sidebar_expanded = st.sidebar.expander('Menu')._visible
-
-
 def clear_tm_content(content):
     keywords_to_remove = ["[현장TM]", "[TM활동]", "[TM 활동]", "[현장 TM]"]
     for keyword in keywords_to_remove:
@@ -184,11 +180,8 @@ def main():
     if "user_input" not in st.session_state:
         st.session_state.user_input = ""
 
-    # 텍스트 입력 초기화 함수
     def clear_text():
         st.session_state.clear()  # 모든 상태를 초기화
-        st.session_state.user_input = ""  # 다시 설정
-        st.experimental_rerun()  # 상태를 초기화하고 재실행
 
    
 
