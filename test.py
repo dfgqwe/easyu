@@ -273,8 +273,8 @@ def main():
     if st.button("입력란 초기화"):
         clear_text()
 
-    st.write("입력란 버튼 2번 눌러야 입력란 삭제되는 버그 수정중.../Worksync 프로토타입 제작...")
-    st.title("Worksync 페이지 준비중...")
+    st.write("입력란 버튼 2번 눌러야 입력란 삭제되는 버그 수정중...(웹페이지에서만 버그 발생)/Worksync 프로토타입 제작...(엑셀하고 비교 필요)")
+    st.title("Worksync 페이지 제작중...")
     
     # 데이터 파일 불러오기
     work = pd.read_csv("데이터.csv")  # 파일 경로를 실제 파일 경로로 변경해주세요
