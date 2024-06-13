@@ -174,7 +174,7 @@ def get_session_state(**kwargs):
     return session_state
 
 def clear_text():
-    session_state = get_session_state(user_input="")
+    st.session_state.user_input = ""
 
 
 def main(): 
