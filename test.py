@@ -131,6 +131,19 @@ B_S_head_formats = {
     "고객홍보"
 ]
 
+# Load the CSV file
+df = pd.read_csv('head.csv', index_col=0)
+
+# Sidebar for MOSS recovery items
+st.sidebar.title("Menu")
+
+# Expander in sidebar
+with st.sidebar.expander('MOSS 회복 항목 표준'):
+    st.dataframe(df)
+
+
+
+
 def get_format(text):
     matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
     if "[한전정전복구]" in matched_formats and ("[기타]" in matched_formats or "[폐문]" in matched_formats):
@@ -167,15 +180,7 @@ def clear_tm_content(content):
         content = content.replace(keyword, "")
     return content.strip()
 
-# Load the CSV file
-df = pd.read_csv('head.csv', index_col=0)
 
-# Sidebar for MOSS recovery items
-st.sidebar.title("Menu")
-
-# Expander in sidebar
-with st.sidebar.expander('MOSS 회복 항목 표준'):
-    st.dataframe(df)
 
 def main():
 
