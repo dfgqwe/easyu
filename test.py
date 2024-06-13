@@ -153,14 +153,9 @@ st.sidebar.title("Menu")
 # Expander in sidebar
 with st.sidebar.expander('MOSS 회복 항목 표준'):
     st.dataframe(df)
-# 초기값 설정
-if "sidebar_expanded" not in st.session_state:
-    st.session_state.sidebar_expanded = False
 
-# Streamlit 애플리케이션
-with st.sidebar.expander('Menu'):
-    # expander를 클릭하여 확장 또는 축소될 때마다 상태 업데이트
-    st.session_state.sidebar_expanded = st.sidebar.expander('Menu')._visible
+
+sidebar_expanded = st.sidebar.expander('Menu')._visible
 
 
 def clear_tm_content(content):
@@ -169,11 +164,7 @@ def clear_tm_content(content):
         content = content.replace(keyword, "")
     return content.strip()
 
-# 텍스트 입력 초기화 함수
-def clear_text():
-    st.session_state.clear()  # 모든 상태를 초기화
-    st.session_state.user_input = ""  # 다시 설정
-    st.experimental_rerun()  # 상태를 초기화하고 재실행
+
 
 def main():
 
@@ -193,7 +184,11 @@ def main():
     if "user_input" not in st.session_state:
         st.session_state.user_input = ""
 
-    
+    # 텍스트 입력 초기화 함수
+    def clear_text():
+        st.session_state.clear()  # 모든 상태를 초기화
+        st.session_state.user_input = ""  # 다시 설정
+        st.experimental_rerun()  # 상태를 초기화하고 재실행
 
    
 
@@ -281,10 +276,10 @@ def main():
             pyperclip.copy(output_text)
 
 
+    if st.button("입력란 초기화"):
+        clear_text()
 
     
 
 if __name__ == "__main__":
     main()
-    if st.button("입력란 초기화"):
-        clear_text()
