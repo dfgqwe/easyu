@@ -1,4 +1,4 @@
 pyperclip
 openpyxl
-openpyxl.utils.dataframe  dataframe_to_rows
-io BytesIO
+dataframe_to_rows
+BytesIO
