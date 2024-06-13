@@ -186,7 +186,9 @@ def main():
 
     # 텍스트 입력 초기화 함수
     def clear_text():
-        st.session_state.user_input = None
+        if 'user_input' in st.session_state:
+            del st.session_state['user_input']
+
 
 
    
