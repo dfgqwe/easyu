@@ -185,13 +185,11 @@ def main():
         st.session_state.user_input = ""
 
     # 텍스트 입력 초기화 함수
+   # 텍스트 입력 초기화 함수
     def clear_text():
-    if not st.session_state.user_input:
-        return  # 입력란이 이미 비어있으면 더 이상 진행하지 않음
-
-    st.session_state.user_input = ""  # 입력란 내용을 비움
-    if sidebar_expanded:  # 사이드바가 펼쳐진 상태인 경우
-        st.experimental_rerun()  # 페이지 새로고침
+        st.session_state.clear()  # 모든 상태를 초기화
+        st.session_state.user_input = ""  # 다시 설정
+        st.experimental_rerun()  # 상태를 초기화하고 재실행
    
 
     results = []
