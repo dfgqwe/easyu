@@ -272,8 +272,9 @@ def main():
     if st.button("입력란 초기화"):
         if not st.session_state.button_clicked:
             clear_text()  # 첫 번째 호출
-            clear_text()  # 두 번째 호출
             st.session_state.button_clicked = True  # 버튼이 클릭되었음을 기록
+        else:
+            clear_text()  # 이미 클릭된 상태이므로 두 번째 호출
 
 
     
