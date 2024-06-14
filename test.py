@@ -3,6 +3,7 @@ import pandas as pd
 import pyperclip
 import re
 
+
 # 포맷 데이터 포함
 formats = {
     "정전": "[사설정전복구]",
@@ -55,7 +56,6 @@ formats = {
     "psu": "[모듈교체]",
     "모듈": "[모듈교체]",
     "보드": "[모듈교체]",
-    "실장": "[모듈교체]",
     "장비교체": "[장비교체]",
     "장비 대개체": "[장비교체]",
     "대개체": "[장비교체]",
@@ -144,6 +144,9 @@ def get_format(text):
     else:
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
         return selected_formats[-1] if selected_formats else None
+
+
+
 # Load the CSV file
 df = pd.read_csv('head.csv', index_col=0)
 
@@ -161,10 +164,8 @@ def clear_tm_content(content):
     return content.strip()
 
 
+def moss_page():
 
-def main():
-
-        
     df1 = pd.read_csv('bs_head.csv')
 
     # 인덱스를 제거한 새로운 데이터프레임 생성
@@ -180,11 +181,11 @@ def main():
     if "user_input" not in st.session_state:
         st.session_state.user_input = ""
 
-
+    # 텍스트 입력 초기화 함수
     def clear_text():
         st.session_state.clear()  # 모든 상태를 초기화
-
-   
+        st.session_state.user_input = ""  # 다시 설정
+        st.experimental_rerun()  # 상태를 초기화하고 재실행
 
     results = []
 
@@ -269,13 +270,12 @@ def main():
         if copy_activated:
             pyperclip.copy(output_text)
 
-
     if st.button("입력란 초기화"):
         clear_text()
-
-    st.write("입력란 버튼 2번 눌러야 입력란 삭제되는 버그 수정중...(웹페이지에서만 버그 발생)")
-    st.write("Worksync 프로토타입 제작...(엑셀 비교 필요)")
-    st.title("Worksync 페이지 제작중...")
+        
+# Worksync 페이지
+def worksync_page():  
+    st.title("Worksync 페이지 준비중...")
     
     # 데이터 파일 불러오기
     work = pd.read_csv("데이터.csv")  # 파일 경로를 실제 파일 경로로 변경해주세요
@@ -291,7 +291,7 @@ def main():
         # 입력된 IP에 해당되는 주소 찾기
         if ip_input in df_no_duplicates['ip'].values:
             address = df_no_duplicates[df_no_duplicates['ip'] == ip_input]['주소'].values[0]
-            st.write("입력 IP와 동일 주소 내 업무")
+            st.write("입력된 IP에 해당하는 주소")
             
             # 동일 주소지의 업무 찾기
             same_address_work = df_no_duplicates[df_no_duplicates['주소'] == address]
@@ -303,5 +303,15 @@ def main():
             st.write("Work-Sync 없습니다.")
 
 
+  
+def main():
+    # Sidebar navigation
+    page = st.sidebar.radio("Menu", ["MOSS", "Worksync"])
+
+    if page == "MOSS":
+        moss_page()
+    elif page == "Worksync":
+        worksync_page()
+        
 if __name__ == "__main__":
     main()
