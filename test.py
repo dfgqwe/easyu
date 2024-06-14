@@ -50,8 +50,6 @@ formats = {
     "타사전환": "[타사전환]",
     "감쇄기": "[광커넥터복구]", 
     "감쇠기": "[광커넥터복구]",
-    "dbm": "[광커넥터복구]",
-    "취부": "[광커넥터복구]",
     "PON": "[모듈교체]",
     "pon": "[모듈교체]",
     "PSU": "[모듈교체]",
@@ -62,7 +60,6 @@ formats = {
     "장비 대개체": "[장비교체]",
     "대개체": "[장비교체]",
     "장비 교체": "[장비교체]",
-    "교체": "[장비교체]",
     "리셋": "[장비리셋]",
     "익일": "[기타]",
     "담당조": "[기타]",
@@ -148,7 +145,23 @@ def get_format(text):
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
         return selected_formats[-1] if selected_formats else None
 
-
+# JavaScript 코드
+script = """
+<script>
+const userInputElement = document.querySelector("#user_input");
+userInputElement.addEventListener("input", function(evt) {
+    const value = evt.target.value;
+    if (value !== undefined) {
+        const formData = new FormData();
+        formData.append("value", value);
+        fetch("/", {
+            method: "POST",
+            body: formData
+        });
+    }
+});
+</script>
+"""
 
 # Load the CSV file
 df = pd.read_csv('head.csv', index_col=0)
@@ -187,10 +200,8 @@ def moss_page():
     # 텍스트 입력 초기화 함수
     def clear_text():
         st.session_state.clear()  # 모든 상태를 초기화
-        #st.session_state.user_input = ""  # 다시 설정
-        #st.session_state.sidebar_expanded = False
-        #st.experimental_rerun()
-        #st.markdown('<script>window.location.reload()</script>', unsafe_allow_html=True)
+        st.session_state.user_input = ""  # 다시 설정
+        st.experimental_rerun()  # 상태를 초기화하고 재실행
 
     results = []
 
@@ -212,10 +223,18 @@ def moss_page():
         if selected_complaint_format:
             results.append(selected_complaint_format)
 
-    user_input = st.text_input("입력란", key="user_input")
+    # JavaScript 추가
+    st.markdown(script, unsafe_allow_html=True)
+
+    # 텍스트 입력란
+    user_input = st.text_area("입력란", value=st.session_state.user_input, key="user_input")
+
+    # 상태 업데이트
+    if st.session_state.user_input != user_input:
+        st.session_state.user_input = user_input
 
     if not is_bs_checked and not is_complaint_checked:
-        head_format = get_format(user_input)
+        head_format = get_format(st.session_state.user_input)
         if head_format:
             results.append(head_format)
 
