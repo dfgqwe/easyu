@@ -3,6 +3,7 @@ import pandas as pd
 import pyperclip
 import re
 
+
 # 포맷 데이터 포함
 formats = {
     "정전": "[사설정전복구]",
@@ -183,7 +184,8 @@ def moss_page():
     # 텍스트 입력 초기화 함수
     def clear_text():
         st.session_state.clear()  # 모든 상태를 초기화
-    
+        st.session_state.user_input = ""  # 다시 설정
+        st.experimental_rerun()  # 상태를 초기화하고 재실행
 
     results = []
 
@@ -296,9 +298,9 @@ def worksync_page():
             
             # 장비명-업무 형식으로 보여주기
             for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
-                st.write(f"{idx}. {row['장비명']} - {row['업무']}")
+                st.text(f"{idx}. {row['장비명']} - {row['업무']}")
         else:
-            st.write("Work-Sync 없습니다.")
+            st.text("Work-Sync 없습니다.")
 
 
   
@@ -313,4 +315,3 @@ def main():
         
 if __name__ == "__main__":
     main()
-
