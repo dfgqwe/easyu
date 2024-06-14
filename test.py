@@ -298,9 +298,9 @@ def worksync_page():
             
             # 장비명-업무 형식으로 보여주기
             for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
-                st.write(f"{idx}. {row['장비명']} - {row['업무']}")
+                st.text(f"{idx}. {row['장비명']} - {row['업무']}")
         else:
-            st.write("Work-Sync 없습니다.")
+            st.text("Work-Sync 없습니다.")
 
 
   
