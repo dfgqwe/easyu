@@ -3,7 +3,7 @@ import pandas as pd
 import pyperclip
 import re
 
-
+@st.cache_data
 # 포맷 데이터 포함
 formats = {
     "정전": "[사설정전복구]",
