@@ -275,7 +275,7 @@ def moss_page():
             if copy_activated:
                 pyperclip.copy(output_text)
                 
-    with col1:
+    with col2:
         if st.button("입력란 초기화"):
             clear_text()
         
