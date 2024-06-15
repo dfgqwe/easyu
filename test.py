@@ -147,8 +147,13 @@ def get_format(text):
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
         return selected_formats[-1] if selected_formats else None
 
-# Expander in sidebar
-st.session_state.sidebar_expanded = False  # Default to expanded
+if "sidebar_expanded" not in st.session_state:
+    st.session_state.sidebar_expanded = False
+
+# Function to clear all session state
+def clear_session_state():
+    st.session_state.clear()  # Clear all session state variables
+    st.session_state.sidebar_expanded = False  # Set sidebar_expanded to False
 
 # Load the CSV file
 df = pd.read_csv('head.csv', index_col=0)
@@ -275,7 +280,8 @@ def moss_page():
             pyperclip.copy(output_text)
 
     if st.button("입력란 초기화"):
-        clear_text()
+        clear_session_state()
+        st.experimental_rerun()
         
 # Worksync 페이지
 def worksync_page():  
