@@ -187,9 +187,9 @@ def moss_page():
     # 텍스트 입력 초기화 함수
     def clear_text():
         st.session_state.clear()  # 모든 상태를 초기화
-        st.session_state.user_input = ""  # 다시 설정
+        #st.session_state.user_input = ""  # 다시 설정
         #st.session_state.sidebar_expanded = False
-        st.experimental_rerun()
+        #st.experimental_rerun()
         #st.markdown('<script>window.location.reload()</script>', unsafe_allow_html=True)
 
     results = []
@@ -268,7 +268,7 @@ def moss_page():
     if 출동예방_actions:
         results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
-    copy_activated = False
+    copy_activated = st.checkbox("복사 기능 활성화", key="copy_activated")
     if st.button("출력"):
         output_text = "\n".join(results)  # Join results with new lines for the desired format
         st.text(output_text)  # Print output_text when the "출력" button is pressed
