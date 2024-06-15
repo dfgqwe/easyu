@@ -222,17 +222,6 @@ def moss_page():
     results.append(user_input)
     results.append("수고하셨습니다")
 
-    st.markdown(
-    """
-    <style>
-    .stMultiSelect .st-ae .css-1up9nh4 {
-        display: block;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-    
     출동예방_actions = []
     selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
     if selected_actions:
