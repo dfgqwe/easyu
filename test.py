@@ -3,6 +3,7 @@ import pandas as pd
 import pyperclip
 import re
 
+
 # 포맷 데이터 포함
 formats = {
     "정전": "[사설정전복구]",
@@ -132,7 +133,7 @@ B_S_head_formats = {
     "DB현행화",
     "고객홍보"
 ]
-
+st.session_state.sidebar_expanded = False
 def get_format(text):
     matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
     if "[한전정전복구]" in matched_formats and ("[기타]" in matched_formats or "[폐문]" in matched_formats):
@@ -147,13 +148,7 @@ def get_format(text):
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
         return selected_formats[-1] if selected_formats else None
 
-if "sidebar_expanded" not in st.session_state:
-    st.session_state.sidebar_expanded = False
 
-# Function to clear all session state
-def reset_sidebar():
-    st.session_state.sidebar_expanded = False
-    st.experimental_rerun()
 
 # Load the CSV file
 df = pd.read_csv('head.csv', index_col=0)
@@ -162,9 +157,7 @@ df = pd.read_csv('head.csv', index_col=0)
 st.sidebar.title("Menu")
 
 # Expander in sidebar
-st.session_state.sidebar_expanded = False  # Default to expanded
-
-with st.sidebar.expander('MOSS 회복 항목 표준', expanded=st.session_state.sidebar_expanded):
+with st.sidebar.expander('MOSS 회복 항목 표준'):
     st.dataframe(df)
 
 def clear_tm_content(content):
@@ -173,7 +166,9 @@ def clear_tm_content(content):
         content = content.replace(keyword, "")
     return content.strip()
 
+
 def moss_page():
+
     df1 = pd.read_csv('bs_head.csv')
 
     # 인덱스를 제거한 새로운 데이터프레임 생성
@@ -194,7 +189,7 @@ def moss_page():
         st.session_state.clear()  # 모든 상태를 초기화
         st.session_state.user_input = ""  # 다시 설정
         st.experimental_rerun()
-        st.session_state.sidebar_expanded = False  # Sidebar will not expand after rerun
+        #st.markdown('<script>window.location.reload()</script>', unsafe_allow_html=True)
 
     results = []
 
@@ -280,7 +275,7 @@ def moss_page():
             pyperclip.copy(output_text)
 
     if st.button("입력란 초기화"):
-        reset_sidebar()
+        clear_text()
         
 # Worksync 페이지
 def worksync_page():  
@@ -311,6 +306,8 @@ def worksync_page():
         else:
             st.text("Work-Sync 없습니다.")
 
+
+  
 # 탭 생성
 tab1, tab2= st.tabs(["MOSS", "worksync"])
 
