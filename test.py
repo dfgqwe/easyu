@@ -265,14 +265,19 @@ def moss_page():
         results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
     copy_activated = False
-    if st.button("출력"):
-        output_text = "\n".join(results)  # Join results with new lines for the desired format
-        st.text(output_text)  # Print output_text when the "출력" button is pressed
-        if copy_activated:
-            pyperclip.copy(output_text)
 
-    if st.button("입력란 초기화"):
-        clear_text()
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button("출력"):
+            output_text = "\n".join(results)  # Join results with new lines for the desired format
+            st.text(output_text)  # Print output_text when the "출력" button is pressed
+            if copy_activated:
+                pyperclip.copy(output_text)
+                
+    with col1:
+        if st.button("입력란 초기화"):
+            clear_text()
         
 # Worksync 페이지
 def worksync_page():  
