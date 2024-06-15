@@ -153,6 +153,10 @@ def get_format(text):
 # Load the CSV file
 df = pd.read_csv('head.csv', index_col=0)
 
+# 세션 상태 초기화
+if "sidebar_expanded" not in st.session_state:
+    st.session_state.sidebar_expanded = False  # 기본적으로 사이드바 접힌 상태로 설정
+
 # Sidebar for MOSS recovery items
 st.sidebar.title("Menu")
 
