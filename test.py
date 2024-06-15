@@ -3,7 +3,6 @@ import pandas as pd
 import pyperclip
 import re
 
-
 # 포맷 데이터 포함
 formats = {
     "정전": "[사설정전복구]",
@@ -148,20 +147,17 @@ def get_format(text):
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
         return selected_formats[-1] if selected_formats else None
 
-
-
 # Load the CSV file
 df = pd.read_csv('head.csv', index_col=0)
-
-# 세션 상태 초기화
-if "sidebar_expanded" not in st.session_state:
-    st.session_state.sidebar_expanded = False  # 기본적으로 사이드바 접힌 상태로 설정
 
 # Sidebar for MOSS recovery items
 st.sidebar.title("Menu")
 
 # Expander in sidebar
-with st.sidebar.expander('MOSS 회복 항목 표준'):
+if "sidebar_expanded" not in st.session_state:
+    st.session_state.sidebar_expanded = False  # Default to expanded
+
+with st.sidebar.expander('MOSS 회복 항목 표준', expanded=st.session_state.sidebar_expanded):
     st.dataframe(df)
 
 def clear_tm_content(content):
@@ -170,9 +166,7 @@ def clear_tm_content(content):
         content = content.replace(keyword, "")
     return content.strip()
 
-
 def moss_page():
-
     df1 = pd.read_csv('bs_head.csv')
 
     # 인덱스를 제거한 새로운 데이터프레임 생성
@@ -192,7 +186,7 @@ def moss_page():
     def clear_text():
         st.session_state.clear()  # 모든 상태를 초기화
         st.session_state.user_input = ""  # 다시 설정
-        #st.session_state.sidebar_expanded = False
+        st.session_state.sidebar_expanded = False  # Sidebar will not expand after rerun
         st.experimental_rerun()
         #st.markdown('<script>window.location.reload()</script>', unsafe_allow_html=True)
 
@@ -311,8 +305,6 @@ def worksync_page():
         else:
             st.text("Work-Sync 없습니다.")
 
-
-  
 # 탭 생성
 tab1, tab2= st.tabs(["MOSS", "worksync"])
 
