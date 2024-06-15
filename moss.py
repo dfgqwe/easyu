@@ -209,6 +209,9 @@ def moss_page():
 
     user_input = st.text_input("입력란", key="user_input")
 
+    if st.button("입력란 초기화"):
+        clear_text()
+    
     if not is_bs_checked and not is_complaint_checked:
         head_format = get_format(user_input)
         if head_format:
@@ -270,8 +273,7 @@ def moss_page():
         if copy_activated:
             pyperclip.copy(output_text)
 
-    if st.button("입력란 초기화"):
-        clear_text()
+    
         
 # Worksync 페이지
 def worksync_page():  
