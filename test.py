@@ -188,7 +188,7 @@ def moss_page():
     def clear_text():
         st.session_state.clear()  # 모든 상태를 초기화
         st.session_state.user_input = ""  # 다시 설정
-        st.session_state.sidebar_expanded = False  # Sidebar will not expand after rerun
+        #st.session_state.sidebar_expanded = False  # Sidebar will not expand after rerun
         st.experimental_rerun()
         #st.markdown('<script>window.location.reload()</script>', unsafe_allow_html=True)
 
