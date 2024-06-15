@@ -62,7 +62,6 @@ formats = {
     "장비 대개체": "[장비교체]",
     "대개체": "[장비교체]",
     "장비 교체": "[장비교체]",
-    "교체": "[장비교체]",
     "리셋": "[장비리셋]",
     "익일": "[기타]",
     "담당조": "[기타]",
@@ -133,7 +132,7 @@ B_S_head_formats = {
     "DB현행화",
     "고객홍보"
 ]
-st.session_state.sidebar_expanded = False
+
 def get_format(text):
     matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
     if "[한전정전복구]" in matched_formats and ("[기타]" in matched_formats or "[폐문]" in matched_formats):
@@ -148,7 +147,7 @@ def get_format(text):
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
         return selected_formats[-1] if selected_formats else None
 
-
+st.session_state.sidebar_expanded = False
 
 # Load the CSV file
 df = pd.read_csv('head.csv', index_col=0)
@@ -183,12 +182,11 @@ def moss_page():
     # 초기값 설정
     if "user_input" not in st.session_state:
         st.session_state.user_input = ""
-        st.session_state.output_results = []
 
-    # Function to clear user_input and output_results
+    # 텍스트 입력 초기화 함수
     def clear_text():
-        st.session_state.user_input = ""
-        st.session_state.output_results = []
+        st.session_state.clear()  # 모든 상태를 초기화
+        
 
     results = []
 
