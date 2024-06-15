@@ -147,6 +147,9 @@ def get_format(text):
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
         return selected_formats[-1] if selected_formats else None
 
+# Expander in sidebar
+st.session_state.sidebar_expanded = False  # Default to expanded
+
 # Load the CSV file
 df = pd.read_csv('head.csv', index_col=0)
 
