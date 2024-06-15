@@ -268,7 +268,7 @@ def moss_page():
     if 출동예방_actions:
         results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
-    copy_activated = st.checkbox("복사 기능 활성화", key="copy_activated")
+    copy_activated = False
     if st.button("출력"):
         output_text = "\n".join(results)  # Join results with new lines for the desired format
         st.text(output_text)  # Print output_text when the "출력" button is pressed
