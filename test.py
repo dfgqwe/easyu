@@ -150,8 +150,6 @@ def get_format(text):
 # Load the CSV file
 df = pd.read_csv('head.csv', index_col=0)
 
-# Sidebar for MOSS recovery items
-st.sidebar.title("Menu")
 
 # Expander in sidebar
 if "sidebar_expanded" not in st.session_state:
@@ -167,6 +165,12 @@ def clear_tm_content(content):
     return content.strip()
 
 def moss_page():
+
+    # Sidebar for MOSS recovery items
+    st.sidebar.title("Menu")
+    with st.sidebar.expander('MOSS 회복 항목 표준', expanded=st.session_state.sidebar_expanded):
+    st.dataframe(df)
+    
     df1 = pd.read_csv('bs_head.csv')
 
     # 인덱스를 제거한 새로운 데이터프레임 생성
