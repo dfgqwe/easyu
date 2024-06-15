@@ -154,8 +154,7 @@ df = pd.read_csv('head.csv', index_col=0)
 st.sidebar.title("Menu")
 
 # Expander in sidebar
-if "sidebar_expanded" not in st.session_state:
-    st.session_state.sidebar_expanded = False  # Default to expanded
+st.session_state.sidebar_expanded = False  # Default to expanded
 
 with st.sidebar.expander('MOSS 회복 항목 표준', expanded=st.session_state.sidebar_expanded):
     st.dataframe(df)
