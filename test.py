@@ -145,6 +145,8 @@ def get_format(text):
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
         return selected_formats[-1] if selected_formats else None
 
+
+
 # Load the CSV file
 df = pd.read_csv('head.csv', index_col=0)
 
@@ -160,6 +162,7 @@ def clear_tm_content(content):
     for keyword in keywords_to_remove:
         content = content.replace(keyword, "")
     return content.strip()
+
 
 def moss_page():
 
@@ -181,8 +184,10 @@ def moss_page():
     # 텍스트 입력 초기화 함수
     def clear_text():
         st.session_state.clear()  # 모든 상태를 초기화
-        st.session_state.user_input = ""  # 다시 설정
-        #st.experimental_rerun()  # 상태를 초기화하고 재실행
+        #st.session_state.user_input = ""  # 다시 설정
+        #st.session_state.sidebar_expanded = False
+        #st.experimental_rerun()
+        #st.markdown('<script>window.location.reload()</script>', unsafe_allow_html=True)
 
     results = []
 
@@ -260,17 +265,16 @@ def moss_page():
     if 출동예방_actions:
         results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
-    copy_activated = st.checkbox("출력 시 클립보드에 복사")
-
+    copy_activated = False
     if st.button("출력"):
         output_text = "\n".join(results)  # Join results with new lines for the desired format
         st.text(output_text)  # Print output_text when the "출력" button is pressed
         if copy_activated:
             pyperclip.copy(output_text)
 
-    if st.button("초기화"):
+    if st.button("입력란 초기화"):
         clear_text()
-
+        
 # Worksync 페이지
 def worksync_page():  
     st.title("Worksync 페이지 준비중...")
@@ -300,6 +304,8 @@ def worksync_page():
         else:
             st.text("Work-Sync 없습니다.")
 
+
+  
 def main():
     # Sidebar navigation
     page = st.sidebar.radio("Menu", ["MOSS", "Worksync"])
@@ -308,6 +314,8 @@ def main():
         moss_page()
     elif page == "Worksync":
         worksync_page()
-
+        
+if __name__ == "__main__":
+    main()
 if __name__ == "__main__":
     main()
