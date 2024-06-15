@@ -183,13 +183,12 @@ def moss_page():
     # 초기값 설정
     if "user_input" not in st.session_state:
         st.session_state.user_input = ""
+        st.session_state.output_results = []
 
-    # 텍스트 입력 초기화 함수
+    # Function to clear user_input and output_results
     def clear_text():
-        st.session_state.clear()  # 모든 상태를 초기화
-        st.session_state.user_input = ""  # 다시 설정
-        st.experimental_rerun()
-        #st.markdown('<script>window.location.reload()</script>', unsafe_allow_html=True)
+        st.session_state.user_input = ""
+        st.session_state.output_results = []
 
     results = []
 
