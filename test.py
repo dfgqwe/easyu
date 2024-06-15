@@ -151,9 +151,9 @@ if "sidebar_expanded" not in st.session_state:
     st.session_state.sidebar_expanded = False
 
 # Function to clear all session state
-def clear_session_state():
-    st.session_state.clear()  # Clear all session state variables
-    st.session_state.sidebar_expanded = False  # Set sidebar_expanded to False
+def reset_sidebar():
+    st.session_state.sidebar_expanded = False
+    st.experimental_rerun()
 
 # Load the CSV file
 df = pd.read_csv('head.csv', index_col=0)
@@ -280,8 +280,7 @@ def moss_page():
             pyperclip.copy(output_text)
 
     if st.button("입력란 초기화"):
-        clear_session_state()
-        st.experimental_rerun()
+        reset_sidebar()
         
 # Worksync 페이지
 def worksync_page():  
