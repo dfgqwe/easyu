@@ -3,7 +3,6 @@ import pandas as pd
 import pyperclip
 import re
 
-@st.cache_data
 # 포맷 데이터 포멧
 formats = {
     "정전": "[사설정전복구]",
@@ -133,6 +132,7 @@ B_S_head_formats = {
     "고객홍보"
 ]
 
+@st.cache_data
 def get_format(text):
     matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
     if "[한전정전복구]" in matched_formats and ("[기타]" in matched_formats or "[폐문]" in matched_formats):
