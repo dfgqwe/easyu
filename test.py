@@ -3,6 +3,7 @@ import pandas as pd
 import pyperclip
 import re
 
+
 # 포맷 데이터 포함
 formats = {
     "정전": "[사설정전복구]",
@@ -49,6 +50,8 @@ formats = {
     "타사전환": "[타사전환]",
     "감쇄기": "[광커넥터복구]", 
     "감쇠기": "[광커넥터복구]",
+    "dbm": "[광커넥터복구]",
+    "취부": "[광커넥터복구]",
     "PON": "[모듈교체]",
     "pon": "[모듈교체]",
     "PSU": "[모듈교체]",
@@ -59,7 +62,7 @@ formats = {
     "장비 대개체": "[장비교체]",
     "대개체": "[장비교체]",
     "장비 교체": "[장비교체]",
-    "교체 완료": "[장비교체]",
+    "교체": "[장비교체]",
     "리셋": "[장비리셋]",
     "익일": "[기타]",
     "담당조": "[기타]",
@@ -184,9 +187,9 @@ def moss_page():
     # 텍스트 입력 초기화 함수
     def clear_text():
         st.session_state.clear()  # 모든 상태를 초기화
-        #st.session_state.user_input = ""  # 다시 설정
+        st.session_state.user_input = ""  # 다시 설정
         #st.session_state.sidebar_expanded = False
-        #st.experimental_rerun()
+        st.experimental_rerun()
         #st.markdown('<script>window.location.reload()</script>', unsafe_allow_html=True)
 
     results = []
@@ -306,15 +309,11 @@ def worksync_page():
 
 
   
-def main():
-    # Sidebar navigation
-    page = st.sidebar.radio("Menu", ["MOSS", "Worksync"])
+# 탭 생성
+tab1, tab2= st.tabs(["MOSS", "worksync"])
 
-    if page == "MOSS":
-        moss_page()
-    elif page == "Worksync":
-        worksync_page()
-        
-if __name__ == "__main__":
-    main()
+with tab1:
+    moss_page()
 
+with tab2:
+    worksync_page()
