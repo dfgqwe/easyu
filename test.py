@@ -134,7 +134,16 @@ B_S_head_formats = {
 
 @st.cache_data
 def get_format(text):
+    # formats는 어딘가에 미리 정의되어 있는 딕셔너리로 가정합니다.
     matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
+
+    # "복구"라는 단어가 포함된 경우
+    if "복구" in text:
+        for format in matched_formats:
+            if format not in ["[기타]", "[폐문]"]:
+                return format
+    
+    # 복구라는 단어가 없는 경우 기존 로직을 그대로 사용
     if "[한전정전복구]" in matched_formats and ("[기타]" in matched_formats or "[폐문]" in matched_formats):
         return "[폐문]" if "[폐문]" in matched_formats else "[기타]"
     elif "[한전정전복구]" in matched_formats:
