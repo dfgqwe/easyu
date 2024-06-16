@@ -147,17 +147,10 @@ def get_format(text):
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
         return selected_formats[-1] if selected_formats else None
 
-st.session_state.sidebar_expanded = False
 
 # Load the CSV file
 df = pd.read_csv('head.csv', index_col=0)
 
-# Sidebar for MOSS recovery items
-st.sidebar.title("Menu")
-
-# Expander in sidebar
-with st.sidebar.expander('MOSS 회복 항목 표준'):
-    st.dataframe(df)
 
 def clear_tm_content(content):
     keywords_to_remove = ["[현장TM]", "[TM활동]", "[TM 활동]", "[현장 TM]"]
@@ -168,6 +161,8 @@ def clear_tm_content(content):
 
 def moss_page():
 
+    st.title("MOSS 회복 문구")
+
     df1 = pd.read_csv('bs_head.csv')
 
     # 인덱스를 제거한 새로운 데이터프레임 생성
@@ -176,8 +171,6 @@ def moss_page():
     # Streamlit 애플리케이션
     with st.expander('MOSS BS 발행 HEAD'):
         st.dataframe(df1_reset)
-    
-    st.title("MOSS 회복 문구")
 
     # 초기값 설정
     if "user_input" not in st.session_state:
@@ -266,7 +259,11 @@ def moss_page():
 
     copy_activated = False
 
-    col1, col2 = st.columns(2)
+
+
+    
+    
+    col1, col2 , col3= st.columns(3)
 
     with col1:
         if st.button("출력"):
@@ -278,7 +275,33 @@ def moss_page():
     with col2:
         if st.button("입력란 초기화"):
             clear_text()
-        
+
+    with col3:
+        if 'button_clicked' not in st.session_state:
+            st.session_state['button_clicked'] = False
+            
+        if st.button('MOSS 회복 항목 표준'):
+            st.session_state['button_clicked'] = not st.session_state['button_clicked']
+
+        if st.session_state['button_clicked']:
+            placeholder = st.empty()
+            with placeholder.container():
+                st.markdown(
+            """
+            <style>
+            /* 데이터프레임이 최대한 화면에 가깝게 보이도록 스타일 조정 */
+            .css-1l02zno {
+                width: 100%;
+                max-width: 100%;
+                height: calc(100vh - 200px); /* 높이를 화면 높이의 일부분으로 설정 */
+                overflow: auto; /* 스크롤이 필요한 경우 스크롤 허용 */
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+                st.dataframe(df)
+                
 # Worksync 페이지
 def worksync_page():  
     st.title("Worksync 페이지 준비중...")
