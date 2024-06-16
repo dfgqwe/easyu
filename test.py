@@ -304,7 +304,7 @@ def moss_page():
                 
 # Worksync 페이지
 def worksync_page():  
-    st.title("Worksync 페이지 준비중...")
+    st.title("Worksync")
     
     # 데이터 파일 불러오기
     work = pd.read_csv("데이터.csv")  # 파일 경로를 실제 파일 경로로 변경해주세요
