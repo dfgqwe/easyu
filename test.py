@@ -347,11 +347,18 @@ def worksync_page():
 
 
   
-# 탭 생성
-tab1, tab2= st.tabs(["MOSS", "Worksync"])
+# 옵션 메뉴 생성
+selected = option_menu(
+    menu_title=None,  # 메뉴 제목 (원하지 않으면 None)
+    options=["Home","MOSS", "Worksync"],  # 옵션 이름들
+    icons=["house", "box-arrow-down","calendar2-check"],  # 각 옵션에 해당하는 아이콘
+    menu_icon="cast",  # 메뉴 아이콘
+    default_index=0,  # 기본 선택 옵션
+    orientation="horizontal"  # 메뉴 방향 (수평)
+)
 
-with tab1:
+# 탭 내용 생성
+if selected == "MOSS":
     moss_page()
-
-with tab2:
+elif selected == "Worksync":
     worksync_page()
