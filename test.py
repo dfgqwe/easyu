@@ -318,27 +318,28 @@ def moss_page():
 # Worksync 페이지
 def worksync_page():  
     st.title("Worksync")
-    
-    # 데이터 파일 불러오기
-    work = pd.read_csv("데이터.csv")  # 파일 경로를 실제 파일 경로로 변경해주세요
 
-    # 'ip'와 '업무'가 동일한 경우 중복된 행 제거
+    # 데이터 파일 불러오기
+    work = pd.read_csv("데이터.csv")
+
+    # '장비ID'와 '업무명'이 동일한 경우 중복된 행 제거
     df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
+
+    # 장비ID 순서대로 정렬
+    df_no_duplicates = df_no_duplicates.sort_values(by='장비ID')
 
     # IP 입력 받기
     ip_input = st.text_input("IP 입력", "")
     
     # IP 입력이 있을 경우
     if ip_input:
-        # 입력된 IP에 해당되는 주소 찾기
+        # 입력된 IP에 해당되는 행 찾기
         if ip_input in df_no_duplicates['장비ID'].values:
+            # 해당 IP의 사업장 찾기
             address = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]['사업장'].values[0]
-            st.write("입력된 IP에 해당하는 주소")
+            st.write("★동일국소 점검 대상★")
             
-            # 동일 주소지의 업무 찾기
             same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
-            
-            # 장비명-업무 형식으로 보여주기
             for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
                 st.text(f"{idx}. {row['장비ID']} - {row['장비명/국사명']} - {row['업무명']}")
         else:
