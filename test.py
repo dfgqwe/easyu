@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import pyperclip
 import re
+from streamlit_option_menu import option_menu
 
 # 포맷 데이터 포멧
 formats = {
