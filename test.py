@@ -348,7 +348,7 @@ def worksync_page():
 
   
 # 탭 생성
-tab1, tab2= st.tabs(["MOSS", "worksync"])
+tab1, tab2= st.tabs(["MOSS", "Worksync"])
 
 with tab1:
     moss_page()
