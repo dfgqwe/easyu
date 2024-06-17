@@ -276,7 +276,7 @@ def moss_page():
 
     
     
-    col1, col2 , col3= st.columns([3, 0.5, 0.5])
+    col1, col2 , col3= st.columns([2.8, 0.5, 0.7])
 
     with col1:
         if st.button("출력"):
