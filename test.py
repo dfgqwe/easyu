@@ -140,7 +140,8 @@ B_S_head_formats = {
     "원격조치(포트BLK)",
     "정전알림이 등록",
     "DB현행화",
-    "고객홍보"
+    "고객홍보",
+    "DB 삭제 여부"
 ]
 
 @st.cache_data
@@ -205,13 +206,25 @@ def moss_page():
 
     results = []
 
+
+    if "bs_checked" not in st.session_state:
+        st.session_state.bs_checked = False
+    if "complaint_checked" not in st.session_state:
+        st.session_state.complaint_checked = False
+
+    def bs_checkbox_callback():
+        st.session_state.complaint_checked = False
+
+    def complaint_checkbox_callback():
+        st.session_state.bs_checked = False
+    
     # B/S 및 민원처리 체크박스
     col1, col2 = st.columns(2)
 
     with col1:
-        is_bs_checked = st.checkbox("B/S")
+        is_bs_checked = st.checkbox("B/S", key="bs_checked", on_change=bs_checkbox_callback)
     with col2:
-        is_complaint_checked = st.checkbox("민원처리")
+        is_complaint_checked = st.checkbox("민원처리", key="complaint_checked", on_change=complaint_checkbox_callback)
 
     if is_bs_checked:
         selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
@@ -231,18 +244,48 @@ def moss_page():
             results.append(head_format)
 
     results.append(user_input)
-    results.append("수고하셨습니다")
+
 
     출동예방_actions = []
     selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
-    if selected_actions:
-        formatted_actions = ", ".join(selected_actions)
+
+    기타_results = []
+
+    if "DB 삭제 여부" in selected_actions:
+        if "기타_고객DB_neoss_불가" not in st.session_state:
+            st.session_state.기타_고객DB_neoss_불가 = False
+        if "기타_neoss_완료" not in st.session_state:
+            st.session_state.기타_neoss_완료 = False
+
+        def 기타_고객DB_neoss_불가_callback():
+            st.session_state.기타_neoss_완료 = False
+
+        def 기타_neoss_완료_callback():
+            st.session_state.기타_고객DB_neoss_불가 = False
+        
+        기타_고객DB_neoss_불가 = st.checkbox("고객DB 존재 NeOSS 삭제 불가", key="기타_고객DB_neoss_불가", on_change=기타_고객DB_neoss_불가_callback)
+        기타_neoss_완료 = st.checkbox("NeOSS 삭제 완료", key="기타_neoss_완료", on_change=기타_neoss_완료_callback)
+    
+        if 기타_고객DB_neoss_불가:
+            기타_results.append("고객DB 존재/NeOSS 삭제 불가")
+        if 기타_neoss_완료:
+            기타_results.append("NeOSS 삭제 완료")
+
+
+    results.extend(기타_results)
+    results.append("수고하셨습니다")
+
+    
+    filtered_actions = [action for action in selected_actions if action != "DB 삭제 여부"]
+    if filtered_actions:
+        formatted_actions = ", ".join(filtered_actions)
         results.append(f"<선조치_NOC> {formatted_actions}")
         if "전기작업 확인(전화)" in selected_actions:
             출동예방_actions.append("[NOC]전기작업 확인(전화)")
         if "출동보류" in selected_actions:
             출동예방_actions.append("[NOC]출동보류")
 
+    
     현장_options = [
         "[현장TM]",
         "주소",
@@ -277,14 +320,12 @@ def moss_page():
         출동예방_actions.append(formatted_TM)
 
     if 출동예방_actions:
-        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
+        results.insert(4, f"<출동예방>{', '.join(출동예방_actions)}")
+
 
     copy_activated = False
 
 
-
-    
-    
     col1, col2 , col3= st.columns([2.8, 0.5, 0.7])
 
     with col1:
