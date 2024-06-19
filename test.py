@@ -51,7 +51,6 @@ formats = {
     "검사": "[고객측작업]",
     "공사": "[고객측작업]",
     "장비철거": "[장비철거]",
-    "장비 철거": "[장비철거]",
     "타사전환": "[타사전환]",
     "타사 전환": "[타사전환]",
     "감쇄기": "[광커넥터복구]", 
@@ -179,6 +178,67 @@ def clear_tm_content(content):
     for keyword in keywords_to_remove:
         content = content.replace(keyword, "")
     return content.strip()
+
+
+# Initialize session state for day and night content if not already present
+if 'day_content' not in st.session_state:
+    st.session_state.day_content = ""
+if 'night_content' not in st.session_state:
+    st.session_state.night_content = ""
+
+
+def home_page():
+    st.title("Home")
+    st.markdown(
+        """
+        <style>
+        .stRadio > div {
+            display: flex;
+            flex-direction: row;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Radio button for choosing between Day Content and Night Content
+    content_option = st.radio("인수 인계", ["주간", "야간"])
+
+    if content_option == "주간":
+        st.header("주간")
+        st.markdown(st.session_state.day_content.replace('\n', '<br>'), unsafe_allow_html=True)
+    else:
+        st.header("야간")
+        st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
+
+
+
+
+def manage_page():
+    st.title("Manage")
+
+    st.markdown(
+        """
+        <style>
+        .stRadio > div {
+            display: flex;
+            flex-direction: row;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+    content_option = st.radio("인수 인계", ["주간", "야간"])
+
+    if content_option == "주간":
+        st.header("주간")
+        st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.day_content, height=200)
+
+    else:
+        st.header("야간")
+        st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.night_content, height=200)
+
+
 
 
 def moss_page():
@@ -409,7 +469,11 @@ selected = option_menu(
 )
 
 # 탭 내용 생성
-if selected == "MOSS":
+if selected == "Home":
+    home_page()
+elif selected == "MOSS":
     moss_page()
 elif selected == "Worksync":
     worksync_page()
+elif selected == "Manage":
+    manage_page()
