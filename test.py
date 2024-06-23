@@ -228,6 +228,9 @@ def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, GITHUB_TOKEN):
         selected_task = st.selectbox("Select task to delete", list(tasks['업무명']))
 
         if st.button("Delete selected task"):
+            # Print selected task for debugging
+            print(f"Selected task to delete: {selected_task}")
+
             # Delete selected task from the data
             work = work[~((work['장비ID'] == ip_input) & (work['업무명'] == selected_task))]
             
@@ -236,6 +239,9 @@ def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, GITHUB_TOKEN):
                 work.to_csv("ws_data.csv", index=False)
                 st.success(f"Task '{selected_task}' deleted successfully.")
                 
+                # Print first few rows of updated data for debugging
+                print(work.head())
+
                 # Update the file in GitHub repository
                 update_file_in_github(repo_owner, repo_name, "ws_data.csv", "main", "Update data file", work.to_csv(index=False), GITHUB_TOKEN)
             except Exception as e:
