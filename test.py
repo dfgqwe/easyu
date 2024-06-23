@@ -260,7 +260,7 @@ def get_file_contents(GITHUB_TOKEN, repo_owner, repo_name, filepath):
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
-        return response.content.decode('utf-8')
+        return response.content.decode('cp949')
     else:
         st.error(f"파일 정보를 가져오지 못했습니다. 상태 코드: {response.status_code}")
         return None
