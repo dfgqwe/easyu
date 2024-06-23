@@ -274,7 +274,7 @@ def manage_page():
 
     # GitHub 정보 입력
     repo = "dfgqwe/easyu"  # 레포지토리 이름
-    path = "main/%EB%8D%B0%EC%9D%B4%ED%84%B0.csv"  # 파일 경로
+    path = "main/데이터.csv"  # 파일 경로
     message = "데이터 업데이트"
     branch = "main"  # 브랜치 이름
     token = "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"  # GitHub Personal Access Token 직접 포함
