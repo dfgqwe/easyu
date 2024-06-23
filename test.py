@@ -235,7 +235,7 @@ def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, GITHUB_TOKEN):
             st.success(f"Task '{selected_task}' deleted successfully.")
 
             # Update the file in GitHub repository
-            update_file_in_github(repo_owner, repo_name, "main/ws_data.csv", "main", "Update data file", work.to_csv(index=False), GITHUB_TOKEN)
+            update_file_in_github(repo_owner, repo_name, "ws_data.csv", "main", "Update data file", work.to_csv(index=False), GITHUB_TOKEN)
     else:
         st.warning("No tasks found for the given IP.")
 
