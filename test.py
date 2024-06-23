@@ -251,7 +251,7 @@ def manage_page():
         st.warning("파일을 가져오는 중에 문제가 발생했습니다.")
 
 def get_file_contents(GITHUB_TOKEN, repo_owner, repo_name, filepath):
-    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
+    url = f"https://github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
     headers = {
         "Authorization": f"Bearer {GITHUB_TOKEN}",  # 여기서 GITHUB_TOKEN은 문자열 형태여야 함
         "Accept": "application/vnd.github.v3.raw"  # 원본 데이터를 가져오기 위해 raw 포맷 지정
