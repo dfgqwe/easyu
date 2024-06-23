@@ -211,8 +211,7 @@ def home_page():
 
 
 # Function to delete tasks based on IP address
-def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, GITHUB_TOKEN):
-    # Load data file
+def delete_tasks_based_on_ip(ip_input):
     try:
         work = pd.read_csv("ws_data.csv")
     except FileNotFoundError:
@@ -227,23 +226,19 @@ def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, GITHUB_TOKEN):
         tasks = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input][['장비명/국사명', '업무명']]
         selected_task = st.selectbox("Select task to delete", list(tasks['업무명']))
 
-        if st.button("Delete selected task"):
-            st.write(f"Selected task to delete: {selected_task}")  # 디버깅 메시지 출력
+        # Display selected task
+        st.write(f"Selected task: {selected_task}")
 
-            # Delete selected task from the data
-            work = work[~((work['장비ID'] == ip_input) & (work['업무명'] == selected_task))]
-            
-            try:
-                # Save modified data back to CSV
-                work.to_csv("ws_data.csv", index=False)
-                st.success(f"Task '{selected_task}' deleted successfully.")
-                
-                st.write(work.head())  # 수정된 데이터 프레임 일부 출력
-
-                # Update the file in GitHub repository
-                update_file_in_github(repo_owner, repo_name, "ws_data.csv", "main", "Update data file", work.to_csv(index=False), GITHUB_TOKEN)
-            except Exception as e:
-                st.error(f"Failed to save data to CSV or update GitHub: {str(e)}")
+        if selected_task:
+            if st.button("Delete selected task"):
+                # Delete selected task from the data
+                work = work[~((work['장비ID'] == ip_input) & (work['업무명'] == selected_task))]
+                try:
+                    # Save modified data back to CSV
+                    work.to_csv("ws_data.csv", index=False)
+                    st.success(f"Task '{selected_task}' deleted successfully.")
+                except Exception as e:
+                    st.error(f"Failed to save data to CSV: {str(e)}")
     else:
         st.warning("No tasks found for the given IP.")
 
@@ -276,13 +271,12 @@ def manage_page():
             st.session_state.night_content = ""
         st.session_state.night_content = st.text_area("Night to Day handover", st.session_state.night_content, height=200)
 
-    # IP input
-    ip_input = st.text_input("IP input", "")
+   ip_input = st.text_input("Enter IP", "")
 
-    # Button to trigger deletion
-    if st.button("Delete tasks from GitHub"):
+    if st.button("Find tasks"):
         if ip_input:
-            delete_tasks_based_on_ip(ip_input, "dfgqwe", "easyu", os.getenv('GITHUB_TOKEN'))
+            delete_tasks_based_on_ip(ip_input)
+
 
 
 
