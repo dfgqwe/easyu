@@ -3,3 +3,4 @@ pyperclip
 streamlit-option-menu
 requests
 PyGithub
+time
