@@ -3,6 +3,7 @@ import pandas as pd
 import pyperclip
 import re
 from streamlit_option_menu import option_menu
+import os
 
 # 포맷 데이터 포멧
 formats = {
@@ -240,17 +241,55 @@ def manage_page():
     df_no_duplicates = df_no_duplicates.sort_values(by='장비ID')
 
     st.write("### Worksync Data")
-    st.dataframe(df_no_duplicates)
+    # GitHub URL에서 CSV 파일 읽기
+    url = "https://raw.githubusercontent.com/dfgqwe/easyu/main/%EB%8D%B0%EC%9D%B4%ED%84%B0.csv"
+    work = pd.read_csv(url, encoding='utf-8')
 
-    to_delete = st.multiselect("Select rows to delete (by index):", df_no_duplicates.index.tolist())
+    # 데이터 표시 및 편집
+    st.write("현재 데이터:")
+    edited_data = st.experimental_data_editor(work)
 
-    if st.button("Delete Selected Rows"):
-        if to_delete:
-            df_no_duplicates = df_no_duplicates.drop(index=to_delete)
-            df_no_duplicates.to_csv("데이터.csv", index=False)  # Save updated dataframe to the CSV
-            st.success("Selected rows deleted and saved.")
-        else:
-            st.warning("No rows selected.")
+    # 수정된 데이터 저장 및 다운로드 버튼
+    if st.button("수정된 데이터 저장"):
+        edited_data.to_csv("수정된_데이터.csv", index=False)
+        st.write("데이터가 수정되었습니다. 수정된 파일을 다운로드하려면 아래 링크를 클릭하세요.")
+        st.download_button("수정된 데이터 다운로드", data=edited_data.to_csv(index=False), file_name="수정된_데이터.csv")
+
+    # GitHub 업데이트 함수
+    def update_github_file(repo, path, content, message, branch, token):
+        url = f"https://api.github.com/repos/{repo}/contents/{path}"
+        headers = {"Authorization": f"token {token}"}
+    
+        # 파일 정보를 가져옴
+        response = requests.get(url, headers=headers)
+        response_json = response.json()
+    
+        # base64로 파일 인코딩
+        encoded_content = base64.b64encode(content.encode()).decode()
+    
+        data = {
+            "message": message,
+            "content": encoded_content,
+            "branch": branch,
+            "sha": response_json["sha"]
+        }    
+    
+        # 파일 업데이트
+        update_response = requests.put(url, headers=headers, json=data)
+        return update_response.json()
+
+    # GitHub 정보 입력
+    repo = "dfgqwe/easyu"  # 레포지토리 이름
+    path = "main/%EB%8D%B0%EC%9D%B4%ED%84%B0.csv"  # 파일 경로
+    message = "데이터 업데이트"
+    branch = "main"  # 브랜치 이름
+    token = os.getenv("GITHUB_TOKEN")  # 환경 변수에서 GitHub Personal Access Token 읽기
+
+    # 데이터 수정 및 GitHub 업데이트
+    if st.button("수정된 데이터 GitHub에 저장"):
+        csv_content = edited_data.to_csv(index=False)
+        result = update_github_file(repo, path, csv_content, message, branch, token)
+        st.write("GitHub에 데이터가 업데이트되었습니다.", result)
 
 
 
