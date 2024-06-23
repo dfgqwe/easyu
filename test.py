@@ -161,7 +161,7 @@ def get_file_content():
     return content, sha
 
 def update_file_content(content, sha):
-    url = f'https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}'
+    url = f'https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/데이터.csv'
     headers = {
         'Authorization': f'token {GITHUB_TOKEN}',
         'Accept': 'application/vnd.github.v3+json'
