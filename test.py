@@ -211,7 +211,7 @@ def home_page():
 
 
 # Function to delete tasks based on IP address
-def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, github_token):
+def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, GITHUB_TOKEN):
     # Load data file
     try:
         work = pd.read_csv("ws_data.csv")
@@ -235,11 +235,11 @@ def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, github_token):
             st.success(f"Task '{selected_task}' deleted successfully.")
 
             # Update the file in GitHub repository
-            update_file_in_github(repo_owner, repo_name, "ws_data.csv", "main", "Update data file", work.to_csv(index=False), github_token)
+            update_file_in_github(repo_owner, repo_name, "main/ws_data.csv", "main", "Update data file", work.to_csv(index=False), GITHUB_TOKEN)
     else:
         st.warning("No tasks found for the given IP.")
 
-def update_file_in_github(repo_owner, repo_name, filepath, branch, commit_message, new_content, github_token):
+def update_file_in_github(repo_owner, repo_name, filepath, branch, commit_message, new_content, GITHUB_TOKEN):
     url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
     headers = {
         "Authorization": f"Bearer {GITHUB_TOKEN}",
