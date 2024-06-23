@@ -148,6 +148,8 @@ GITHUB_USER = 'dfgqwe'
 GITHUB_REPO = 'easyue'
 GITHUB_FILE_PATH = '데이터.csv'
 GITHUB_TOKEN = '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'
+GITHUB_FILE_PATH = quote(GITHUB_FILE_PATH, safe='')
+
 def get_file_content():
     url = f'https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/데이터.csv'
     headers = {
