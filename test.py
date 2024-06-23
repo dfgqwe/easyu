@@ -239,79 +239,34 @@ def manage_page():
     # Manage Worksync data
     st.title("Manage Work Data")
 
-    device_id = st.text_input("장비ID 입력", "")
-    
-    if st.button("업무 불러오기"):
-        works_to_delete = st.selectbox("삭제할 업무명 선택", get_works_for_device(device_id))
+    token = os.getenv('GITHUB_TOKEN')  # 환경 변수에서 토큰을 가져옴
+    repo_owner = "dfgqwe"
+    repo_name = "easyu"
+    filepath = "데이터.csv"  # Replace with the path to your file in the repository
 
-    if st.button("선택한 업무 삭제"):
-        # 선택한 업무 삭제 로직 추가
-        st.success(f"{works_to_delete} 삭제 완료!")
+    file_contents = get_file_contents(token, repo_owner, repo_name, filepath)
 
-def get_works_for_device(device_id):
-    url = f"https://api.github.com/repos/user/repository/contents/{device_id}/데이터.csv"
+    if file_contents:
+        df = pd.read_csv(pd.compat.StringIO(file_contents))
+        st.dataframe(df)
+    else:
+        st.warning("파일을 가져오는 중에 문제가 발생했습니다.")
+
+def get_file_contents(token, repo_owner, repo_name, filepath):
+    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
     headers = {
-        "Authorization": "Bearer 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"  # Replace with your actual token
+        "Authorization": f"token {token}"
     }
 
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
-        content = response.content.decode('utf-8')
-        lines = content.splitlines()
-        works = [line.split(',')[1] for line in lines]  # 예시: 업무명이 CSV 파일의 두 번째 열에 있다고 가정
+        content = response.json()["content"]
+        decoded_content = base64.b64decode(content).decode('utf-8')
+        return decoded_content
     else:
         st.error(f"파일 정보를 가져오지 못했습니다. 상태 코드: {response.status_code}")
-        works = []
-
-    return works
-
-def delete_work(work_name, device_id):
-    owner = 'dfgqwe'  # GitHub 사용자명
-    repo = 'easyu'    # 레포지토리명
-    path = '데이터.csv'  # 파일 경로
-    token = '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'  # GitHub 개인 액세스 토큰
-
-    url = f'https://api.github.com/repos/{owner}/{repo}/contents/{path}'
-
-    headers = {
-        'Authorization': f'token {token}',
-        'Accept': 'application/vnd.github.v3+json'
-    }
-
-    # 기존 파일 내용 가져오기
-    response = requests.get(url, headers=headers)
-
-    if response.status_code == 200:
-        file_data = response.json()
-        sha = file_data['sha']
-        content = base64.b64decode(file_data['content']).decode('utf-8')
-
-        # 파일 내용 수정: 선택한 업무명 삭제
-        updated_content = ""
-        lines = content.splitlines()
-        for line in lines:
-            if work_name not in line or device_id not in line:
-                updated_content += line + "\n"
-
-        update_data = {
-            'message': f'Delete {work_name} for device {device_id} via API',
-            'content': base64.b64encode(updated_content.encode('utf-8')).decode('utf-8'),
-            'sha': sha
-        }
-
-        update_url = f'https://api.github.com/repos/{owner}/{repo}/contents/{path}'
-        update_response = requests.put(update_url, headers=headers, json=update_data)
-
-        if update_response.status_code == 200:
-            st.success(f"{work_name} 삭제 완료.")
-        else:
-            st.error(f"{work_name} 삭제 실패. 상태 코드: {update_response.status_code}")
-            st.error(update_response.text)
-    else:
-        st.error(f"파일 정보를 가져오지 못했습니다. 상태 코드: {response.status_code}")
-        st.error(response.text)
-
+        return None
 
 
 def moss_page():
