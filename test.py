@@ -235,7 +235,7 @@ def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name):
             st.success(f"Task '{selected_task}' deleted successfully.")
 
             # Update the file in GitHub repository
-            github_token = os.getenv('GITHUB_TOKEN')
+            github_token = os.getenv('github_token')
             update_file_in_github(repo_owner, repo_name, "ws_data.csv", "main", "Update data file", work.to_csv(index=False), github_token)
     else:
         st.warning("No tasks found for the given IP.")
@@ -263,7 +263,7 @@ def update_file_in_github(repo_owner, repo_name, filepath, branch, commit_messag
             "message": commit_message,
             "content": content_base64,
             "sha": sha,
-            "branch": branch
+            "branch": main
         }
         update_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
         update_response = requests.put(update_url, headers=headers, json=update_data)
