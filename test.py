@@ -292,7 +292,7 @@ def delete_work(work_name, device_id):
     owner = 'dfgqwe'  # GitHub 사용자명
     repo = 'easyu'    # 레포지토리명
     path = '데이터.csv'  # 파일 경로
-    token = 'your_github_personal_access_token'  # GitHub 개인 액세스 토큰
+    token = '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'  # GitHub 개인 액세스 토큰
 
     url = f'https://api.github.com/repos/{owner}/{repo}/contents/{path}'
 
