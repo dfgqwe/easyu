@@ -153,6 +153,8 @@ def get_format(text):
         return "[한전정전복구]"
     elif "[전원어댑터교체]" in matched_formats:
         return "[전원어댑터교체]"
+    elif "[사설차단기복구]" in matched_formats:
+        return "[사설차단기복구]"
     elif "[기타]" in matched_formats or "[폐문]" in matched_formats:
         return matched_formats[-1]
     else:
