@@ -147,12 +147,12 @@ B_S_head_formats = {
 ]
 GITHUB_USER = 'dfgqwe'
 GITHUB_REPO = 'easyue'
-GITHUB_FILE_PATH = '데이터.csv'
+GITHUB_FILE_PATH = 'ws_data.csv'
 GITHUB_TOKEN = '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'
 GITHUB_FILE_PATH = quote(GITHUB_FILE_PATH, safe='')
 
 def get_file_content():
-    url = f'https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/데이터.csv'
+    url = f'https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}'
     headers = {
         'Authorization': f'token {GITHUB_TOKEN}',
         'Accept': 'application/vnd.github.v3.raw'
@@ -164,13 +164,13 @@ def get_file_content():
     return content, sha
 
 def update_file_content(content, sha):
-    url = f'https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/데이터.csv'
+    url = f'https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}'
     headers = {
         'Authorization': f'token {GITHUB_TOKEN}',
         'Accept': 'application/vnd.github.v3+json'
     }
     data = {
-        'message': 'Update 데이터.csv',
+        'message': 'Update ws_data.csv',
         'content': base64.b64encode(content.encode('utf-8')).decode('utf-8'),
         'sha': sha
     }
@@ -572,7 +572,7 @@ def worksync_page():
     st.title("Worksync")
 
     # 데이터 파일 불러오기
-    work = pd.read_csv("데이터.csv")
+    work = pd.read_csv("ws_data.csv")
 
     # '장비ID'와 '업무명'이 동일한 경우 중복된 행 제거
     df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
