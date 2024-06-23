@@ -4,6 +4,7 @@ import pyperclip
 import re
 from streamlit_option_menu import option_menu
 import os
+import requests
 
 # 포맷 데이터 포멧
 formats = {
