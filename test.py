@@ -237,12 +237,10 @@ def manage_page():
         st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.night_content, height=200)
 
     # Manage Worksync data
-    st.title("Manage Work Data")
-
     GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')  # 환경 변수에서 토큰을 가져옴
     repo_owner = "dfgqwe"
     repo_name = "easyu"
-    filepath = "데이터.csv"  # Replace with the path to your file in the repository
+    filepath = "데이터.csv"  # GitHub 저장소 내 파일 경로
 
     file_contents = get_file_contents(GITHUB_TOKEN, repo_owner, repo_name, filepath)
 
@@ -255,15 +253,14 @@ def manage_page():
 def get_file_contents(GITHUB_TOKEN, repo_owner, repo_name, filepath):
     url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
     headers = {
-        "Authorization": f"GITHUB_TOKEN {GITHUB_TOKEN}"
+        "Authorization": f"GITHUB_TOKEN {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3.raw"  # 원본 데이터를 가져오기 위해 raw 포맷 지정
     }
 
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
-        content = response.json()["content"]
-        decoded_content = base64.b64decode(content).decode('utf-8')
-        return decoded_content
+        return response.content.decode('utf-8')
     else:
         st.error(f"파일 정보를 가져오지 못했습니다. 상태 코드: {response.status_code}")
         return None
