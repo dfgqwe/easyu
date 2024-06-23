@@ -239,7 +239,7 @@ def manage_page():
     # Manage Worksync data
     st.title("Manage Work Data")
 
-    token = os.getenv('GITHUB_TOKEN')  # 환경 변수에서 토큰을 가져옴
+    GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')  # 환경 변수에서 토큰을 가져옴
     repo_owner = "dfgqwe"
     repo_name = "easyu"
     filepath = "데이터.csv"  # Replace with the path to your file in the repository
@@ -252,10 +252,10 @@ def manage_page():
     else:
         st.warning("파일을 가져오는 중에 문제가 발생했습니다.")
 
-def get_file_contents(token, repo_owner, repo_name, filepath):
+def get_file_contents(GITHUB_TOKEN, repo_owner, repo_name, filepath):
     url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
     headers = {
-        "Authorization": f"token {token}"
+        "Authorization": f"GITHUB_TOKEN {GITHUB_TOKEN}"
     }
 
     response = requests.get(url, headers=headers)
