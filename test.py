@@ -204,7 +204,7 @@ def update_data_on_github(repo_name, file_path, github_token, df):
         file_content = repo.get_contents(file_path)
         
         # Update file on GitHub
-        repo.update_file(file_content.path, "Update data", df.to_csv(index=False), file_content.sha)
+        repo.update_file(file_content.path, "ws_data.csv", df.to_csv(index=False), file_content.sha)
         
         st.success("Data successfully updated on GitHub.")
     except Exception as e:
