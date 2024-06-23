@@ -253,18 +253,17 @@ def manage_page():
 def get_file_contents(GITHUB_TOKEN, repo_owner, repo_name, filepath):
     url = f"https://api.github.com/{repo_owner}/{repo_name}/{filepath}"
     headers = {
-        "Bearer":{GITHUB_TOKEN},
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3.raw"  # 원본 데이터를 가져오기 위해 raw 포맷 지정
     }
 
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
-        return response.content.decode('cp949')
+        return response.content.decode('utf-8')
     else:
         st.error(f"파일 정보를 가져오지 못했습니다. 상태 코드: {response.status_code}")
         return None
-
 
 def moss_page():
 
