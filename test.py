@@ -211,7 +211,36 @@ def home_page():
 
 
 # Function to delete tasks based on IP address
-def delete_tasks_based_on_ip(ip_input):
+def delete_file_from_github(repo_owner, repo_name, filepath, github_token):
+    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
+    headers = {
+        "Authorization": f"Bearer {github_token}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    # Step 1: Get current file information
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        file_data = response.json()
+        sha = file_data['sha']  # Get the current file's SHA hash
+        commit_message = "Delete file via API"  # Commit message for deletion
+
+        # Step 2: Delete the file
+        delete_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
+        delete_data = {
+            "message": commit_message,
+            "sha": sha
+        }
+        delete_response = requests.delete(delete_url, headers=headers, json=delete_data)
+
+        if delete_response.status_code == 200:
+            st.success(f"File {filepath} successfully deleted from GitHub.")
+        else:
+            st.error(f"Failed to delete file {filepath} from GitHub. Status code: {delete_response.status_code}")
+    else:
+        st.error(f"Failed to get file information from GitHub. Status code: {response.status_code}")
+
+def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, github_token):
     # 데이터 파일 불러오기
     try:
         work = pd.read_csv("ws_data.csv")  # 파일 경로 설정
@@ -233,6 +262,10 @@ def delete_tasks_based_on_ip(ip_input):
             # 수정된 데이터를 다시 저장
             work.to_csv("ws_data.csv", index=False)
             st.success(f"업무 '{selected_task}' 삭제 완료.")
+
+            # GitHub에서도 파일 삭제하기
+            filepath = "ws_data.csv"  # GitHub 저장소 내 파일 경로
+            delete_file_from_github(repo_owner, repo_name, filepath, github_token)
     else:
         st.warning("해당 IP에 대한 업무가 없습니다.")
 
@@ -255,19 +288,28 @@ def manage_page():
 
     if content_option == "주간":
         st.header("주간")
+        if 'day_content' not in st.session_state:
+            st.session_state.day_content = ""
         st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.day_content, height=200)
 
     else:
         st.header("야간")
+        if 'night_content' not in st.session_state:
+            st.session_state.night_content = ""
         st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.night_content, height=200)
 
     # IP 입력 받기
     ip_input = st.text_input("IP 입력", "")
 
+    # GitHub 설정
+    github_token = os.getenv('GITHUB_TOKEN')  # 환경 변수에서 GitHub 토큰을 가져옵니다
+    repo_owner = "YourGitHubUsername"  # GitHub 사용자명 또는 조직명
+    repo_name = "YourRepositoryName"  # GitHub 저장소명
+
     # Button to trigger deletion
     if st.button("GitHub에서 업무 삭제"):
         if ip_input:
-            delete_tasks_based_on_ip(ip_input)
+            delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, github_token)
 
 
 
