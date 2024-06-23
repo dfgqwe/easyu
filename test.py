@@ -271,7 +271,6 @@ def get_works_for_device(device_id):
     response = requests.get(url, headers=headers)
 
    if response.status_code == 200:
-       # 파일 내용 가져오기
        file_contents = response.content
         # 이후 파일 처리 로직 작성
 
