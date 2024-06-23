@@ -152,7 +152,7 @@ GITHUB_TOKEN = 'github_pat_11BI5AZEQ0Wvw0f9Hzn9yW_2QlQDLr9nX9bCn0QVjyCXt3wqIsgIY
 GITHUB_FILE_PATH = quote(GITHUB_FILE_PATH, safe='')
 
 def get_file_content():
-    url = f'https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}'
+    url = f'https://github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}'
     headers = {
         'Authorization': f'token {GITHUB_TOKEN}',
         'Accept': 'application/vnd.github.v3.raw'
@@ -164,7 +164,7 @@ def get_file_content():
     return content, sha
 
 def update_file_content(content, sha):
-    url = f'https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}'
+    url = f'https://github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}'
     headers = {
         'Authorization': f'token {GITHUB_TOKEN}',
         'Accept': 'application/vnd.github.v3+json'
