@@ -244,7 +244,7 @@ def manage_page():
     repo_name = "easyu"
     filepath = "데이터.csv"  # Replace with the path to your file in the repository
 
-    file_contents = get_file_contents(token, repo_owner, repo_name, filepath)
+    file_contents = get_file_contents(GITHUB_TOKEN, repo_owner, repo_name, filepath)
 
     if file_contents:
         df = pd.read_csv(pd.compat.StringIO(file_contents))
