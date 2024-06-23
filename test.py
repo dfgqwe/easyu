@@ -151,7 +151,7 @@ GITHUB_FILE_PATH = 'ws_data.csv'
 GITHUB_TOKEN = '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'
 
 def get_file_content():
-    url = 'https://github.com/dfgqwe/easyu/blob/main/ws_data.csv''
+    url = 'https://github.com/dfgqwe/easyu/blob/main/ws_data.csv'
     headers = {
         'Authorization': f'token {GITHUB_TOKEN}',
         'Accept': 'application/vnd.github.v3.raw'
