@@ -493,7 +493,7 @@ def worksync_page():
     st.title("Worksync")
 
     # 데이터 파일 불러오기
-    work = pd.read_csv("데이터.csv")
+    work = pd.read_csv("ws_data.csv.csv")
 
     # '장비ID'와 '업무명'이 동일한 경우 중복된 행 제거
     df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
