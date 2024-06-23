@@ -235,15 +235,9 @@ def manage_page():
     # Manage Worksync data
     st.header("Worksync Data Management")
 
-    work = pd.read_csv("https://raw.githubusercontent.com/user/repository/branch/" + urllib.parse.quote("데이터.csv")")  # Replace with your actual GitHub URL
-
-    df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
-    df_no_duplicates = df_no_duplicates.sort_values(by='장비ID')
-
-    st.write("### Worksync Data")
-    # GitHub URL에서 CSV 파일 읽기
-    url =  "https://raw.githubusercontent.com/user/repository/branch/" + urllib.parse.quote("데이터.csv")
-    work = pd.read_csv(url, encoding='utf-8')
+   # GitHub URL에서 CSV 파일 읽기
+    url = "https://raw.githubusercontent.com/user/repository/branch/data.csv"  # 실제 URL로 수정 필요
+    work = pd.read_csv(url)
 
     # 데이터 표시 및 편집
     st.write("현재 데이터:")
@@ -257,8 +251,7 @@ def manage_page():
 
     # GitHub 업데이트 함수
     def update_github_file(repo, path, content, message, branch, token):
-        url = f"url = "https://raw.githubusercontent.com/user/repository/branch/" + urllib.parse.quote("데이터.csv")"
-        work = pd.read_csv(url)
+        url = f"https://api.github.com/repos/{repo}/contents/{path}"
         headers = {"Authorization": f"token {token}"}
     
         # 파일 정보를 가져옴
@@ -273,7 +266,7 @@ def manage_page():
             "content": encoded_content,
             "branch": branch,
             "sha": response_json["sha"]
-        }    
+        }
     
         # 파일 업데이트
         update_response = requests.put(url, headers=headers, json=data)
