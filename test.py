@@ -268,8 +268,8 @@ def manage_page():
             st.error("GitHub token is not set. Please set it in Streamlit secrets.")
             return
         
-        repo_name = "your_github_username/your_repo_name"
-        file_path = "path/to/your/data.csv"
+        repo_name = "dfgqwe/easyu"
+        file_path = "ws_data.csv"
         
         df_no_duplicates = fetch_data_from_github(repo_name, file_path, github_token)
         if df_no_duplicates is None:
