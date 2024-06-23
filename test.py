@@ -240,7 +240,7 @@ def manage_page():
     GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')  # 환경 변수에서 토큰을 가져옴
     repo_owner = "dfgqwe"
     repo_name = "easyu"
-    filepath = "데이터.csv"  # GitHub 저장소 내 파일 경로
+    filepath = "780bd4ee5299f56b912c7caebfd5374876a51fde/%EB%8D%B0%EC%9D%B4%ED%84%B0.csv"  # GitHub 저장소 내 파일 경로
 
     file_contents = get_file_contents(GITHUB_TOKEN, repo_owner, repo_name, filepath)
 
