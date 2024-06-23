@@ -271,7 +271,7 @@ def get_works_for_device(device_id):
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
-       file_contents = response.content
+        file_contents = response.content
         # 이후 파일 처리 로직 작성
 
         # 장비ID에 해당하는 업무명 목록 가져오기
