@@ -258,9 +258,9 @@ def manage_page():
         st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.night_content, height=200)
 
     # IP 입력 받기
-    ip_input = st.text_input("IP 입력", "")
+    ip_input1 = st.text_input("IP 입력", "")
     
-    if ip_input:
+    if ip_input1:
         # Ensure you have set your GitHub token in Streamlit secrets
         try:
             github_token = st.secrets["GITHUB_TOKEN"]
@@ -278,8 +278,8 @@ def manage_page():
 
         df_no_duplicates = df_no_duplicates.drop_duplicates(subset=['장비ID', '업무명'])
         
-        if ip_input in df_no_duplicates['장비ID'].values:
-            address = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]['사업장'].values[0]
+        if ip_input1 in df_no_duplicates['장비ID'].values:
+            address = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input1]['사업장'].values[0]
             st.write("★동일국소 점검 대상★")
             
             same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
