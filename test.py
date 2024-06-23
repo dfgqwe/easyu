@@ -211,6 +211,8 @@ def home_page():
         st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
 
 
+# Function to read data from GitHub
+@st.cache
 def fetch_data_from_github(repo_name, file_path, github_token):
     try:
         g = Github(github_token)
