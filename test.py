@@ -495,7 +495,7 @@ def manage_page():
         # Ensure you have set your GitHub token in Streamlit secrets
         try:
              github_token = st.secrets["GITHUB_TOKEN"]
-         except KeyError:
+        except KeyError:
              st.error("GitHub token is not set. Please set it in Streamlit secrets.")
              return
         
