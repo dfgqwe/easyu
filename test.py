@@ -270,7 +270,7 @@ def manage_page():
     ip_input = st.text_input("IP 입력", "")
 
     # Button to trigger deletion
-    if st.button("선택된 업무 삭제"):
+    if st.button("업무 확인"):
         if ip_input:
             delete_tasks_based_on_ip(ip_input)
 
@@ -302,7 +302,6 @@ def delete_tasks_based_on_ip(ip_input):
                 delete_file_from_github(GITHUB_TOKEN, repo_owner, repo_name, filepath)
     else:
         st.warning("해당 IP에 대한 업무가 없습니다.")
-
 def moss_page():
 
     st.title("MOSS 회복 문구")
