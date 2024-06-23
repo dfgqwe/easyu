@@ -236,7 +236,7 @@ def manage_page():
         st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.night_content, height=200)
 
     # Manage Worksync data
-  st.title("Manage Work Data")
+    st.title("Manage Work Data")
 
     # 장비ID 입력 받기
     device_id = st.text_input("장비ID 입력", "")
