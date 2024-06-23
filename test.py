@@ -230,6 +230,7 @@ def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, GITHUB_TOKEN):
         if st.button("Delete selected task"):
             # Delete selected task from the data
             work = work[~((work['장비ID'] == ip_input) & (work['업무명'] == selected_task))]
+            
             try:
                 # Save modified data back to CSV
                 work.to_csv("ws_data.csv", index=False)
@@ -241,7 +242,6 @@ def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, GITHUB_TOKEN):
                 st.error(f"Failed to save data to CSV or update GitHub: {str(e)}")
     else:
         st.warning("No tasks found for the given IP.")
-
 
 def manage_page():
     st.title("Manage")
