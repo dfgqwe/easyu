@@ -482,23 +482,22 @@ def manage_page():
          # 비밀번호 입력 후에만 Radio 버튼을 표시
          content_option = st.radio("인수 인계", ["주간", "야간"])
 
-        if content_option == "주간":
-            st.header("주간")
-            st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.get("day_content", ""), height=200)
-        else:
-            st.header("야간")
-            st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.get("night_content", ""), height=200)
+         if content_option == "주간":
+             st.header("주간")
+             st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.get("day_content", ""), height=200)
+         else:
+             st.header("야간")
+             st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.get("night_content", ""), height=200)
 
-    # IP 입력 받기
+     # IP 입력 받기
     ip_input1 = st.text_input("IP 입력", "")
-    
     if ip_input1:
         # Ensure you have set your GitHub token in Streamlit secrets
         try:
-            github_token = st.secrets["GITHUB_TOKEN"]
-        except KeyError:
-            st.error("GitHub token is not set. Please set it in Streamlit secrets.")
-            return
+             github_token = st.secrets["GITHUB_TOKEN"]
+         except KeyError:
+             st.error("GitHub token is not set. Please set it in Streamlit secrets.")
+             return
         
         repo_name = "dfgqwe/easyu"
         file_path = "ws_data.csv"
