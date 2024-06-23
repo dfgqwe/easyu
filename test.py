@@ -149,7 +149,7 @@ GITHUB_REPO = 'easyue'
 GITHUB_FILE_PATH = '데이터.csv'
 GITHUB_TOKEN = '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'
 def get_file_content():
-    url = f'https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}'
+    url = f'https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/데이터.csv'
     headers = {
         'Authorization': f'token {GITHUB_TOKEN}',
         'Accept': 'application/vnd.github.v3.raw'
