@@ -490,8 +490,8 @@ def manage_page():
              st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.get("night_content", ""), height=200)
 
      # IP 입력 받기
-    ip_input1 = st.text_input("IP 입력", "")
-    if ip_input1:
+     ip_input1 = st.text_input("IP 입력", "")
+     if ip_input1:
         # Ensure you have set your GitHub token in Streamlit secrets
         try:
              github_token = st.secrets["GITHUB_TOKEN"]
