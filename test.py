@@ -147,7 +147,7 @@ B_S_head_formats = {
 GITHUB_USER = 'dfgqwe'
 GITHUB_REPO = 'easyue'
 GITHUB_FILE_PATH = '데이터.csv'
-GITHUB_TOKEN = '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'
+GITHUB_TOKEN = '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'
 def get_file_content():
     url = f'https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/데이터.csv'
     headers = {
@@ -519,7 +519,7 @@ def moss_page():
         출동예방_actions.append(formatted_TM)
 
     if 출동예방_actions:
-        results.insert(4, f"<출동예방>{', '.join(출동예방_actions)}")
+        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
 
     copy_activated = False
