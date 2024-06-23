@@ -475,7 +475,7 @@ def manage_page():
     if time.time() - st.session_state.last_activity_time > 300:
         st.session_state.manage_logged_in = False
 
-     if not st.session_state.manage_logged_in:
+    if not st.session_state.manage_logged_in:
          password = st.text_input("Manage 페이지 비밀번호 입력", type="password")
 
          if password == manage_password:
