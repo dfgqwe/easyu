@@ -151,7 +151,7 @@ GITHUB_FILE_PATH = 'ws_data.csv'
 GITHUB_TOKEN = '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'
 
 def get_file_content():
-    url = f'https://github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/{GITHUB_FILE_PATH}'
+    url = f'https://github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/blob/main/{GITHUB_FILE_PATH}'
     headers = {
         'Authorization': f'token {GITHUB_TOKEN}',
         'Accept': 'application/vnd.github.v3.raw'
@@ -163,7 +163,7 @@ def get_file_content():
     return content, sha
 
 def update_file_content(content, sha):
-    url = f'https://github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/{GITHUB_FILE_PATH}'
+    url = f'https://github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/blob/main/{GITHUB_FILE_PATH}'
     headers = {
         'Authorization': f'token {GITHUB_TOKEN}',
         'Accept': 'application/vnd.github.v3+json'
