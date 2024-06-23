@@ -304,9 +304,9 @@ def manage_page():
             st.session_state.night_content = ""
         st.session_state.night_content = st.text_area("Night to Day handover", st.session_state.night_content, height=200)
 
-     ip_input = st.text_input("Enter IP", "")
+    ip_input = st.text_input("Enter IP", "")
 
-     if st.button("Find tasks"):
+    if st.button("Find tasks"):
         if ip_input:
             # Replace with your actual GitHub repository information and token
             repo_owner = "dfgqwe"
