@@ -5,6 +5,7 @@ import re
 from streamlit_option_menu import option_menu
 import requests
 from urllib.parse import quote
+import base64
 
 # 포맷 데이터 포멧
 formats = {
