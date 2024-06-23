@@ -295,7 +295,7 @@ def delete_tasks_based_on_ip(ip_input):
             GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')  # 환경 변수에서 토큰을 가져옴
             repo_owner = "dfgqwe"
             repo_name = "easyu"
-            filepath = f"blob/main/{selected_task}.csv"  # 예시 파일 경로 (업무명을 파일명으로 사용할 수 있음)
+            filepath = f"blob/main/ws_data.csv"  # 예시 파일 경로 (업무명을 파일명으로 사용할 수 있음)
             delete_file_from_github(GITHUB_TOKEN, repo_owner, repo_name, filepath)
     else:
         st.warning("해당 IP에 대한 업무가 없습니다.")
