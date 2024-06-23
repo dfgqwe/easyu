@@ -242,28 +242,34 @@ def manage_page():
     repo_name = "easyu"
     filepath = "blob/main/ws_data.csv"  # GitHub 저장소 내 파일 경로
 
-    file_contents = get_file_contents(GITHUB_TOKEN, repo_owner, repo_name, filepath)
-
-    if file_contents:
-        df = pd.read_csv(io.StringIO(file_contents))
-        st.dataframe(df)
-    else:
-        st.warning("파일을 가져오는 중에 문제가 발생했습니다.")
-
-def get_file_contents(GITHUB_TOKEN, repo_owner, repo_name, filepath):
-    url = f"https://github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
+def delete_file_from_github(GITHUB_TOKEN, repo_owner, repo_name, filepath):
+    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
     headers = {
-        "Authorization": f"Bearer {GITHUB_TOKEN}",  # 여기서 GITHUB_TOKEN은 문자열 형태여야 함
-        "Accept": "application/vnd.github.v3.raw"  # 원본 데이터를 가져오기 위해 raw 포맷 지정
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json"
     }
 
+    # Step 1: Get current file information
     response = requests.get(url, headers=headers)
-
     if response.status_code == 200:
-        return response.content.decode('utf-8')
+        file_data = response.json()
+        sha = file_data['sha']  # Get the current file's SHA hash
+        commit_message = "Delete file via API"  # Commit message for deletion
+
+        # Step 2: Delete the file
+        delete_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
+        delete_data = {
+            "message": commit_message,
+            "sha": sha
+        }
+        delete_response = requests.delete(delete_url, headers=headers, json=delete_data)
+
+        if delete_response.status_code == 200:
+            print(f"File {filepath} successfully deleted.")
+        else:
+            print(f"Failed to delete file {filepath}. Status code: {delete_response.status_code}")
     else:
-        st.error(f"파일 정보를 가져오지 못했습니다. 상태 코드: {response.status_code}")
-        return None
+        print(f"Failed to get file information. Status code: {response.status_code}")
 
 def moss_page():
 
