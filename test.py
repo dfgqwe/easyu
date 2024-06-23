@@ -211,36 +211,7 @@ def home_page():
 
 
 
-# Function to delete a file from GitHub repository
-def delete_file_from_github(GITHUB_TOKEN, repo_owner, repo_name, filepath):
-    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
-    headers = {
-        "Authorization": f"Bearer {GITHUB_TOKEN}",
-        "Accept": "application/vnd.github.v3+json"
-    }
-
-    # Step 1: Get current file information
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        file_data = response.json()
-        sha = file_data['sha']  # Get the current file's SHA hash
-        commit_message = "Delete file via API"  # Commit message for deletion
-
-        # Step 2: Delete the file
-        delete_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
-        delete_data = {
-            "message": commit_message,
-            "sha": sha
-        }
-        delete_response = requests.delete(delete_url, headers=headers, json=delete_data)
-
-        if delete_response.status_code == 200:
-            st.success(f"File {filepath} successfully deleted.")
-        else:
-            st.error(f"Failed to delete file {filepath}. Status code: {delete_response.status_code}")
-    else:
-        st.error(f"Failed to get file information. Status code: {response.status_code}")
-
+        
 # Function to manage page
 def manage_page():
     st.title("Manage")
@@ -292,11 +263,11 @@ def delete_tasks_based_on_ip(ip_input):
         selected_task = st.selectbox("삭제할 업무 선택", list(tasks['업무명']))
 
         if st.button("선택한 업무 삭제"):
-            GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')  # 환경 변수에서 토큰을 가져옴
-            repo_owner = "dfgqwe"
-            repo_name = "easyu"
-            filepath = f"blob/main/ws_data.csv"  # 예시 파일 경로 (업무명을 파일명으로 사용할 수 있음)
-            delete_file_from_github(GITHUB_TOKEN, repo_owner, repo_name, filepath)
+            # 선택한 업무를 데이터에서 삭제
+            work = work[~((work['장비ID'] == ip_input) & (work['업무명'] == selected_task))]
+            # 수정된 데이터를 다시 저장
+            work.to_csv("ws_data.csv", index=False)
+            st.success(f"업무 '{selected_task}' 삭제 완료.")
     else:
         st.warning("해당 IP에 대한 업무가 없습니다.")
 
