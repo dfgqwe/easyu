@@ -263,7 +263,7 @@ def update_file_in_github(repo_owner, repo_name, filepath, branch, commit_messag
             "message": commit_message,
             "content": content_base64,
             "sha": sha,
-            "branch": main
+            "branch": branch
         }
         update_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
         update_response = requests.put(update_url, headers=headers, json=update_data)
