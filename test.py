@@ -276,7 +276,9 @@ def manage_page():
             st.error("Failed to fetch data from GitHub.")
             return
 
-        if ip_input in df_no_duplicates[['장비ID', '업무명']].values:
+         df_no_duplicates = df_no_duplicates.drop_duplicates(subset=['장비ID', '업무명'])
+        
+         if ip_input in df_no_duplicates['장비ID'].values:
             address = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]['사업장'].values[0]
             st.write("★동일국소 점검 대상★")
             
