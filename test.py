@@ -210,77 +210,19 @@ def home_page():
         st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
 
 
-# Function to delete tasks based on IP address
-def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name):
-    # Load data file
-    try:
-        work = pd.read_csv("ws_data.csv")
-    except FileNotFoundError:
-        st.error("Failed to find the data file.")
-        return
+def fetch_data_from_github(repo_name, file_path, github_token):
+    g = Github(github_token)
+    repo = g.get_repo(repo_name)
+    file_content = repo.get_contents(file_path)
+    df = pd.read_csv(file_content.download_url)
+    return df
 
-    # Remove duplicate rows based on '장비ID' and '업무명'
-    df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
-
-    # Find tasks associated with the IP
-    if ip_input in df_no_duplicates['장비ID'].values:
-        tasks = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input][['장비명/국사명', '업무명']]
-        selected_task = st.selectbox("Select task to delete", list(tasks['업무명']))
-
-        # Store the selected task in session state
-        st.session_state.selected_task = selected_task
-
-        if st.button("Delete selected task"):
-            if 'selected_task' in st.session_state:
-                # Delete selected task from the data
-                work = work[~((work['장비ID'] == ip_input) & (work['업무명'] == st.session_state.selected_task))]
-                # Save modified data back to CSV
-                work.to_csv("ws_data.csv", index=False)
-                st.success(f"Task '{st.session_state.selected_task}' deleted successfully.")
-
-                # Update the file in GitHub repository
-                github_token = os.getenv('GITHUB_TOKEN')
-                if github_token:
-                    update_file_in_github(repo_owner, repo_name, "ws_data.csv", "main", "Update data file", work.to_csv(index=False), github_token)
-                else:
-                    st.error("GitHub token not found.")
-    else:
-        st.warning("No tasks found for the given IP.")
-
-# Function to update file in GitHub repository
-def update_file_in_github(repo_owner, repo_name, filepath, branch, commit_message, new_content, github_token):
-    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
-    headers = {
-        "Authorization": f"Bearer {github_token}",
-        "Accept": "application/vnd.github.v3+json"
-    }
-
-    # Step 1: Get current file information
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        file_data = response.json()
-        sha = file_data['sha']  # Get the current file's SHA hash
-
-        # Step 2: Encode new content to base64
-        content_bytes = new_content.encode('utf-8')
-        content_base64 = base64.b64encode(content_bytes).decode('utf-8')
-
-        # Step 3: Update the file
-        update_data = {
-            "message": commit_message,
-            "content": content_base64,
-            "sha": sha,
-            "branch": "main"  # 이 부분을 실제 사용하는 브랜치 이름으로 수정하세요
-        }
-        update_response = requests.put(url, headers=headers, json=update_data)
-
-        if update_response.status_code == 200:
-            st.success(f"File {filepath} updated successfully.")
-        else:
-            st.error(f"Failed to update file {filepath}. Status code: {update_response.status_code}")
-    else:
-        st.error(f"Failed to get file information. Status code: {response.status_code}")
-
+# Function to update data on GitHub
+def update_data_on_github(repo_name, file_path, github_token, df):
+    g = Github(github_token)
+    repo = g.get_repo(repo_name)
+    file_content = repo.get_contents(file_path)
+    repo.update_file(file_content.path, "Update data", df.to_csv(index=False), file_content.sha)
 def manage_page():
     st.title("Manage")
 
@@ -295,29 +237,46 @@ def manage_page():
         """,
         unsafe_allow_html=True
     )
+    content_option = st.radio("인수 인계", ["주간", "야간"])
 
-    content_option = st.radio("Handover", ["Day", "Night"])
-
-    if content_option == "Day":
-        st.header("Day")
-        if 'day_content' not in st.session_state:
-            st.session_state.day_content = ""
-        st.session_state.day_content = st.text_area("Day to Night handover", st.session_state.day_content, height=200)
-
+    if content_option == "주간":
+        st.header("주간")
+        st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.day_content, height=200)
     else:
-        st.header("Night")
-        if 'night_content' not in st.session_state:
-            st.session_state.night_content = ""
-        st.session_state.night_content = st.text_area("Night to Day handover", st.session_state.night_content, height=200)
+        st.header("야간")
+        st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.night_content, height=200)
 
-    ip_input = st.text_input("Enter IP", "")
+    # IP 입력 받기
+    ip_input = st.text_input("IP 입력", "")
+    
+    if ip_input:
+        github_token = st.secrets["GITHUB_TOKEN"]
+        repo_name = "your_github_username/your_repo_name"
+        file_path = "path/to/your/data.csv"
+        
+        df_no_duplicates = fetch_data_from_github(repo_name, file_path, github_token)
 
-    if st.button("Find tasks"):
-        if ip_input:
-            # Replace with your actual GitHub repository information and token
-            repo_owner = "dfgqwe"
-            repo_name = "easyu"
-            delete_tasks_based_on_ip(ip_input, repo_owner, repo_name)
+        if ip_input in df_no_duplicates['장비ID'].values:
+            address = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]['사업장'].values[0]
+            st.write("★동일국소 점검 대상★")
+            
+            same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
+            for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
+                st.text(f"{idx}. {row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})")
+
+            selected_tasks = st.multiselect(
+                "삭제할 업무를 선택하세요:",
+                same_address_work.index,
+                format_func=lambda x: f"{same_address_work.loc[x, '장비명/국사명']} - {same_address_work.loc[x, '장비ID']} ({same_address_work.loc[x, '업무명']})"
+            )
+
+            if st.button("선택된 업무 삭제"):
+                if selected_tasks:
+                    df_no_duplicates = df_no_duplicates.drop(selected_tasks)
+                    update_data_on_github(repo_name, file_path, github_token, df_no_duplicates)
+                    st.success("선택된 업무가 성공적으로 삭제되었습니다.")
+                else:
+                    st.warning("삭제할 업무를 선택하세요.")
 
 
 
