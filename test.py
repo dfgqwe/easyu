@@ -328,15 +328,36 @@ def manage_page():
             st.header("야간")
             st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.get("night_content", ""), height=200)
 
-    st.markdown("### 데이터 삭제")
-    row_to_delete = st.number_input("삭제할 행 번호를 입력하세요", min_value=0, max_value=len(df)-1, step=1)
-    if st.button("삭제"):
-        df = df.drop(index=row_to_delete).reset_index(drop=True)
-        csv_content = df.to_csv(index=False)
-        update_file_content(csv_content, sha)
-    else:
-        st.error("데이터를 불러오는 데 실패했습니다.")
+        # Worksync 데이터 추가 및 삭제 기능
+        st.subheader("Worksync 데이터 관리")
 
+        df, sha = load_csv()
+
+        if not df.empty:
+            st.dataframe(df)
+
+            st.markdown("### 데이터 추가")
+            new_data = {}
+            for column in df.columns:
+                new_data[column] = st.text_input(f"{column}", key=f"new_{column}")
+
+            if st.button("추가"):
+                new_row = pd.DataFrame([new_data])
+                df = pd.concat([df, new_row], ignore_index=True)
+                csv_content = df.to_csv(index=False)
+                update_file_content(csv_content, sha)
+
+            st.markdown("### 데이터 삭제")
+            if not df.empty:
+                row_to_delete = st.number_input("삭제할 행 번호를 입력하세요", min_value=0, max_value=len(df)-1, step=1)
+                if st.button("삭제"):
+                    df = df.drop(index=row_to_delete).reset_index(drop=True)
+                    csv_content = df.to_csv(index=False)
+                    update_file_content(csv_content, sha)
+            else:
+                st.error("삭제할 데이터가 없습니다.")
+        else:
+            st.error("데이터를 불러오는 데 실패했습니다.")
 
 def moss_page():
 
