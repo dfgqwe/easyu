@@ -252,7 +252,6 @@ def manage_page():
 
 def get_file_contents(GITHUB_TOKEN, repo_owner, repo_name, filepath):
     url = f"https://api.github.com/{repo_owner}/{repo_name}/{filepath}"
-    https://api.github.com/{repo_owner}/{repo_name}/{filepath}).
     
     headers = {
          f"Bearer {GITHUB_TOKEN}": "public_repo",
