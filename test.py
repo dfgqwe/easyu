@@ -252,8 +252,10 @@ def manage_page():
 
 def get_file_contents(GITHUB_TOKEN, repo_owner, repo_name, filepath):
     url = f"https://api.github.com/{repo_owner}/{repo_name}/{filepath}"
+    https://api.github.com/{repo_owner}/{repo_name}/{filepath}).
+    
     headers = {
-        "Authorization": f"Bearer {GITHUB_TOKEN}",
+         f"Bearer {GITHUB_TOKEN}": "public_repo",
         "Accept": "application/vnd.github.v3.raw"  # 원본 데이터를 가져오기 위해 raw 포맷 지정
     }
 
