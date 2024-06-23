@@ -245,7 +245,7 @@ def manage_page():
     file_contents = get_file_contents(GITHUB_TOKEN, repo_owner, repo_name, filepath)
 
     if file_contents:
-        df = pd.read_csv(pd.compat.StringIO(file_contents))
+        df = pd.read_csv(io.StringIO(file_contents))
         st.dataframe(df)
     else:
         st.warning("파일을 가져오는 중에 문제가 발생했습니다.")
