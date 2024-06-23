@@ -261,6 +261,12 @@ phone_numbers = {
         {"부서명": "phone", "전화번호": "053-678-9012"}
     ]
 }
+GITHUB_USER = 'dfgqwe'
+GITHUB_REPO = 'easyue'
+GITHUB_FILE_PATH = '데이터.csv'
+GITHUB_TOKEN = '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'
+
+
 
 def home_page():
     st.title("Home")
