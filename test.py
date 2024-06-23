@@ -461,9 +461,9 @@ def worksync_page():
         else:
             st.text("Work-Sync 없습니다.")
 
-
+manage_password = "1234"
 def manage_page():
-     manage_password = "1234"
+     
      st.title("Manage")
 
      if 'manage_logged_in' not in st.session_state:
@@ -489,49 +489,50 @@ def manage_page():
              st.header("야간")
              st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.get("night_content", ""), height=200)
 
-     # IP 입력 받기
-     ip_input1 = st.text_input("IP 입력", "")
-     if ip_input1:
-        # Ensure you have set your GitHub token in Streamlit secrets
-        try:
-             github_token = st.secrets["GITHUB_TOKEN"]
-        except KeyError:
-             st.error("GitHub token is not set. Please set it in Streamlit secrets.")
-             return
+     if st.session_state.manage_logged_in:
+         # IP 입력 받기
+         ip_input1 = st.text_input("IP 입력", "")
+         if ip_input1:
+            # Ensure you have set your GitHub token in Streamlit secrets
+            try:
+                github_token = st.secrets["GITHUB_TOKEN"]
+            except KeyError:
+                st.error("GitHub token is not set. Please set it in Streamlit secrets.")
+                return
         
-        repo_name = "dfgqwe/easyu"
-        file_path = "ws_data.csv"
+            repo_name = "dfgqwe/easyu"
+            file_path = "ws_data.csv"
         
-        df_no_duplicates1 = fetch_data_from_github(repo_name, file_path, github_token)
-        if df_no_duplicates1 is None:
-            st.error("Failed to fetch data from GitHub.")
-            return
+            df_no_duplicates1 = fetch_data_from_github(repo_name, file_path, github_token)
+            if df_no_duplicates1 is None:
+                st.error("Failed to fetch data from GitHub.")
+                return
 
-        df_no_duplicates1 = df_no_duplicates1.drop_duplicates(subset=['장비ID', '업무명'])
+            df_no_duplicates1 = df_no_duplicates1.drop_duplicates(subset=['장비ID', '업무명'])
         
-        if ip_input1 in df_no_duplicates1['장비ID'].values:
-            address = df_no_duplicates1[df_no_duplicates1['장비ID'] == ip_input1]['사업장'].values[0]
-            st.write("★동일국소 점검 대상★")
+            if ip_input1 in df_no_duplicates1['장비ID'].values:
+                address = df_no_duplicates1[df_no_duplicates1['장비ID'] == ip_input1]['사업장'].values[0]
+                st.write("★동일국소 점검 대상★")
             
-            same_address_work = df_no_duplicates1[df_no_duplicates1['사업장'] == address]
-            for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
-                st.text(f"{idx}. {row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})")
+                same_address_work = df_no_duplicates1[df_no_duplicates1['사업장'] == address]
+                for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
+                    st.text(f"{idx}. {row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})")
 
-            selected_tasks = st.multiselect(
+                selected_tasks = st.multiselect(
                 "삭제할 업무를 선택하세요:",
                 same_address_work.index,
                 format_func=lambda x: f"{same_address_work.loc[x, '장비명/국사명']} - {same_address_work.loc[x, '장비ID']} ({same_address_work.loc[x, '업무명']})"
             )
 
-            if st.button("선택된 업무 삭제"):
-                if selected_tasks:
-                    st.write(f"Before deletion: {df_no_duplicates1.shape[0]} rows")
-                    df_no_duplicates1 = df_no_duplicates1.drop(selected_tasks)
-                    st.write(f"After deletion: {df_no_duplicates1.shape[0]} rows")
-                    update_data_on_github(repo_name, file_path, github_token, df_no_duplicates1)
-                    st.success("선택된 업무가 성공적으로 삭제되었습니다.")
-                else:
-                    st.warning("삭제할 업무를 선택하세요.")
+                if st.button("선택된 업무 삭제"):
+                    if selected_tasks:
+                        st.write(f"Before deletion: {df_no_duplicates1.shape[0]} rows")
+                        df_no_duplicates1 = df_no_duplicates1.drop(selected_tasks)
+                        st.write(f"After deletion: {df_no_duplicates1.shape[0]} rows")
+                        update_data_on_github(repo_name, file_path, github_token, df_no_duplicates1)
+                        st.success("선택된 업무가 성공적으로 삭제되었습니다.")
+                    else:
+                        st.warning("삭제할 업무를 선택하세요.")
 
 
 
