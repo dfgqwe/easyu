@@ -181,6 +181,9 @@ if 'night_content' not in st.session_state:
     st.session_state.night_content = ""
 
 
+
+
+
 def home_page():
     st.title("Home")
     st.markdown(
@@ -233,58 +236,103 @@ def manage_page():
         st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.night_content, height=200)
 
     # Manage Worksync data
-    st.header("Worksync Data Management")
+  st.title("Manage Work Data")
 
-   # GitHub URL에서 CSV 파일 읽기
-    url = "https://raw.githubusercontent.com/user/repository/branch/data.csv"  # 실제 URL로 수정 필요
-    work = pd.read_csv(url)
+    # 장비ID 입력 받기
+    device_id = st.text_input("장비ID 입력", "")
 
-    # 데이터 표시 및 편집
-    st.write("현재 데이터:")
-    edited_data = st.experimental_data_editor(work)
+    if device_id:
+        st.write(f"장비ID: {device_id}")
 
-    # 수정된 데이터 저장 및 다운로드 버튼
-    if st.button("수정된 데이터 저장"):
-        edited_data.to_csv("수정된_데이터.csv", index=False)
-        st.write("데이터가 수정되었습니다. 수정된 파일을 다운로드하려면 아래 링크를 클릭하세요.")
-        st.download_button("수정된 데이터 다운로드", data=edited_data.to_csv(index=False), file_name="수정된_데이터.csv")
+        # 삭제할 업무명 선택
+        work_to_delete = st.selectbox("삭제할 업무명 선택", get_works_for_device(device_id))
 
-    # GitHub 업데이트 함수
-    def update_github_file(repo, path, content, message, branch, token):
-        url = f"https://api.github.com/repos/{repo}/contents/{path}"
-        headers = {"Authorization": f"token {token}"}
-    
-        # 파일 정보를 가져옴
-        response = requests.get(url, headers=headers)
-        response_json = response.json()
-    
-        # base64로 파일 인코딩
-        encoded_content = base64.b64encode(content.encode()).decode()
-    
-        data = {
-            "message": message,
-            "content": encoded_content,
-            "branch": branch,
-            "sha": response_json["sha"]
+        if work_to_delete:
+            st.write(f"선택한 업무명: {work_to_delete}")
+
+            # 삭제 버튼 클릭 시
+            if st.button("선택한 업무명 삭제"):
+                delete_work(work_to_delete, device_id)
+
+def get_works_for_device(device_id):
+    owner = 'dfgqwe'  # GitHub 사용자명
+    repo = 'easyu'    # 레포지토리명
+    path = '데이터.csv'  # 파일 경로
+    token = 'your_github_personal_access_token'  # GitHub 개인 액세스 토큰
+
+    url = f'https://api.github.com/repos/{owner}/{repo}/contents/{path}'
+
+    headers = {
+        'Authorization': f'token {token}',
+        'Accept': 'application/vnd.github.v3+json'
+    }
+
+    # 파일 내용 가져오기
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        file_data = response.json()
+        content = base64.b64decode(file_data['content']).decode('utf-8')
+
+        # 장비ID에 해당하는 업무명 목록 가져오기
+        works = []
+        lines = content.splitlines()
+        for line in lines:
+            fields = line.split(',')
+            if len(fields) >= 2 and fields[0].strip() == device_id:
+                works.append(fields[1].strip())
+
+        return works
+    else:
+        st.error(f"파일 정보를 가져오지 못했습니다. 상태 코드: {response.status_code}")
+        st.error(response.text)
+        return []
+
+def delete_work(work_name, device_id):
+    owner = 'dfgqwe'  # GitHub 사용자명
+    repo = 'easyu'    # 레포지토리명
+    path = '데이터.csv'  # 파일 경로
+    token = 'your_github_personal_access_token'  # GitHub 개인 액세스 토큰
+
+    url = f'https://api.github.com/repos/{owner}/{repo}/contents/{path}'
+
+    headers = {
+        'Authorization': f'token {token}',
+        'Accept': 'application/vnd.github.v3+json'
+    }
+
+    # 기존 파일 내용 가져오기
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        file_data = response.json()
+        sha = file_data['sha']
+        content = base64.b64decode(file_data['content']).decode('utf-8')
+
+        # 파일 내용 수정: 선택한 업무명 삭제
+        updated_content = ""
+        lines = content.splitlines()
+        for line in lines:
+            if work_name not in line or device_id not in line:
+                updated_content += line + "\n"
+
+        update_data = {
+            'message': f'Delete {work_name} for device {device_id} via API',
+            'content': base64.b64encode(updated_content.encode('utf-8')).decode('utf-8'),
+            'sha': sha
         }
-    
-        # 파일 업데이트
-        update_response = requests.put(url, headers=headers, json=data)
-        return update_response.json()
 
-    # GitHub 정보 입력
-    repo = "dfgqwe/easyu"  # 레포지토리 이름
-    path = "main/데이터.csv"  # 파일 경로
-    message = "데이터 업데이트"
-    branch = "main"  # 브랜치 이름
-    token = "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"  # GitHub Personal Access Token 직접 포함
+        update_url = f'https://api.github.com/repos/{owner}/{repo}/contents/{path}'
+        update_response = requests.put(update_url, headers=headers, json=update_data)
 
-    # 데이터 수정 및 GitHub 업데이트
-    if st.button("수정된 데이터 GitHub에 저장"):
-        csv_content = edited_data.to_csv(index=False)
-        result = update_github_file(repo, path, csv_content, message, branch, token)
-        st.write("GitHub에 데이터가 업데이트되었습니다.", result)
-
+        if update_response.status_code == 200:
+            st.success(f"{work_name} 삭제 완료.")
+        else:
+            st.error(f"{work_name} 삭제 실패. 상태 코드: {update_response.status_code}")
+            st.error(update_response.text)
+    else:
+        st.error(f"파일 정보를 가져오지 못했습니다. 상태 코드: {response.status_code}")
+        st.error(response.text)
 
 
 
