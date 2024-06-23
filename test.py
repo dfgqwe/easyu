@@ -231,6 +231,27 @@ def manage_page():
         st.header("야간")
         st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.night_content, height=200)
 
+    # Manage Worksync data
+    st.header("Worksync Data Management")
+
+    work = pd.read_csv("https://raw.githubusercontent.com/user/repository/branch/데이터.csv")  # Replace with your actual GitHub URL
+
+    df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
+    df_no_duplicates = df_no_duplicates.sort_values(by='장비ID')
+
+    st.write("### Worksync Data")
+    st.dataframe(df_no_duplicates)
+
+    to_delete = st.multiselect("Select rows to delete (by index):", df_no_duplicates.index.tolist())
+
+    if st.button("Delete Selected Rows"):
+        if to_delete:
+            df_no_duplicates = df_no_duplicates.drop(index=to_delete)
+            df_no_duplicates.to_csv("데이터.csv", index=False)  # Save updated dataframe to the CSV
+            st.success("Selected rows deleted and saved.")
+        else:
+            st.warning("No rows selected.")
+
 
 
 
