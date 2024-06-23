@@ -148,7 +148,7 @@ B_S_head_formats = {
 GITHUB_USER = 'dfgqwe'
 GITHUB_REPO = 'easyue'
 GITHUB_FILE_PATH = '데이터.csv'
-GITHUB_TOKEN = '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'
+GITHUB_TOKEN = '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'
 
 def get_file_content():
     url = f'https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}'
