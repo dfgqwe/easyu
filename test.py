@@ -334,17 +334,6 @@ def manage_page():
     
     if st.session_state.manage_logged_in:
         # 비밀번호 입력 후에만 Radio 버튼을 표시
-        st.markdown(
-        """
-        <style>
-        .stRadio > div {
-            display: flex;
-            flex-direction: row;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
         content_option = st.radio("인수 인계", ["주간", "야간"])
 
         if content_option == "주간":
@@ -385,7 +374,6 @@ def manage_page():
                 st.error("삭제할 데이터가 없습니다.")
         else:
             st.error("데이터를 불러오는 데 실패했습니다.")
-
 def moss_page():
 
     st.title("MOSS 회복 문구")
