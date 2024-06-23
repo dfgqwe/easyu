@@ -301,7 +301,6 @@ def delete_tasks_based_on_ip(ip_input):
         st.warning("해당 IP에 대한 업무가 없습니다.")
 
 
-
 def moss_page():
 
     st.title("MOSS 회복 문구")
