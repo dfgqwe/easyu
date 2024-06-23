@@ -296,7 +296,7 @@ def update_file_in_github(repo_owner, repo_name, filepath, branch, commit_messag
             "message": commit_message,
             "content": content_base64,
             "sha": sha,
-            "branch": branch
+            "branch": main
         }
         update_response = requests.put(url, headers=headers, json=update_data)
 
