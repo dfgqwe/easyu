@@ -486,6 +486,18 @@ def manage_page():
              return
     
     if st.session_state.manage_logged_in:
+        st.markdown(
+        """
+        <style>
+        .stRadio > div {
+            display: flex;
+            flex-direction: row;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
          # 비밀번호 입력 후에만 Radio 버튼을 표시
          content_option = st.radio("인수 인계", ["주간", "야간"])
 
