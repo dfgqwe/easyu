@@ -210,35 +210,34 @@ def home_page():
         st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
 
 
-# Function to delete file from GitHub repository
-def delete_file_from_github(repo_owner, repo_name, filepath, github_token):
-    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
-    headers = {
-        "Authorization": f"Bearer {github_token}",
-        "Accept": "application/vnd.github.v3+json"
-    }
+# Function to delete tasks based on IP address
+def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, github_token):
+    # Load data file
+    try:
+        work = pd.read_csv("ws_data.csv")
+    except FileNotFoundError:
+        st.error("Failed to find the data file.")
+        return
 
-    # Step 1: Get current file information
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        file_data = response.json()
-        sha = file_data['sha']  # Get the current file's SHA hash
-        commit_message = "Delete file via API"  # Commit message for deletion
+    # Remove duplicate rows based on '장비ID' and '업무명'
+    df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
 
-        # Step 2: Delete the file
-        delete_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
-        delete_data = {
-            "message": commit_message,
-            "sha": sha
-        }
-        delete_response = requests.delete(delete_url, headers=headers, json=delete_data)
+    # Find tasks associated with the IP
+    if ip_input in df_no_duplicates['장비ID'].values:
+        tasks = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input][['장비명/국사명', '업무명']]
+        selected_task = st.selectbox("Select task to delete", list(tasks['업무명']))
 
-        if delete_response.status_code == 200:
-            st.success(f"File {filepath} successfully deleted from GitHub.")
-        else:
-            st.error(f"Failed to delete file {filepath} from GitHub. Status code: {delete_response.status_code}")
+        if st.button("Delete selected task"):
+            # Delete selected task from the data
+            work = work[~((work['장비ID'] == ip_input) & (work['업무명'] == selected_task))]
+            # Save modified data back to CSV
+            work.to_csv("ws_data.csv", index=False)
+            st.success(f"Task '{selected_task}' deleted successfully.")
+
+            # Update the file in GitHub repository
+            update_file_in_github(repo_owner, repo_name, "main/ws_data.csv", "main", "Update data file", work.to_csv(index=False), github_token)
     else:
-        st.error(f"Failed to get file information from GitHub. Status code: {response.status_code}")
+        st.warning("No tasks found for the given IP.")
 
 # Function to update file in GitHub repository
 def update_file_in_github(repo_owner, repo_name, filepath, branch, commit_message, content, github_token):
@@ -274,35 +273,6 @@ def update_file_in_github(repo_owner, repo_name, filepath, branch, commit_messag
             st.error(f"Failed to update file {filepath} on GitHub. Status code: {update_response.status_code}")
     else:
         st.error(f"Failed to get file information from GitHub. Status code: {response.status_code}")
-
-# Function to delete tasks based on IP address
-def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, github_token):
-    # Load data file
-    try:
-        work = pd.read_csv("ws_data.csv")
-    except FileNotFoundError:
-        st.error("Failed to find the data file.")
-        return
-
-    # Remove duplicate rows based on '장비ID' and '업무명'
-    df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
-
-    # Find tasks associated with the IP
-    if ip_input in df_no_duplicates['장비ID'].values:
-        tasks = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input][['장비명/국사명', '업무명']]
-        selected_task = st.selectbox("Select task to delete", list(tasks['업무명']))
-
-        if st.button("Delete selected task"):
-            # Delete selected task from the data
-            work = work[~((work['장비ID'] == ip_input) & (work['업무명'] == selected_task))]
-            # Save modified data back to CSV
-            work.to_csv("ws_data.csv", index=False)
-            st.success(f"Task '{selected_task}' deleted successfully.")
-
-            # Update the file in GitHub repository
-            update_file_in_github(repo_owner, repo_name, "ws_data.csv", "main", "Update data file", work.to_csv(index=False), github_token)
-    else:
-        st.warning("No tasks found for the given IP.")
 
 # Function to manage page
 def manage_page():
@@ -341,7 +311,6 @@ def manage_page():
     if st.button("Delete tasks from GitHub"):
         if ip_input:
             delete_tasks_based_on_ip(ip_input, "YourGitHubUsername", "YourRepositoryName", os.getenv('GITHUB_TOKEN'))
-
 
 
 def moss_page():
