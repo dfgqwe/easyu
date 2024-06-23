@@ -242,6 +242,7 @@ def manage_page():
     # 장비ID 입력 받기
     device_id = st.text_input("장비ID 입력", "")
 
+    
     if device_id:
         st.write(f"장비ID: {device_id}")
 
@@ -261,19 +262,18 @@ def get_works_for_device(device_id):
     path = '데이터.csv'  # 파일 경로
     token = 'your_github_personal_access_token'  # GitHub 개인 액세스 토큰
 
-    url = f'https://api.github.com/repos/{owner}/{repo}/contents/{path}'
-
+   
+    url = "https://api.github.com/repos/user/repository/contents/데이터.csv"
     headers = {
-        'Authorization': f'token {token}',
-        'Accept': 'application/vnd.github.v3+json'
+        "Authorization": "Bearer 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"  # Replace with your actual token
     }
 
-    # 파일 내용 가져오기
     response = requests.get(url, headers=headers)
 
-    if response.status_code == 200:
-        file_data = response.json()
-        content = base64.b64decode(file_data['content']).decode('utf-8')
+   if response.status_code == 200:
+       # 파일 내용 가져오기
+       file_contents = response.content
+        # 이후 파일 처리 로직 작성
 
         # 장비ID에 해당하는 업무명 목록 가져오기
         works = []
