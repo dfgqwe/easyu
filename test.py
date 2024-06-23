@@ -1,12 +1,1089 @@
 import streamlit as st
-import pandas as pd
+
+# 포맷 데이터 포함
+formats = {
+ "정전": "[사설정전복구]",
+    "복전": "[사설정전복구]",
+    "차단기 on": "[사설차단기복구]",
+    "어댑터": "[전원어댑터교체]",
+    "댑터": "[전원어댑터교체]",
+    "멀티탭": "[멀티탭 ON/교체]",
+    "발전기": "[발전기가동]",
+    "파워뱅크": "[전원가복구]",
+    "가복구": "[전원가복구]",
+    "임": "[전원가복구]",
+    "전기안전검사": "[고객측작업]",
+    "전기검사": "[고객측작업]",
+    "작업": "[고객측작업]",
+    "점검": "[고객측작업]",
+    "검사": "[고객측작업]",
+    "장비철거": "[장비철거]",
+    "타사전환": "[타사전환]",
+    "PON": "[모듈교체]",
+    "PSU": "[모듈교체]",
+    "모듈": "[모듈교체]",
+    "장비교체": "[장비교체]",
+    "교체": "[장비교체]",
+    "리셋": "[장비리셋]",
+    "폐문": "[폐문]",
+    "출입불가": "[폐문]",
+    "출입": "[폐문]",
+    "명일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "VOC": "[기타]",
+}
+
+
+def get_format(text):
+    for keyword, head_format in formats.items():
+        if keyword in text:
+            return head_format
+    return None
+
+def main():
+    st.title("문장 분석 및 포맷 추가")
+
+    # 텍스트 입력 위젯
+    user_input = st.text_input("입력란", )
+
+    # 입력 형식 검사 및 포맷 추가
+    head_format = get_format(user_input)
+    
+    if head_format:
+        st.write(head_format)
+    st.write(user_input)
+    st.write("수고하셨습니다")
+if __name__ == "__main__":
+    main()
+
+
+
+================================================
+import streamlit as st
+
+# 포맷 데이터 포함
+formats = {
+    "정전": "[사설정전복구]",
+    "복전": "[사설정전복구]",
+    "차단기 on": "[사설차단기복구]",
+    "어댑터": "[전원어댑터교체]",
+    "댑터": "[전원어댑터교체]",
+    "멀티탭": "[멀티탭 ON/교체]",
+    "발전기": "[발전기가동]",
+    "파워뱅크": "[전원가복구]",
+    "가복구": "[전원가복구]",
+    "임": "[전원가복구]",
+    "전기안전검사": "[고객측작업]",
+    "전기검사": "[고객측작업]",
+    "작업": "[고객측작업]",
+    "점검": "[고객측작업]",
+    "검사": "[고객측작업]",
+    "장비철거": "[장비철거]",
+    "타사전환": "[타사전환]",
+    "PON": "[모듈교체]",
+    "PSU": "[모듈교체]",
+    "모듈": "[모듈교체]",
+    "장비교체": "[장비교체]",
+    "교체": "[장비교체]",
+    "리셋": "[장비리셋]",
+    "폐문": "[폐문]",
+    "출입불가": "[폐문]",
+    "출입": "[폐문]",
+    "명일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "VOC": "[기타]",
+}
+
+# 선조치_NOC에 대한 내용
+선조치_NOC_options = [
+    "원인분석(전원)",
+    "원인분석(선로)",
+    "원인분석(장비)",
+    "전기작업 확인(전화)",
+    "FOLLOW추가",
+    "출동보류",
+    "원격조치(리부팅)",
+    "원격조치(포트리셋)",
+    "원격조치(포트BLK)",
+    "정전알림이 등록",
+    "DB현행화",
+    "고객홍보"
+]
+
+def get_format(text):
+    for keyword, head_format in formats.items():
+        if keyword in text:
+            return head_format
+    return None
+
+def main():
+    st.title("문장 분석 및 포맷 추가")
+
+    # 텍스트 입력 위젯
+    user_input = st.text_input("입력란", )
+
+    # 입력 형식 검사 및 포맷 추가
+    head_format = get_format(user_input)
+    
+    if head_format:
+        st.write(head_format)
+    
+    st.write(user_input)
+    st.write("수고하셨습니다")
+
+    # 선조치_NOC 다중 선택 박스
+    selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options)
+    
+    if selected_actions:
+        formatted_actions = ", ".join(selected_actions)
+        st.write(f"<선조치_NOC> {formatted_actions}")
+
+if __name__ == "__main__":
+    main()
+
+
+====================================================
+import streamlit as st
+
+# 포맷 데이터 포함
+formats = {
+    "정전": "[사설정전복구]",
+    "복전": "[사설정전복구]",
+    "차단기 on": "[사설차단기복구]",
+    "어댑터": "[전원어댑터교체]",
+    "댑터": "[전원어댑터교체]",
+    "멀티탭": "[멀티탭 ON/교체]",
+    "발전기": "[발전기가동]",
+    "파워뱅크": "[전원가복구]",
+    "가복구": "[전원가복구]",
+    "임": "[전원가복구]",
+    "전기안전검사": "[고객측작업]",
+    "전기검사": "[고객측작업]",
+    "작업": "[고객측작업]",
+    "점검": "[고객측작업]",
+    "검사": "[고객측작업]",
+    "장비철거": "[장비철거]",
+    "타사전환": "[타사전환]",
+    "PON": "[모듈교체]",
+    "PSU": "[모듈교체]",
+    "모듈": "[모듈교체]",
+    "장비교체": "[장비교체]",
+    "교체": "[장비교체]",
+    "리셋": "[장비리셋]",
+    "폐문": "[폐문]",
+    "출입불가": "[폐문]",
+    "출입": "[폐문]",
+    "명일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "VOC": "[기타]",
+}
+
+# 선조치_NOC에 대한 내용
+선조치_NOC_options = [
+    "원인분석(전원)",
+    "원인분석(선로)",
+    "원인분석(장비)",
+    "전기작업 확인(전화)",
+    "FOLLOW추가",
+    "출동보류",
+    "원격조치(리부팅)",
+    "원격조치(포트리셋)",
+    "원격조치(포트BLK)",
+    "정전알림이 등록",
+    "DB현행화",
+    "고객홍보"
+]
+
+def get_format(text):
+    for keyword, head_format in formats.items():
+        if keyword in text:
+            return head_format
+    return None
+
+def main():
+    st.title("문장 분석 및 포맷 추가")
+
+    # 텍스트 입력 위젯
+    user_input = st.text_input("입력란", )
+
+    # 입력 형식 검사 및 포맷 추가
+    head_format = get_format(user_input)
+    
+    if head_format:
+        st.write(head_format)
+    
+    st.write(user_input)
+    st.write("수고하셨습니다")
+
+    # 선조치_NOC 다중 선택 박스
+    selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options)
+    
+    if selected_actions:
+        formatted_actions = ", ".join(selected_actions)
+        st.write(f"<선조치_NOC> {formatted_actions}")
+
+    # 현장 항목들 다중 선택 박스
+    현장_options = [
+        "주소",
+        "연락처",
+        "장비위치",
+        "차단기위치",
+        "출입방법",
+        "기타(간단히 내용입력)"
+    ]
+    selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options)
+
+    if selected_locations and selected_actions:
+        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력')})" for location in selected_locations])
+        st.write(f"<현장> {formatted_locations} 수정요청")
+
+if __name__ == "__main__":
+    main()
+
+==================================================================
+import streamlit as st
+
+# 포맷 데이터 포함
+formats = {
+    "정전": "[사설정전복구]",
+    "복전": "[사설정전복구]",
+    "차단기 on": "[사설차단기복구]",
+    "어댑터": "[전원어댑터교체]",
+    "댑터": "[전원어댑터교체]",
+    "멀티탭": "[멀티탭 ON/교체]",
+    "발전기": "[발전기가동]",
+    "파워뱅크": "[전원가복구]",
+    "가복구": "[전원가복구]",
+    "임": "[전원가복구]",
+    "전기안전검사": "[고객측작업]",
+    "전기검사": "[고객측작업]",
+    "작업": "[고객측작업]",
+    "점검": "[고객측작업]",
+    "검사": "[고객측작업]",
+    "장비철거": "[장비철거]",
+    "타사전환": "[타사전환]",
+    "PON": "[모듈교체]",
+    "PSU": "[모듈교체]",
+    "모듈": "[모듈교체]",
+    "장비교체": "[장비교체]",
+    "교체": "[장비교체]",
+    "리셋": "[장비리셋]",
+    "폐문": "[폐문]",
+    "출입불가": "[폐문]",
+    "출입": "[폐문]",
+    "명일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "VOC": "[기타]",
+}
+
+# 선조치_NOC에 대한 내용
+선조치_NOC_options = [
+    "원인분석(전원)",
+    "원인분석(선로)",
+    "원인분석(장비)",
+    "전기작업 확인(전화)",
+    "FOLLOW추가",
+    "출동보류",
+    "원격조치(리부팅)",
+    "원격조치(포트리셋)",
+    "원격조치(포트BLK)",
+    "정전알림이 등록",
+    "DB현행화",
+    "고객홍보"
+]
+
+def get_format(text):
+    for keyword, head_format in formats.items():
+        if keyword in text:
+            return head_format
+    return None
+
+def main():
+    st.title("회복 문구")
+
+    results = []
+
+    # 텍스트 입력 위젯
+    user_input = st.text_input("입력란", )
+
+    # 입력 형식 검사 및 포맷 추가
+    head_format = get_format(user_input)
+    if head_format:
+        results.append(head_format)
+
+    results.append(user_input)
+    results.append("수고하셨습니다")
+
+    # 선조치_NOC 다중 선택 박스
+    selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options)
+    if selected_actions:
+        formatted_actions = ", ".join(selected_actions)
+        results.append(f"<선조치_NOC> {formatted_actions}")
+
+    # 현장 항목들 다중 선택 박스
+    현장_options = [
+        "주소",
+        "연락처",
+        "장비위치",
+        "차단기위치",
+        "출입방법",
+        "기타(간단히 내용입력)"
+    ]
+    selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options)
+
+    if selected_locations and selected_actions:
+        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력')})" for location in selected_locations])
+        results.append(f"<현장> {formatted_locations} 수정요청")
+
+    if st.button("출력"):
+        for result in results:
+            st.write(result)
+
+if __name__ == "__main__":
+    main()
+
+===================================================
+import streamlit as st
+
+# 포맷 데이터 포함
+formats = {
+    "정전": "[사설정전복구]",
+    "복전": "[사설정전복구]",
+    "차단기 on": "[사설차단기복구]",
+    "어댑터": "[전원어댑터교체]",
+    "어뎁터": "[전원어댑터교체]",
+    "아뎁터": "[전원어댑터교체]",
+    "아댑터": "[전원어댑터교체]",
+    "아답터": "[전원어댑터교체]",
+    "멀티탭": "[멀티탭 ON/교체]",
+    "발전기": "[발전기가동]",
+    "파워뱅크": "[전원가복구]",
+    "가복구": "[전원가복구]",
+    "임": "[전원가복구]",
+    "전기안전검사": "[고객측작업]",
+    "전기검사": "[고객측작업]",
+    "작업": "[고객측작업]",
+    "점검": "[고객측작업]",
+    "검사": "[고객측작업]",
+    "장비철거": "[장비철거]",
+    "타사전환": "[타사전환]",
+    "PON": "[모듈교체]",
+    "PSU": "[모듈교체]",
+    "모듈": "[모듈교체]",
+    "장비교체": "[장비교체]",
+    "교체": "[장비교체]",
+    "리셋": "[장비리셋]",
+    "폐문": "[폐문]",
+    "출입불가": "[폐문]",
+    "출입": "[폐문]",
+    "명일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "VOC": "[기타]",
+}
+
+# 선조치_NOC에 대한 내용
+선조치_NOC_options = [
+    "원인분석(전원)",
+    "원인분석(선로)",
+    "원인분석(장비)",
+    "전기작업 확인(전화)",
+    "FOLLOW추가",
+    "출동보류",
+    "원격조치(리부팅)",
+    "원격조치(포트리셋)",
+    "원격조치(포트BLK)",
+    "정전알림이 등록",
+    "DB현행화",
+    "고객홍보"
+]
+
+def get_format(text):
+    for keyword, head_format in formats.items():
+        if keyword in text:
+            return head_format
+    return None
+
+def main():
+    st.title("문장 분석 및 포맷 추가")
+
+    results = []
+
+    # 텍스트 입력 위젯
+    user_input = st.text_input("입력란", )
+
+    # 입력 형식 검사 및 포맷 추가
+    head_format = get_format(user_input)
+    if head_format:
+        results.append(head_format)
+
+    results.append(user_input)
+    results.append("수고하셨습니다")
+
+    # 선조치_NOC 다중 선택 박스
+    selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options)
+    if selected_actions:
+        formatted_actions = ", ".join(selected_actions)
+        results.append(f"<선조치_NOC> {formatted_actions}")
+
+    # 현장 항목들 다중 선택 박스
+    현장_options = [
+        "주소",
+        "연락처",
+        "장비위치",
+        "차단기위치",
+        "출입방법",
+        "기타(간단히 내용입력)"
+    ]
+    selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options)
+
+    if selected_locations and selected_actions:
+        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력')})" for location in selected_locations])
+        results.append(f"<현장> {formatted_locations} 수정요청")
+
+    if "전기작업 확인(전화)" in selected_actions:
+        results.insert(3, "<출동예방>전기작업 확인(전화)")
+
+    if st.button("출력"):
+        st.text("\n".join(results))  # 결과를 모두 하나의 문자열로 합쳐서 출력
+
+if __name__ == "__main__":
+    main()
+
+=================================================================
+<복붙기능존재>
+import streamlit as st
 import pyperclip
 import re
-from streamlit_option_menu import option_menu
-import requests
-from urllib.parse import quote
 
-# 포맷 데이터 포멧
+# 포맷 데이터 포함
+formats = {
+    "정전": "[사설정전복구]",
+    "복전": "[사설정전복구]",
+    "출동 중 복구": "[사설정전복구]",
+    "출동중복구": "[사설정전복구]",
+    "한전": "[한전정전복구]",
+    "차단기 on": "[사설차단기복구]",
+    "trip": "[사설차단기복구]",
+    "TRIP": "[사설차단기복구]",
+    "어댑터": "[전원어댑터교체]",
+    "어뎁터": "[전원어댑터교체]",
+    "아뎁터": "[전원어댑터교체]",
+    "아댑터": "[전원어댑터교체]",
+    "아답터": "[전원어댑터교체]",
+    "아답타": "[전원어댑터교체]",
+    "멀티탭": "[멀티탭 ON/교체]",
+    "발전기": "[발전기가동]",
+    "파워뱅크": "[전원가복구]",
+    "가복구": "[전원가복구]",
+    "임시": "[전원가복구]",
+    "전기안전검사": "[고객측작업]",
+    "전기검사": "[고객측작업]",
+    "작업": "[고객측작업]",
+    "점검": "[고객측작업]",
+    "검사": "[고객측작업]",
+    "공사": "[고객측작업]",
+    "장비철거": "[장비철거]",
+    "타사전환": "[타사전환]",
+    "PON": "[모듈교체]",
+    "pon": "[모듈교체]",
+    "PSU": "[모듈교체]",
+    "psu": "[모듈교체]",
+    "모듈": "[모듈교체]",
+    "장비교체": "[장비교체]",
+    "교체": "[장비교체]",
+    "리셋": "[장비리셋]",
+    "폐문": "[폐문]",
+    "출입불가": "[폐문]",
+    "출입": "[폐문]",
+    "명일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "VOC": "[기타]",
+}
+
+# 선조치_NOC에 대한 내용
+선조치_NOC_options = [
+    "원인분석(전원)",
+    "원인분석(선로)",
+    "원인분석(장비)",
+    "전기작업 확인(전화)",
+    "FOLLOW추가",
+    "출동보류",
+    "원격조치(리부팅)",
+    "원격조치(포트리셋)",
+    "원격조치(포트BLK)",
+    "정전알림이 등록",
+    "DB현행화",
+    "고객홍보"
+]
+
+def get_format(text):
+    for keyword, head_format in formats.items():
+        if keyword in text:
+            return head_format
+    return None
+
+def main():
+    st.title("회복 문구")
+
+    results = []
+
+    # 텍스트 입력 위젯
+    user_input = st.text_input("입력란", key="user_input")
+
+    # 입력 형식 검사 및 포맷 추가
+    head_format = get_format(user_input)
+    if head_format:
+        results.append(head_format)
+
+    results.append(user_input)
+    results.append("수고하셨습니다")
+
+    # 선조치_NOC 다중 선택 박스
+    selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
+    if selected_actions:
+        formatted_actions = ", ".join(selected_actions)
+        results.append(f"<선조치_NOC> {formatted_actions}")
+
+    # 현장 항목들 다중 선택 박스
+    현장_options = [
+        "[현장TM]",
+        "주소",
+        "연락처",
+        "장비위치",
+        "차단기위치",
+        "출입방법",
+        "기타(간단히 내용입력)"
+    ]
+    selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
+
+    # [현장TM] 선택 시 입력란 추가
+    현장TM_내용 = ""
+    if "[현장TM]" in selected_locations:
+        현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+        if "[현장TM]" in 현장TM_내용:
+            formatted_TM = 현장TM_내용  # [현장TM]이 포함되어 있으면 그대로 사용
+        else:
+            formatted_TM = f"[현장TM] {현장TM_내용}"  # 포함되어 있지 않으면 [현장TM] 추가
+        selected_locations.remove("[현장TM]")
+        formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+    else:
+        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+    
+    if selected_locations or "[현장TM]" in locals():
+        results.append(f"<현장> {formatted_locations} 수정요청")
+
+    출동예방_actions = []
+    # [현장TM] 내용에 특정 키워드가 포함되거나 숫자나 한국 전화번호 형태가 있는 경우 <출동예방>에도 추가
+    if 현장TM_내용 and (any(keyword in 현장TM_내용 for keyword in ["연락", "전화", "건물주", "확인", "통화"]) or re.search(r"\d", 현장TM_내용) or re.search(r"\d{3}-\d{4}-\d{4}", 현장TM_내용)):
+        출동예방_actions.append(formatted_TM)
+
+    # "전기작업 확인(전화)"가 선택된 경우 <출동예방>에도 추가
+    if "전기작업 확인(전화)" in selected_actions:
+        출동예방_actions.append("전기작업 확인(전화)")
+    
+    if 출동예방_actions:
+        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
+
+    copy_activated = st.checkbox("복사 기능 활성화", key="copy_activated")
+    if st.button("출력"):
+        output_text = "\n".join(results)
+        if copy_activated:
+            pyperclip.copy(output_text)
+        st.text(output_text)
+
+if __name__ == "__main__":
+    main()
+
+======================================================================
+<복사 기능 x>
+import streamlit as st
+import pyperclip
+import re
+
+# 포맷 데이터 포함
+formats = {
+    "정전": "[사설정전복구]",
+    "복전": "[사설정전복구]",
+    "출동 중 복구": "[사설정전복구]",
+    "출동중복구": "[사설정전복구]",
+    "한전": "[한전정전복구]",
+    "차단기 on": "[사설차단기복구]",
+    "trip": "[사설차단기복구]",
+    "TRIP": "[사설차단기복구]",
+    "어댑터": "[전원어댑터교체]",
+    "어뎁터": "[전원어댑터교체]",
+    "아뎁터": "[전원어댑터교체]",
+    "아댑터": "[전원어댑터교체]",
+    "아답터": "[전원어댑터교체]",
+    "아답타": "[전원어댑터교체]",
+    "멀티탭": "[멀티탭 ON/교체]",
+    "발전기": "[발전기가동]",
+    "파워뱅크": "[전원가복구]",
+    "가복구": "[전원가복구]",
+    "임시": "[전원가복구]",
+    "전기안전검사": "[고객측작업]",
+    "전기검사": "[고객측작업]",
+    "작업": "[고객측작업]",
+    "점검": "[고객측작업]",
+    "검사": "[고객측작업]",
+    "공사": "[고객측작업]",
+    "장비철거": "[장비철거]",
+    "타사전환": "[타사전환]",
+    "PON": "[모듈교체]",
+    "pon": "[모듈교체]",
+    "PSU": "[모듈교체]",
+    "psu": "[모듈교체]",
+    "모듈": "[모듈교체]",
+    "장비교체": "[장비교체]",
+    "교체": "[장비교체]",
+    "리셋": "[장비리셋]",
+    "폐문": "[폐문]",
+    "출입불가": "[폐문]",
+    "출입": "[폐문]",
+    "명일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "VOC": "[기타]",
+}
+
+# 선조치_NOC에 대한 내용
+선조치_NOC_options = [
+    "원인분석(전원)",
+    "원인분석(선로)",
+    "원인분석(장비)",
+    "전기작업 확인(전화)",
+    "FOLLOW추가",
+    "출동보류",
+    "원격조치(리부팅)",
+    "원격조치(포트리셋)",
+    "원격조치(포트BLK)",
+    "정전알림이 등록",
+    "DB현행화",
+    "고객홍보"
+]
+
+def get_format(text):
+    for keyword, head_format in formats.items():
+        if keyword in text:
+            return head_format
+    return None
+
+def main():
+    st.title("회복 문구")
+
+    results = []
+
+    # 텍스트 입력 위젯
+    user_input = st.text_input("입력란", key="user_input")
+
+    # 입력 형식 검사 및 포맷 추가
+    head_format = get_format(user_input)
+    if head_format:
+        results.append(head_format)
+
+    results.append(user_input)
+    results.append("수고하셨습니다")
+
+    # 선조치_NOC 다중 선택 박스
+    selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
+    if selected_actions:
+        formatted_actions = ", ".join(selected_actions)
+        results.append(f"<선조치_NOC> {formatted_actions}")
+
+    # 현장 항목들 다중 선택 박스
+    현장_options = [
+        "[현장TM]",
+        "주소",
+        "연락처",
+        "장비위치",
+        "차단기위치",
+        "출입방법",
+        "기타(간단히 내용입력)"
+    ]
+    selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
+
+    # [현장TM] 선택 시 입력란 추가
+    현장TM_내용 = ""
+    if "[현장TM]" in selected_locations:
+        현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+        if "[현장TM]" in 현장TM_내용:
+            formatted_TM = 현장TM_내용  # [현장TM]이 포함되어 있으면 그대로 사용
+        else:
+            formatted_TM = f"[현장TM] {현장TM_내용}"  # 포함되어 있지 않으면 [현장TM] 추가
+        selected_locations.remove("[현장TM]")
+        formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+    else:
+        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+    
+    if selected_locations or "[현장TM]" in locals():
+        results.append(f"<현장> {formatted_locations} 수정요청")
+
+    출동예방_actions = []
+    # [현장TM] 내용에 특정 키워드가 포함되거나 숫자나 한국 전화번호 형태가 있는 경우 <출동예방>에도 추가
+    if 현장TM_내용 and (any(keyword in 현장TM_내용 for keyword in ["연락", "전화", "건물주", "확인", "통화"]) or re.search(r"\d", 현장TM_내용) or re.search(r"\d{3}-\d{4}-\d{4}", 현장TM_내용)):
+        출동예방_actions.append(formatted_TM)
+
+    # "전기작업 확인(전화)"가 선택된 경우 <출동예방>에도 추가
+    if "전기작업 확인(전화)" in selected_actions:
+        출동예방_actions.append("전기작업 확인(전화)")
+    
+    if 출동예방_actions:
+        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
+
+    copy_activated = False
+    if st.button("출력"):
+        output_text = "\n".join(results)
+        if copy_activated:
+            pyperclip.copy(output_text)
+        st.text(output_text)
+
+if __name__ == "__main__":
+    main()
+
+import streamlit as st
+import pyperclip
+import re
+
+# 포맷 데이터 포함
+formats = {
+    "정전": "[사설정전복구]",
+    "입전": "[사설정전복구]",
+    "복전": "[사설정전복구]",
+    "출동 중 복구": "[사설정전복구]",
+    "출동중복구": "[사설정전복구]",
+    "한전": "[한전정전복구]",
+    "차단기 on": "[사설차단기복구]",
+    "trip": "[사설차단기복구]",
+    "TRIP": "[사설차단기복구]",
+    "어댑터": "[전원어댑터교체]",
+    "어뎁터": "[전원어댑터교체]",
+    "아뎁터": "[전원어댑터교체]",
+    "아댑터": "[전원어댑터교체]",
+    "아답터": "[전원어댑터교체]",
+    "아답타": "[전원어댑터교체]",
+    "멀티탭": "[멀티탭 ON/교체]",
+    "콘센트": "[멀티탭 ON/교체]",
+    "멀티탭 교체": "[멀티탭 ON/교체]",
+    "콘센트 교체": "[멀티탭 ON/교체]",
+    "발전기": "[발전기가동]",
+    "파워뱅크": "[전원가복구]",
+    "가복구": "[전원가복구]",
+    "임시": "[전원가복구]",
+    "전기안전검사": "[고객측작업]",
+    "전기검사": "[고객측작업]",
+    "작업": "[고객측작업]",
+    "점검": "[고객측작업]",
+    "검사": "[고객측작업]",
+    "공사": "[고객측작업]",
+    "장비철거": "[장비철거]",
+    "타사전환": "[타사전환]",
+    "감쇄기": "[광커넥터복구]", 
+    "감쇠기": "[광커넥터복구]",
+    "PON": "[모듈교체]",
+    "pon": "[모듈교체]",
+    "PSU": "[모듈교체]",
+    "psu": "[모듈교체]",
+    "모듈": "[모듈교체]",
+    "장비교체": "[장비교체]",
+    "장비 대개체": "[장비교체]",
+    "대개체": "[장비교체]",
+    "교체": "[장비교체]",
+    "리셋": "[장비리셋]",
+    "폐문": "[폐문]",
+    "출입불가": "[폐문]",
+    "출입": "[폐문]",
+    "명일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "VOC": "[기타]",
+}
+
+# 선조치_NOC에 대한 내용
+선조치_NOC_options = [
+    "원인분석(전원)",
+    "원인분석(선로)",
+    "원인분석(장비)",
+    "전기작업 확인(전화)",
+    "FOLLOW추가",
+    "출동보류",
+    "원격조치(리부팅)",
+    "원격조치(포트리셋)",
+    "원격조치(포트BLK)",
+    "정전알림이 등록",
+    "DB현행화",
+    "고객홍보"
+]
+
+def get_format(text):
+    for keyword, head_format in formats.items():
+        if keyword in text:
+            return head_format
+    return None
+
+def main():
+    st.title("회복 문구")
+
+    # 초기값 설정
+    if "user_input" not in st.session_state:
+        st.session_state.user_input = ""
+
+    # 텍스트 입력 초기화 함수
+    def clear_text():
+        st.session_state.clear()  # 모든 상태를 초기화
+        st.session_state.user_input = ""  # 다시 설정
+        st.experimental_rerun()  # 상태를 초기화하고 재실행
+
+    results = []
+
+    # 텍스트 입력 위젯
+    user_input = st.text_input("입력란", key="user_input")
+
+    # 입력 형식 검사 및 포맷 추가
+    head_format = get_format(user_input)
+    if head_format:
+        results.append(head_format)
+
+    results.append(user_input)
+    results.append("수고하셨습니다")
+
+    # 선조치_NOC 다중 선택 박스
+    selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
+    if selected_actions:
+        formatted_actions = ", ".join(selected_actions)
+        results.append(f"<선조치_NOC> {formatted_actions}")
+
+    # 현장 항목들 다중 선택 박스
+    현장_options = [
+        "[현장TM]",
+        "주소",
+        "연락처",
+        "장비위치",
+        "차단기위치",
+        "출입방법",
+        "기타(간단히 내용입력)"
+    ]
+    selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
+
+    # [현장TM] 선택 시 입력란 추가
+    현장TM_내용 = ""
+    if "[현장TM]" in selected_locations:
+        현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+        if "[현장TM]" in 현장TM_내용:
+            formatted_TM = 현장TM_내용  # [현장TM]이 포함되어 있으면 그대로 사용
+        else:
+            formatted_TM = f"[현장TM] {현장TM_내용}"  # 포함되어 있지 않으면 [현장TM] 추가
+        selected_locations.remove("[현장TM]")
+        formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+    else:
+        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+    
+    if selected_locations or "[현장TM]" in locals():
+        results.append(f"<현장> {formatted_locations} 수정요청")
+
+    출동예방_actions = []
+    # [현장TM] 내용에 특정 키워드가 포함되거나 숫자나 한국 전화번호 형태가 있는 경우 <출동예방>에도 추가
+    if 현장TM_내용 and (any(keyword in 현장TM_내용 for keyword in ["연락", "전화", "건물주", "확인", "통화"]) or re.search(r"\d", 현장TM_내용) or re.search(r"\d{3}-\d{4}-\d{4}", 현장TM_내용)):
+        출동예방_actions.append(formatted_TM)
+
+    # "전기작업 확인(전화)"가 선택된 경우 <출동예방>에도 추가
+    if "전기작업 확인(전화)" in selected_actions:
+        출동예방_actions.append("전기작업 확인(전화)")
+    
+    if 출동예방_actions:
+        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
+
+    copy_activated = False
+    if st.button("출력"):
+        output_text = "\n".join(results)
+        if copy_activated:
+            pyperclip.copy(output_text)
+        st.text(output_text)
+
+    # 입력란 초기화 버튼
+    if st.button("입력란 초기화"):
+        clear_text()
+
+if __name__ == "__main__":
+    main()
+==========================================================
+import streamlit as st
+import pyperclip
+import re
+
+# 포맷 데이터 포함
+formats = {
+    "정전": "[사설정전복구]",
+    "입전": "[사설정전복구]",
+    "복전": "[사설정전복구]",
+    "출동 중 복구": "[사설정전복구]",
+    "출동중복구": "[사설정전복구]",
+    "한전": "[한전정전복구]",
+    "차단기 on": "[사설차단기복구]",
+    "trip": "[사설차단기복구]",
+    "TRIP": "[사설차단기복구]",
+    "어댑터": "[전원어댑터교체]",
+    "어뎁터": "[전원어댑터교체]",
+    "아뎁터": "[전원어댑터교체]",
+    "아댑터": "[전원어댑터교체]",
+    "아답터": "[전원어댑터교체]",
+    "아답타": "[전원어댑터교체]",
+    "멀티탭": "[멀티탭 ON/교체]",
+    "콘센트": "[멀티탭 ON/교체]",
+    "멀티탭 교체": "[멀티탭 ON/교체]",
+    "콘센트 교체": "[멀티탭 ON/교체]",
+    "발전기": "[발전기가동]",
+    "파워뱅크": "[전원가복구]",
+    "가복구": "[전원가복구]",
+    "임시": "[전원가복구]",
+    "전기안전검사": "[고객측작업]",
+    "전기검사": "[고객측작업]",
+    "작업": "[고객측작업]",
+    "점검": "[고객측작업]",
+    "검사": "[고객측작업]",
+    "공사": "[고객측작업]",
+    "장비철거": "[장비철거]",
+    "타사전환": "[타사전환]",
+    "감쇄기": "[광커넥터복구]", 
+    "감쇠기": "[광커넥터복구]",
+    "PON": "[모듈교체]",
+    "pon": "[모듈교체]",
+    "PSU": "[모듈교체]",
+    "psu": "[모듈교체]",
+    "모듈": "[모듈교체]",
+    "장비교체": "[장비교체]",
+    "장비 대개체": "[장비교체]",
+    "대개체": "[장비교체]",
+    "교체": "[장비교체]",
+    "리셋": "[장비리셋]",
+    "폐문": "[폐문]",
+    "출입불가": "[폐문]",
+    "출입": "[폐문]",
+    "명일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "VOC": "[기타]",
+}
+
+# 선조치_NOC에 대한 내용
+선조치_NOC_options = [
+    "원인분석(전원)",
+    "원인분석(선로)",
+    "원인분석(장비)",
+    "전기작업 확인(전화)",
+    "FOLLOW추가",
+    "출동보류",
+    "원격조치(리부팅)",
+    "원격조치(포트리셋)",
+    "원격조치(포트BLK)",
+    "정전알림이 등록",
+    "DB현행화",
+    "고객홍보"
+]
+
+def get_format(text):
+    for keyword, head_format in formats.items():
+        if keyword in text:
+            return head_format
+    return None
+
+def main():
+    st.title("회복 문구")
+
+    # 초기값 설정
+    if "user_input" not in st.session_state:
+        st.session_state.user_input = ""
+
+    # 텍스트 입력 초기화 함수
+    def clear_text():
+        st.session_state.clear()  # 모든 상태를 초기화
+        st.session_state.user_input = ""  # 다시 설정
+        st.experimental_rerun()  # 상태를 초기화하고 재실행
+
+    results = []
+
+    # 텍스트 입력 위젯
+    user_input = st.text_input("입력란", key="user_input")
+
+    # 입력 형식 검사 및 포맷 추가
+    head_format = get_format(user_input)
+    if head_format:
+        results.append(head_format)
+
+    results.append(user_input)
+    results.append("수고하셨습니다")
+
+    # 선조치_NOC 다중 선택 박스
+    selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
+    if selected_actions:
+        formatted_actions = ", ".join(selected_actions)
+        results.append(f"<선조치_NOC> {formatted_actions}")
+
+    # 현장 항목들 다중 선택 박스
+    현장_options = [
+        "[현장TM]",
+        "주소",
+        "연락처",
+        "장비위치",
+        "차단기위치",
+        "출입방법",
+        "기타(간단히 내용입력)"
+    ]
+    selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
+
+    # [현장TM] 선택 시 입력란 추가
+    현장TM_내용 = ""
+    if "[현장TM]" in selected_locations:
+        현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+        if "[현장TM]" in 현장TM_내용:
+            formatted_TM = 현장TM_내용  # [현장TM]이 포함되어 있으면 그대로 사용
+        else:
+            formatted_TM = f"[현장TM] {현장TM_내용}"  # 포함되어 있지 않으면 [현장TM] 추가
+        selected_locations.remove("[현장TM]")
+        formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+    else:
+        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+    
+    if selected_locations or "[현장TM]" in locals():
+        results.append(f"<현장> {formatted_locations} 수정요청")
+
+    출동예방_actions = []
+    # [현장TM] 내용에 특정 키워드가 포함되거나 숫자나 한국 전화번호 형태가 있는 경우 <출동예방>에도 추가
+    if 현장TM_내용 and (any(keyword in 현장TM_내용 for keyword in ["연락", "전화", "건물주", "확인", "통화"]) or re.search(r"\d", 현장TM_내용) or re.search(r"\d{3}-\d{4}-\d{4}", 현장TM_내용)):
+        출동예방_actions.append(formatted_TM)
+
+    # "전기작업 확인(전화)"가 선택된 경우 <출동예방>에도 추가
+    if "전기작업 확인(전화)" in selected_actions:
+        출동예방_actions.append("전기작업 확인(전화)")
+    
+    if 출동예방_actions:
+        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
+
+    copy_activated = False
+    if st.button("출력"):
+        output_text = "\n".join(results)
+        if copy_activated:
+            pyperclip.copy(output_text)
+        st.text(output_text)
+
+    # 입력란 초기화 버튼
+    if st.button("입력란 초기화"):
+        clear_text()
+
+if __name__ == "__main__":
+    main()
+
+================================================
+import streamlit as st
+import pyperclip
+import re
+
+# 포맷 데이터 포함
 formats = {
     "정전": "[사설정전복구]",
     "입전": "[사설정전복구]",
@@ -15,21 +1092,11 @@ formats = {
     "출동중복구": "[사설정전복구]",
     "출동 중 자동복구": "[사설정전복구]",
     "출동중자동복구": "[사설정전복구]",
-    "출동중 자동복구": "[사설정전복구]",
     "자동": "[사설정전복구]",
-    "루트변경": "[사설정전복구]",
-    "루트 변경": "[사설정전복구]",
     "한전": "[한전정전복구]",
-    "변압기": "[한전정전복구]",
-    "차단기": "[사설차단기복구]",
     "차단기 on": "[사설차단기복구]",
-    "차단기 ON": "[사설차단기복구]",
-    "차단기on": "[사설차단기복구]",
-    "차단기ON": "[사설차단기복구]",
-    "On": "[사설차단기복구]",
     "trip": "[사설차단기복구]",
     "TRIP": "[사설차단기복구]",
-    "Trip": "[사설차단기복구]",
     "트립": "[사설차단기복구]",
     "어댑터": "[전원어댑터교체]",
     "어뎁터": "[전원어댑터교체]",
@@ -38,57 +1105,40 @@ formats = {
     "아답터": "[전원어댑터교체]",
     "아답타": "[전원어댑터교체]",
     "멀티탭": "[멀티탭 ON/교체]",
-    "멀티탭 교체": "[멀티탭 ON/교체]",
     "콘센트": "[멀티탭 ON/교체]",
-    "콘샌트": "[멀티탭 ON/교체]",
+    "멀티탭 교체": "[멀티탭 ON/교체]",
+    "콘센트 교체": "[멀티탭 ON/교체]",
     "발전기": "[발전기가동]",
     "파워뱅크": "[전원가복구]",
     "가복구": "[전원가복구]",
     "임시": "[전원가복구]",
     "전기안전검사": "[고객측작업]",
     "전기검사": "[고객측작업]",
-    "전기작업": "[고객측작업]",
     "작업": "[고객측작업]",
     "점검": "[고객측작업]",
     "검사": "[고객측작업]",
     "공사": "[고객측작업]",
     "장비철거": "[장비철거]",
     "타사전환": "[타사전환]",
-    "타사 전환": "[타사전환]",
     "감쇄기": "[광커넥터복구]", 
     "감쇠기": "[광커넥터복구]",
-    "dbm": "[광커넥터복구]",
-    "취부": "[광커넥터복구]",
     "PON": "[모듈교체]",
     "pon": "[모듈교체]",
-    "Pon": "[모듈교체]",
-    "PoN": "[모듈교체]",
     "PSU": "[모듈교체]",
     "psu": "[모듈교체]",
     "모듈": "[모듈교체]",
-    "보드": "[모듈교체]",
     "장비교체": "[장비교체]",
     "장비 대개체": "[장비교체]",
     "대개체": "[장비교체]",
-    "장비 교체": "[장비교체]",
+    "교체": "[장비교체]",
     "리셋": "[장비리셋]",
-    "익일": "[기타]",
-    "담당조": "[기타]",
-    "OFF": "[기타]",
-    "off": "[기타]",
-    "예정": "[기타]",
-    "재발행": "[기타]",
-    "VOC": "[기타]",
-    "voc": "[기타]",
-    "미정": "[기타]",
-    "불가": "[기타]",
-    "망실": "[기타]",
-    "예정": "[기타]",
-    "접근불가": "[폐문]",
-    "접근 불가": "[폐문]",
+    "폐문": "[폐문]",
     "출입불가": "[폐문]",
     "출입": "[폐문]",
-    "폐문": "[폐문]"
+    "명일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "VOC": "[기타]",
 }
 
 # B/S 및 민원처리 head_format 데이터
@@ -103,8 +1153,7 @@ B_S_head_formats = {
     "NOC_점검정비": "[NOC_점검정비]",
     "NOC_자산관리": "[NOC_자산관리]",
     "NOC_중복장애": "[NOC_중복장애]",
-    "NOC_kernel정비": "[NOC_kernel정비]",
-    "기타": "[기타]"
+    "NOC_kernel정비": "[NOC_kernel정비]"
 }
 
 민원처리_head_formats = {
@@ -142,257 +1191,17 @@ B_S_head_formats = {
     "원격조치(포트BLK)",
     "정전알림이 등록",
     "DB현행화",
-    "고객홍보",
-    "DB 삭제 여부"
+    "고객홍보"
 ]
-GITHUB_USER = 'dfgqwe'
-GITHUB_REPO = 'easyue'
-GITHUB_FILE_PATH = 'ws_data.csv'
-GITHUB_TOKEN = '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'
 
-def get_file_content():
-    url = 'https://github.com/dfgqwe/easyu/blob/main/ws_data.csv'
-    headers = {
-        'Authorization': f'token {GITHUB_TOKEN}',
-        'Accept': 'application/vnd.github.v3.raw'
-    }
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-    content = base64.b64decode(response.json()['content']).decode('utf-8')
-    sha = response.json()['sha']
-    return content, sha
-
-def update_file_content(content, sha):
-    url = 'https://github.com/dfgqwe/easyu/blob/main/ws_data.csv'
-    headers = {
-        'Authorization': f'token {GITHUB_TOKEN}',
-        'Accept': 'application/vnd.github.v3+json'
-    }
-    data = {
-        'message': 'Update ws_data.csv',
-        'content': base64.b64encode(content.encode('utf-8')).decode('utf-8'),
-        'sha': sha
-    }
-    response = requests.put(url, headers=headers, json=data)
-    response.raise_for_status()
-    return response.json()
-
-# Load the CSV file
-def load_csv():
-    content, sha = get_file_content()
-    if content:
-        try:
-            return pd.read_csv(pd.compat.StringIO(content)), sha
-        except Exception as e:
-            st.error(f"CSV 파일을 읽는 중 오류가 발생했습니다: {e}")
-            return pd.DataFrame(), ""
-    else:
-        return pd.DataFrame(), ""
-
-
-
-
-@st.cache_data
 def get_format(text):
-    matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
-    if "[한전정전복구]" in matched_formats and ("[기타]" in matched_formats or "[폐문]" in matched_formats):
-        return "[폐문]" if "[폐문]" in matched_formats else "[기타]"
-    elif "[한전정전복구]" in matched_formats:
-        return "[한전정전복구]"
-    elif "[전원어댑터교체]" in matched_formats:
-        return "[전원어댑터교체]"
-    elif "[사설차단기복구]" in matched_formats:
-        return "[사설차단기복구]"
-    elif "[기타]" in matched_formats or "[폐문]" in matched_formats:
-        return matched_formats[-1]
-    else:
-        selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
-        return selected_formats[-1] if selected_formats else None
+    for keyword, head_format in formats.items():
+        if keyword in text:
+            return head_format
+    return None
 
-
-
-# Load the CSV file
-df = pd.read_csv('head.csv', index_col=0)
-
-
-def clear_tm_content(content):
-    keywords_to_remove = ["[현장TM]", "[TM활동]", "[TM 활동]", "[현장 TM]"]
-    for keyword in keywords_to_remove:
-        content = content.replace(keyword, "")
-    return content.strip()
-
-
-# Initialize session state for day and night content if not already present
-if 'day_content' not in st.session_state:
-    st.session_state.day_content = ""
-if 'night_content' not in st.session_state:
-    st.session_state.night_content = ""
-
-# 전화번호 정보를 저장하는 딕셔너리
-phone_numbers = {
-    "충청": [
-        {"부서명": "OSP", "전화번호": "02-500-6150"},
-        {"부서명": "phone", "전화번호": "041-234-5678"},
-        {"부서명": "phone", "전화번호": "041-345-6789"},
-        {"부서명": "phone", "전화번호": "041-456-7890"},
-        {"부서명": "phone", "전화번호": "041-567-8901"},
-        {"부서명": "phone", "전화번호": "041-678-9012"}
-    ],
-    "호남": [
-        {"부서명": "OSP", "전화번호": "02-500-6150"},
-        {"부서명": "phone", "전화번호": "061-234-5678"},
-        {"부서명": "phone", "전화번호": "061-345-6789"},
-        {"부서명": "phone", "전화번호": "061-456-7890"},
-        {"부서명": "phone", "전화번호": "061-567-8901"},
-        {"부서명": "phone", "전화번호": "061-678-9012"}
-    ],
-    "부산": [
-        {"부서명": "OSP", "전화번호": "02-500-6150"},
-        {"부서명": "phone", "전화번호": "051-234-5678"},
-        {"부서명": "phone", "전화번호": "051-345-6789"},
-        {"부서명": "phone", "전화번호": "051-456-7890"},
-        {"부서명": "phone", "전화번호": "051-567-8901"},
-        {"부서명": "phone", "전화번호": "051-678-9012"}
-    ],
-    "대구": [
-        {"부서명": "OSP", "전화번호": "02-500-6150"},
-        {"부서명": "phone", "전화번호": "053-234-5678"},
-        {"부서명": "phone", "전화번호": "053-345-6789"},
-        {"부서명": "phone", "전화번호": "053-456-7890"},
-        {"부서명": "phone", "전화번호": "053-567-8901"},
-        {"부서명": "phone", "전화번호": "053-678-9012"}
-    ]
-}
-
-
-def home_page():
-    st.title("Home")
-    st.markdown(
-        """
-        <style>
-        .stRadio > div {
-            display: flex;
-            flex-direction: row;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-
-    # Radio button for choosing between Day Content and Night Content
-    content_option = st.radio("인수 인계", ["주간", "야간"])
-
-    if content_option == "주간":
-        st.header("주간")
-        st.markdown(st.session_state.day_content.replace('\n', '<br>'), unsafe_allow_html=True)
-    else:
-        st.header("야간")
-        st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
-        
-    # 전화번호 정보를 선택하는 selectbox 추가
-    st.header("전화번호 안내")
-    region = st.selectbox("본부 선", ["충청", "호남", "부산", "대구"])
-    
-    # 선택된 지역의 전화번호 정보 표시
-    st.subheader(f"{region} 지역 전화번호")
-    phone_data = phone_numbers.get(region, [])
-    
-    chunk_size = 3
-    for i in range(0, len(phone_data), chunk_size):
-        chunk = phone_data[i:i+chunk_size]
-        df = pd.DataFrame(chunk)
-        df.set_index('부서명', inplace=True)  # 'name'을 인덱스로 설정
-        st.dataframe(df)
-
-
-
-# 예시로 사용할 비밀번호
-manage_password = "1234"
-
-def manage_page():
-    st.title("Manage")
-
-    if 'manage_logged_in' not in st.session_state:
-        st.session_state.manage_logged_in = False
-
-    if not st.session_state.manage_logged_in:
-        password = st.text_input("Manage 페이지 비밀번호 입력", type="password")
-
-        if password == manage_password:
-            st.session_state.manage_logged_in = True
-        elif password:
-            st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
-            return
-    
-    if st.session_state.manage_logged_in:
-        # 비밀번호 입력 후에만 Radio 버튼을 표시
-        content_option = st.radio("인수 인계", ["주간", "야간"])
-
-        if content_option == "주간":
-            st.header("주간")
-            st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.get("day_content", ""), height=200)
-
-        else:
-            st.header("야간")
-            st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.get("night_content", ""), height=200)
-
-        st.header("Worksync 데이터 관리")
-
-        # CSV 파일 로드
-        try:
-            content, sha = get_file_content()
-            work = pd.read_csv(pd.compat.StringIO(content))
-        except Exception as e:
-            st.error(f"Error loading data: {e}")
-            return
-
-        # '장비ID'와 '업무명'이 동일한 경우 중복된 행 제거
-        df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
-
-        # 장비ID 순서대로 정렬
-        df_no_duplicates = df_no_duplicates.sort_values(by='장비ID')
-
-        # IP 입력 받기
-        ip_input = st.text_input("IP 입력", "")
-
-        # IP 입력이 있을 경우
-        if ip_input:
-            # 입력된 IP에 해당되는 행 찾기
-            if ip_input in df_no_duplicates['장비ID'].values:
-                # 해당 IP의 사업장 찾기
-                address = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]['사업장'].values[0]
-                st.write("★동일국소 점검 대상★")
-
-                same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
-                selected_indices = []
-
-                for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
-                    if st.checkbox(f"{idx}. {row['장비ID']} - {row['장비명/국사명']} - {row['업무명']}", key=index):
-                        selected_indices.append(index)
-
-                if st.button("선택 항목 삭제"):
-                    if selected_indices:
-                        df_no_duplicates = df_no_duplicates.drop(selected_indices)
-                        updated_content = df_no_duplicates.to_csv(index=False)
-                        update_file_content(updated_content, sha)
-                        st.success("선택된 항목이 삭제되었습니다.")
-                    else:
-                        st.warning("삭제할 항목을 선택하세요.")
-            else:
-                st.text("Work-Sync 없습니다.")
-                
-def moss_page():
-
+def main():
     st.title("MOSS 회복 문구")
-
-    df1 = pd.read_csv('bs_head.csv')
-
-    # 인덱스를 제거한 새로운 데이터프레임 생성
-    df1_reset = df1.reset_index(drop=True)
-
-    # Streamlit 애플리케이션
-    with st.expander('MOSS BS 발행 HEAD'):
-        st.dataframe(df1_reset)
 
     # 초기값 설정
     if "user_input" not in st.session_state:
@@ -403,29 +1212,501 @@ def moss_page():
         st.session_state.clear()  # 모든 상태를 초기화
         st.session_state.user_input = ""  # 다시 설정
         st.experimental_rerun()  # 상태를 초기화하고 재실행
-        
 
     results = []
 
+    col1, col2 = st.columns(2)
 
-    if "bs_checked" not in st.session_state:
-        st.session_state.bs_checked = False
-    if "complaint_checked" not in st.session_state:
-        st.session_state.complaint_checked = False
+    # B/S 체크박스 추가
+    with col1:
+        is_bs_checked = st.checkbox("B/S")
 
-    def bs_checkbox_callback():
-        st.session_state.complaint_checked = False
+    # 민원처리 체크박스 추가
+    with col2:
+        is_complaint_checked = st.checkbox("민원처리")
 
-    def complaint_checkbox_callback():
-        st.session_state.bs_checked = False
+    if is_bs_checked:
+        # B/S 체크박스가 선택되었을 때 B/S head_format을 선택할 수 있는 드롭다운 메뉴
+        selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
+        if selected_bs_format:
+            results.append(selected_bs_format)
+
+    if is_complaint_checked:
+        # 민원처리 체크박스가 선택되었을 때 민원처리 head_format을 선택할 수 있는 드롭다운 메뉴
+        selected_complaint_format = st.selectbox("민원처리 head_format을 선택하세요:", list(민원처리_head_formats.values()), key="complaint_format")
+        if selected_complaint_format:
+            results.append(selected_complaint_format)
+
+    # 텍스트 입력 위젯
+    user_input = st.text_input("입력란", key="user_input")
+
+    # 입력 형식 검사 및 포맷 추가
+    if not is_bs_checked and not is_complaint_checked:
+        head_format = get_format(user_input)
+        if head_format:
+            results.append(head_format)
+
+    results.append(user_input)
+    results.append("수고하셨습니다")
+
+    # 선조치_NOC 다중 선택 박스
+    selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
+    if selected_actions:
+        formatted_actions = ", ".join(selected_actions)
+        results.append(f"<선조치_NOC> {formatted_actions}")
+
+    # 현장 항목들 다중 선택 박스
+    현장_options = [
+        "[현장TM]",
+        "주소",
+        "연락처",
+        "장비위치",
+        "차단기위치",
+        "출입방법",
+        "기타(간단히 내용입력)"
+    ]
+    selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
+
+    # [현장TM] 선택 시 입력란 추가
+    현장TM_내용 = ""
+    if "[현장TM]" in selected_locations:
+        현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+        if "[현장TM]" in 현장TM_내용:
+            formatted_TM = 현장TM_내용  # [현장TM]이 포함되어 있으면 그대로 사용
+        else:
+            formatted_TM = f"[현장TM] {현장TM_내용}"  # 포함되어 있지 않으면 [현장TM] 추가
+        selected_locations.remove("[현장TM]")
+        if selected_locations:
+            formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations]) + " 수정요청"
+        else:
+            formatted_locations = f"{formatted_TM}"
+    else:
+        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
     
+    if selected_locations or 현장TM_내용:
+        results.append(f"<현장> {formatted_locations}")
+
+    출동예방_actions = []
+    # [현장TM] 내용에 특정 키워드가 포함되거나 숫자나 한국 전화번호 형태가 있는 경우 <출동예방>에도 추가
+    if 현장TM_내용 and (any(keyword in 현장TM_내용 for keyword in ["연락", "전화", "건물주", "통화"]) or re.search(r"\d", 현장TM_내용) or re.search(r"\d{3}-\d{4}-\d{4}", 현장TM_내용)):
+        출동예방_actions.append(formatted_TM)
+
+    # "전기작업 확인(전화)"가 선택된 경우 <출동예방>에도 추가
+    if "전기작업 확인(전화)" in selected_actions:
+        출동예방_actions.append("전기작업 확인(전화)")
+    
+    if 출동예방_actions:
+        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
+
+    copy_activated = False
+    if st.button("출력"):
+        output_text = "\n".join(results)
+        if copy_activated:
+            pyperclip.copy(output_text)
+        st.text(output_text)
+
+    # 입력란 초기화 버튼
+    if st.button("입력란 초기화"):
+        clear_text()
+
+if __name__ == "__main__":
+    main()
+
+=============================
+import streamlit as st
+import pyperclip
+import re
+
+# 포맷 데이터 포함
+formats = {
+    "출입불가": "[폐문]",
+    "출입": "[폐문]",
+    "한전": "[한전정전복구]",
+    "정전": "[사설정전복구]",
+    "입전": "[사설정전복구]",
+    "복전": "[사설정전복구]",
+    "출동 중 복구": "[사설정전복구]",
+    "출동중복구": "[사설정전복구]",
+    "출동 중 자동복구": "[사설정전복구]",
+    "출동중자동복구": "[사설정전복구]",
+    "자동": "[사설정전복구]",
+    "차단기 on": "[사설차단기복구]",
+    "trip": "[사설차단기복구]",
+    "TRIP": "[사설차단기복구]",
+    "트립": "[사설차단기복구]",
+    "어댑터": "[전원어댑터교체]",
+    "어뎁터": "[전원어댑터교체]",
+    "아뎁터": "[전원어댑터교체]",
+    "아댑터": "[전원어댑터교체]",
+    "아답터": "[전원어댑터교체]",
+    "아답타": "[전원어댑터교체]",
+    "멀티탭": "[멀티탭 ON/교체]",
+    "콘센트": "[멀티탭 ON/교체]",
+    "멀티탭 교체": "[멀티탭 ON/교체]",
+    "콘센트 교체": "[멀티탭 ON/교체]",
+    "발전기": "[발전기가동]",
+    "파워뱅크": "[전원가복구]",
+    "가복구": "[전원가복구]",
+    "임시": "[전원가복구]",
+    "전기안전검사": "[고객측작업]",
+    "전기검사": "[고객측작업]",
+    "전기작업": "[고객측작업]",
+    "작업": "[고객측작업]",
+    "점검": "[고객측작업]",
+    "검사": "[고객측작업]",
+    "공사": "[고객측작업]",
+    "장비철거": "[장비철거]",
+    "타사전환": "[타사전환]",
+    "감쇄기": "[광커넥터복구]", 
+    "감쇠기": "[광커넥터복구]",
+    "PON": "[모듈교체]",
+    "pon": "[모듈교체]",
+    "PSU": "[모듈교체]",
+    "psu": "[모듈교체]",
+    "모듈": "[모듈교체]",
+    "보드": "[모듈교체]",
+    "장비교체": "[장비교체]",
+    "장비 대개체": "[장비교체]",
+    "대개체": "[장비교체]",
+    "교체": "[장비교체]",
+    "리셋": "[장비리셋]",
+    "익일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "예정": "[기타]",
+    "재발행": "[기타]",
+    "VOC": "[기타]",
+    "미정": "[기타]",
+    "폐문": "[폐문]"
+    
+}
+
+# B/S 및 민원처리 head_format 데이터
+B_S_head_formats = {
+    "NOC_광레벨불": "[NOC_광레벨불]",
+    "NOC_CRC발생": "[NOC_CRC발생]",
+    "NOC_장비철거": "[NOC_장비철거]",
+    "NOC_형상삭제": "[NOC_형상삭제]",
+    "NOC_PSU교체": "[NOC_PSU교체]",
+    "NOC_PLK_PSU교체": "[NOC_PLK_PSU교체]",
+    "NOC_장비교체": "[NOC_장비교체]",
+    "NOC_점검정비": "[NOC_점검정비]",
+    "NOC_자산관리": "[NOC_자산관리]",
+    "NOC_중복장애": "[NOC_중복장애]",
+    "NOC_kernel정비": "[NOC_kernel정비]"
+}
+
+민원처리_head_formats = {
+    "NOC_장비교체": "[NOC_장비교체]",
+    "NOC_PON모듈교체": "[NOC_PON모듈교체]",
+    "NOC_보드교체": "[NOC_보드교체]",
+    "NOC_BAT교체": "[NOC_BAT교체]",
+    "NOC_어댑터교체": "[NOC_어댑터교체]",
+    "NOC_FAN교체": "[NOC_FAN교체]",
+    "NOC_관련부서이관": "[NOC_관련부서이관]",
+    "NOC_장비철거": "[NOC_장비철거]",
+    "NOC_광커넥터재접속": "[NOC_광커넥터재접속]",
+    "NOC_전원가복구": "[NOC_전원가복구]",
+    "NOC_모자분리": "[NOC_모자분리]",
+    "NOC_전기요금": "[NOC_전기요금]",
+    "NOC_장비재설치": "[NOC_장비재설치]",
+    "NOC_PSU교체": "[NOC_PSU교체]",
+    "NOC_감쇄기실장": "[NOC_감쇄기실장]",
+    "NOC_상태변경": "[NOC_상태변경]",
+    "NOC_장비리셋": "[NOC_장비리셋]",
+    "NOC_자연회복": "[NOC_자연회복]",
+    "NOC_기타": "[NOC_기타]"
+}
+
+# 선조치_NOC에 대한 내용
+선조치_NOC_options = [
+    "원인분석(전원)",
+    "원인분석(선로)",
+    "원인분석(장비)",
+    "전기작업 확인(전화)",
+    "FOLLOW추가",
+    "출동보류",
+    "원격조치(리부팅)",
+    "원격조치(포트리셋)",
+    "원격조치(포트BLK)",
+    "정전알림이 등록",
+    "DB현행화",
+    "고객홍보"
+]
+
+def get_format(text):
+    for keyword, head_format in formats.items():
+        if keyword in text:
+            return head_format
+    return None
+
+def main():
+    st.title("MOSS 회복 문구")
+
+    # 초기값 설정
+    if "user_input" not in st.session_state:
+        st.session_state.user_input = ""
+
+    # 텍스트 입력 초기화 함수
+    def clear_text():
+        st.session_state.clear()  # 모든 상태를 초기화
+        st.session_state.user_input = ""  # 다시 설정
+        st.experimental_rerun()  # 상태를 초기화하고 재실행
+
+    results = []
+
+    col1, col2 = st.columns(2)
+
+    # B/S 체크박스 추가
+    with col1:
+        is_bs_checked = st.checkbox("B/S")
+
+    # 민원처리 체크박스 추가
+    with col2:
+        is_complaint_checked = st.checkbox("민원처리")
+
+    if is_bs_checked:
+        # B/S 체크박스가 선택되었을 때 B/S head_format을 선택할 수 있는 드롭다운 메뉴
+        selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
+        if selected_bs_format:
+            results.append(selected_bs_format)
+
+    if is_complaint_checked:
+        # 민원처리 체크박스가 선택되었을 때 민원처리 head_format을 선택할 수 있는 드롭다운 메뉴
+        selected_complaint_format = st.selectbox("민원처리 head_format을 선택하세요:", list(민원처리_head_formats.values()), key="complaint_format")
+        if selected_complaint_format:
+            results.append(selected_complaint_format)
+
+    # 텍스트 입력 위젯
+    user_input = st.text_input("입력란", key="user_input")
+
+    # 입력 형식 검사 및 포맷 추가
+    if not is_bs_checked and not is_complaint_checked:
+        head_format = get_format(user_input)
+        if head_format:
+            results.append(head_format)
+
+    results.append(user_input)
+    results.append("수고하셨습니다")
+
+    # 선조치_NOC 다중 선택 박스
+    selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
+    if selected_actions:
+        formatted_actions = ", ".join(selected_actions)
+        results.append(f"<선조치_NOC> {formatted_actions}")
+
+    # 현장 항목들 다중 선택 박스
+    현장_options = [
+        "[현장TM]",
+        "주소",
+        "연락처",
+        "장비위치",
+        "차단기위치",
+        "출입방법",
+        "기타(간단히 내용입력)"
+    ]
+    selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
+
+    # [현장TM] 선택 시 입력란 추가
+    현장TM_내용 = ""
+    if "[현장TM]" in selected_locations:
+        현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+        현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
+        if "[현장TM]" in 현장TM_내용:
+            formatted_TM = 현장TM_내용  # [현장TM]이 포함되어 있으면 그대로 사용
+        else:
+            formatted_TM = f"[현장TM] {현장TM_내용}"  # 포함되어 있지 않으면 [현장TM] 추가
+        selected_locations.remove("[현장TM]")
+        if selected_locations:
+            formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations]) + " 수정요청"
+        else:
+            formatted_locations = f"{formatted_TM}"
+    else:
+        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+        if selected_locations:
+            formatted_locations += " 수정요청"
+    
+    if selected_locations or 현장TM_내용:
+        results.append(f"<현장> {formatted_locations}")
+
+    출동예방_actions = []
+    # [현장TM] 내용에 특정 키워드가 포함되거나 숫자나 한국 전화번호 형태가 있는 경우 <출동예방>에도 추가
+    if 현장TM_내용 and 현장TM_출동예방:
+        출동예방_actions.append(formatted_TM)
+
+    # "전기작업 확인(전화)"가 선택된 경우 <출동예방>에도 추가
+    if "전기작업 확인(전화)" in selected_actions:
+        출동예방_actions.append("[NOC]전기작업 확인(전화)")
+
+    if "출동보류" in selected_actions:
+        출동예방_actions.append("[NOC]출동보류")
+    
+    if 출동예방_actions:
+        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
+
+    copy_activated = False
+    if st.button("출력"):
+        output_text = "\n".join(results)
+        if copy_activated:
+            pyperclip.copy(output_text)
+        st.text(output_text)
+
+    # 입력란 초기화 버튼
+    if st.button("입력란 초기화"):
+        clear_text()
+
+if __name__ == "__main__":
+    main()
+
+=======================================
+import streamlit as st
+import pyperclip
+import re
+
+# 포맷 데이터 포함
+formats = {
+    "출입불가": "[폐문]",
+    "출입": "[폐문]",
+    "한전": "[한전정전복구]",
+    "정전": "[사설정전복구]",
+    "입전": "[사설정전복구]",
+    "복전": "[사설정전복구]",
+    "출동 중 복구": "[사설정전복구]",
+    "출동중복구": "[사설정전복구]",
+    "출동 중 자동복구": "[사설정전복구]",
+    "출동중자동복구": "[사설정전복구]",
+    "자동": "[사설정전복구]",
+    "차단기 on": "[사설차단기복구]",
+    "trip": "[사설차단기복구]",
+    "TRIP": "[사설차단기복구]",
+    "트립": "[사설차단기복구]",
+    "어댑터": "[전원어댑터교체]",
+    "어뎁터": "[전원어댑터교체]",
+    "아뎁터": "[전원어댑터교체]",
+    "아댑터": "[전원어댑터교체]",
+    "아답터": "[전원어댑터교체]",
+    "아답타": "[전원어댑터교체]",
+    "멀티탭": "[멀티탭 ON/교체]",
+    "콘센트": "[멀티탭 ON/교체]",
+    "멀티탭 교체": "[멀티탭 ON/교체]",
+    "콘센트 교체": "[멀티탭 ON/교체]",
+    "발전기": "[발전기가동]",
+    "파워뱅크": "[전원가복구]",
+    "가복구": "[전원가복구]",
+    "임시": "[전원가복구]",
+    "전기안전검사": "[고객측작업]",
+    "전기검사": "[고객측작업]",
+    "전기작업": "[고객측작업]",
+    "작업": "[고객측작업]",
+    "점검": "[고객측작업]",
+    "검사": "[고객측작업]",
+    "공사": "[고객측작업]",
+    "장비철거": "[장비철거]",
+    "타사전환": "[타사전환]",
+    "감쇄기": "[광커넥터복구]", 
+    "감쇠기": "[광커넥터복구]",
+    "PON": "[모듈교체]",
+    "pon": "[모듈교체]",
+    "PSU": "[모듈교체]",
+    "psu": "[모듈교체]",
+    "모듈": "[모듈교체]",
+    "보드": "[모듈교체]",
+    "장비교체": "[장비교체]",
+    "장비 대개체": "[장비교체]",
+    "대개체": "[장비교체]",
+    "교체": "[장비교체]",
+    "리셋": "[장비리셋]",
+    "익일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "예정": "[기타]",
+    "재발행": "[기타]",
+    "VOC": "[기타]",
+    "미정": "[기타]",
+    "폐문": "[폐문]"
+}
+
+# B/S 및 민원처리 head_format 데이터
+B_S_head_formats = {
+    "NOC_광레벨불": "[NOC_광레벨불]",
+    "NOC_CRC발생": "[NOC_CRC발생]",
+    "NOC_장비철거": "[NOC_장비철거]",
+    "NOC_형상삭제": "[NOC_형상삭제]",
+    "NOC_PSU교체": "[NOC_PSU교체]",
+    "NOC_PLK_PSU교체": "[NOC_PLK_PSU교체]",
+    "NOC_장비교체": "[NOC_장비교체]",
+    "NOC_점검정비": "[NOC_점검정비]",
+    "NOC_자산관리": "[NOC_자산관리]",
+    "NOC_중복장애": "[NOC_중복장애]",
+    "NOC_kernel정비": "[NOC_kernel정비]"
+}
+
+민원처리_head_formats = {
+    "NOC_장비교체": "[NOC_장비교체]",
+    "NOC_PON모듈교체": "[NOC_PON모듈교체]",
+    "NOC_보드교체": "[NOC_보드교체]",
+    "NOC_BAT교체": "[NOC_BAT교체]",
+    "NOC_어댑터교체": "[NOC_어댑터교체]",
+    "NOC_FAN교체": "[NOC_FAN교체]",
+    "NOC_관련부서이관": "[NOC_관련부서이관]",
+    "NOC_장비철거": "[NOC_장비철거]",
+    "NOC_광커넥터재접속": "[NOC_광커넥터재접속]",
+    "NOC_전원가복구": "[NOC_전원가복구]",
+    "NOC_모자분리": "[NOC_모자분리]",
+    "NOC_전기요금": "[NOC_전기요금]",
+    "NOC_장비재설치": "[NOC_장비재설치]",
+    "NOC_PSU교체": "[NOC_PSU교체]",
+    "NOC_감쇄기실장": "[NOC_감쇄기실장]",
+    "NOC_상태변경": "[NOC_상태변경]",
+    "NOC_장비리셋": "[NOC_장비리셋]",
+    "NOC_자연회복": "[NOC_자연회복]",
+    "NOC_기타": "[NOC_기타]"
+}
+
+# 선조치_NOC에 대한 내용
+선조치_NOC_options = [
+    "원인분석(전원)",
+    "원인분석(선로)",
+    "원인분석(장비)",
+    "전기작업 확인(전화)",
+    "FOLLOW추가",
+    "출동보류",
+    "원격조치(리부팅)",
+    "원격조치(포트리셋)",
+    "원격조치(포트BLK)",
+    "정전알림이 등록",
+    "DB현행화",
+    "고객홍보"
+]
+
+def get_format(text):
+    for keyword, head_format in formats.items():
+        if keyword in text:
+            return head_format
+    return None
+
+def main():
+    st.title("MOSS 회복 문구")
+
+    # 초기값 설정
+    if "user_input" not in st.session_state:
+        st.session_state.user_input = ""
+
+    # 텍스트 입력 초기화 함수
+    def clear_text():
+        st.session_state.clear()  # 모든 상태를 초기화
+        st.session_state.user_input = ""  # 다시 설정
+        st.experimental_rerun()  # 상태를 초기화하고 재실행
+
+    results = []
+
     # B/S 및 민원처리 체크박스
     col1, col2 = st.columns(2)
 
     with col1:
-        is_bs_checked = st.checkbox("B/S", key="bs_checked", on_change=bs_checkbox_callback)
+        is_bs_checked = st.checkbox("B/S")
     with col2:
-        is_complaint_checked = st.checkbox("민원처리", key="complaint_checked", on_change=complaint_checkbox_callback)
+        is_complaint_checked = st.checkbox("민원처리")
 
     if is_bs_checked:
         selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
@@ -445,48 +1726,1496 @@ def moss_page():
             results.append(head_format)
 
     results.append(user_input)
+    results.append("수고하셨습니다")
 
+    selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
+    if selected_actions:
+        formatted_actions = ", ".join(selected_actions)
+        results.append(f"<선조치_NOC> {formatted_actions}")
+
+    현장_options = [
+        "[현장TM]",
+        "주소",
+        "연락처",
+        "장비위치",
+        "차단기위치",
+        "출입방법",
+        "기타(간단히 내용입력)"
+    ]
+    selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
+
+    현장TM_내용 = ""
+    if "[현장TM]" in selected_locations:
+        현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+        현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
+        if "[현장TM]" in 현장TM_내용:
+            formatted_TM = 현장TM_내용
+        else:
+            formatted_TM = f"[현장TM] {현장TM_내용}"
+        selected_locations.remove("[현장TM]")
+        if selected_locations:
+            formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations]) + " 수정요청"
+        else:
+            formatted_locations = f"{formatted_TM}"
+    else:
+        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+        if selected_locations:
+            formatted_locations += " 수정요청"
+
+    if selected_locations or 현장TM_내용:
+        results.append(f"<현장> {formatted_locations}")
+
+    출동예방_actions = []
+    if 현장TM_내용 and 현장TM_출동예방:
+        출동예방_actions.append(formatted_TM)
+    if "전기작업 확인(전화)" in selected_actions:
+        출동예방_actions.append("[NOC]전기작업 확인(전화)")
+    if "출동보류" in selected_actions:
+        출동예방_actions.append("[NOC]출동보류")
+
+    if 출동예방_actions:
+        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
+
+    copy_activated = False
+    if st.button("출력"):
+        output_text = "\n".join(results)  # Join results with new lines for the desired format
+        st.text(output_text)  # Print output_text when the "출력" button is pressed
+        if copy_activated:
+            pyperclip.copy(output_text)
+
+    if st.button("입력란 초기화"):
+        clear_text()
+
+if __name__ == "__main__":
+    main()
+
+===========================
+06.05
+import streamlit as st
+import pyperclip
+import re
+
+# 포맷 데이터 포함
+formats = {
+    "출입불가": "[폐문]",
+    "출입": "[폐문]",
+    "한전": "[한전정전복구]",
+    "정전": "[사설정전복구]",
+    "입전": "[사설정전복구]",
+    "복전": "[사설정전복구]",
+    "출동 중 복구": "[사설정전복구]",
+    "출동중복구": "[사설정전복구]",
+    "출동 중 자동복구": "[사설정전복구]",
+    "출동중자동복구": "[사설정전복구]",
+    "자동": "[사설정전복구]",
+    "차단기 on": "[사설차단기복구]",
+    "trip": "[사설차단기복구]",
+    "TRIP": "[사설차단기복구]",
+    "트립": "[사설차단기복구]",
+    "어댑터": "[전원어댑터교체]",
+    "어뎁터": "[전원어댑터교체]",
+    "아뎁터": "[전원어댑터교체]",
+    "아댑터": "[전원어댑터교체]",
+    "아답터": "[전원어댑터교체]",
+    "아답타": "[전원어댑터교체]",
+    "멀티탭": "[멀티탭 ON/교체]",
+    "콘센트": "[멀티탭 ON/교체]",
+    "멀티탭 교체": "[멀티탭 ON/교체]",
+    "콘센트 교체": "[멀티탭 ON/교체]",
+    "발전기": "[발전기가동]",
+    "파워뱅크": "[전원가복구]",
+    "가복구": "[전원가복구]",
+    "임시": "[전원가복구]",
+    "전기안전검사": "[고객측작업]",
+    "전기검사": "[고객측작업]",
+    "전기작업": "[고객측작업]",
+    "작업": "[고객측작업]",
+    "점검": "[고객측작업]",
+    "검사": "[고객측작업]",
+    "공사": "[고객측작업]",
+    "장비철거": "[장비철거]",
+    "타사전환": "[타사전환]",
+    "감쇄기": "[광커넥터복구]", 
+    "감쇠기": "[광커넥터복구]",
+    "PON": "[모듈교체]",
+    "pon": "[모듈교체]",
+    "PSU": "[모듈교체]",
+    "psu": "[모듈교체]",
+    "모듈": "[모듈교체]",
+    "보드": "[모듈교체]",
+    "장비교체": "[장비교체]",
+    "장비 대개체": "[장비교체]",
+    "대개체": "[장비교체]",
+    "교체": "[장비교체]",
+    "리셋": "[장비리셋]",
+    "익일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "예정": "[기타]",
+    "재발행": "[기타]",
+    "VOC": "[기타]",
+    "미정": "[기타]",
+    "폐문": "[폐문]"
+}
+
+# B/S 및 민원처리 head_format 데이터
+B_S_head_formats = {
+    "NOC_광레벨불": "[NOC_광레벨불]",
+    "NOC_CRC발생": "[NOC_CRC발생]",
+    "NOC_장비철거": "[NOC_장비철거]",
+    "NOC_형상삭제": "[NOC_형상삭제]",
+    "NOC_PSU교체": "[NOC_PSU교체]",
+    "NOC_PLK_PSU교체": "[NOC_PLK_PSU교체]",
+    "NOC_장비교체": "[NOC_장비교체]",
+    "NOC_점검정비": "[NOC_점검정비]",
+    "NOC_자산관리": "[NOC_자산관리]",
+    "NOC_중복장애": "[NOC_중복장애]",
+    "NOC_kernel정비": "[NOC_kernel정비]"
+}
+
+민원처리_head_formats = {
+    "NOC_장비교체": "[NOC_장비교체]",
+    "NOC_PON모듈교체": "[NOC_PON모듈교체]",
+    "NOC_보드교체": "[NOC_보드교체]",
+    "NOC_BAT교체": "[NOC_BAT교체]",
+    "NOC_어댑터교체": "[NOC_어댑터교체]",
+    "NOC_FAN교체": "[NOC_FAN교체]",
+    "NOC_관련부서이관": "[NOC_관련부서이관]",
+    "NOC_장비철거": "[NOC_장비철거]",
+    "NOC_광커넥터재접속": "[NOC_광커넥터재접속]",
+    "NOC_전원가복구": "[NOC_전원가복구]",
+    "NOC_모자분리": "[NOC_모자분리]",
+    "NOC_전기요금": "[NOC_전기요금]",
+    "NOC_장비재설치": "[NOC_장비재설치]",
+    "NOC_PSU교체": "[NOC_PSU교체]",
+    "NOC_감쇄기실장": "[NOC_감쇄기실장]",
+    "NOC_상태변경": "[NOC_상태변경]",
+    "NOC_장비리셋": "[NOC_장비리셋]",
+    "NOC_자연회복": "[NOC_자연회복]",
+    "NOC_기타": "[NOC_기타]"
+}
+
+# 선조치_NOC에 대한 내용
+선조치_NOC_options = [
+    "원인분석(전원)",
+    "원인분석(선로)",
+    "원인분석(장비)",
+    "전기작업 확인(전화)",
+    "FOLLOW추가",
+    "출동보류",
+    "원격조치(리부팅)",
+    "원격조치(포트리셋)",
+    "원격조치(포트BLK)",
+    "정전알림이 등록",
+    "DB현행화",
+    "고객홍보"
+]
+
+def get_format(text):
+    for keyword, head_format in formats.items():
+        if keyword in text:
+            return head_format
+    return None
+
+def main():
+    st.title("MOSS 회복 문구")
+
+    # 초기값 설정
+    if "user_input" not in st.session_state:
+        st.session_state.user_input = ""
+
+    # 텍스트 입력 초기화 함수
+    def clear_text():
+        st.session_state.clear()  # 모든 상태를 초기화
+        st.session_state.user_input = ""  # 다시 설정
+        st.experimental_rerun()  # 상태를 초기화하고 재실행
+
+    results = []
+
+    # B/S 및 민원처리 체크박스
+    col1, col2 = st.columns(2)
+
+    with col1:
+        is_bs_checked = st.checkbox("B/S")
+    with col2:
+        is_complaint_checked = st.checkbox("민원처리")
+
+    if is_bs_checked:
+        selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
+        if selected_bs_format:
+            results.append(selected_bs_format)
+
+    if is_complaint_checked:
+        selected_complaint_format = st.selectbox("민원처리 head_format을 선택하세요:", list(민원처리_head_formats.values()), key="complaint_format")
+        if selected_complaint_format:
+            results.append(selected_complaint_format)
+
+    user_input = st.text_input("입력란", key="user_input")
+
+    if not is_bs_checked and not is_complaint_checked:
+        head_format = get_format(user_input)
+        if head_format:
+            results.append(head_format)
+
+    results.append(user_input)
+    results.append("수고하셨습니다")
+
+    selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
+    if selected_actions:
+        formatted_actions = ", ".join(selected_actions)
+        results.append(f"<선조치_NOC> {formatted_actions}")
+
+    현장_options = [
+        "[현장TM]",
+        "주소",
+        "연락처",
+        "장비위치",
+        "차단기위치",
+        "출입방법",
+        "기타(간단히 내용입력)"
+    ]
+    selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
+
+    현장TM_내용 = ""
+    if "[현장TM]" in selected_locations:
+        현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+        현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
+        if "[TM활동]" in 현장TM_내용:
+            formatted_TM = 현장TM_내용.replace("[현장TM]", "[TM활동]")
+        else:
+            formatted_TM = f"[현장TM] {현장TM_내용}"
+        selected_locations.remove("[현장TM]")
+        if selected_locations:
+            formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations]) + " 수정요청"
+        else:
+            formatted_locations = f"{formatted_TM}"
+    else:
+        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+        if selected_locations:
+            formatted_locations += " 수정요청"
+
+    if selected_locations or 현장TM_내용:
+        results.append(f"<현장> {formatted_locations}")
+
+    출동예방_actions = []
+    if 현장TM_내용 and 현장TM_출동예방:
+        출동예방_actions.append(formatted_TM)
+    if "전기작업 확인(전화)" in selected_actions:
+        출동예방_actions.append("[NOC]전기작업 확인(전화)")
+    if "출동보류" in selected_actions:
+        출동예방_actions.append("[NOC]출동보류")
+
+    if 출동예방_actions:
+        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
+
+    copy_activated = False
+    if st.button("출력"):
+        output_text = "\n".join(results)  # Join results with new lines for the desired format
+        st.text(output_text)  # Print output_text when the "출력" button is pressed
+        if copy_activated:
+            pyperclip.copy(output_text)
+
+    if st.button("입력란 초기화"):
+        clear_text()
+
+if __name__ == "__main__":
+    main()
+
+=====================================
+<version2>
+import streamlit as st
+import pyperclip
+import re
+
+# 포맷 데이터 포함
+formats = {
+    "정전": "[사설정전복구]",
+    "입전": "[사설정전복구]",
+    "복전": "[사설정전복구]",
+    "출동 중 복구": "[사설정전복구]",
+    "출동중복구": "[사설정전복구]",
+    "출동 중 자동복구": "[사설정전복구]",
+    "출동중자동복구": "[사설정전복구]",
+    "자동": "[사설정전복구]",
+    "한전": "[한전정전복구]",
+    "차단기 on": "[사설차단기복구]",
+    "trip": "[사설차단기복구]",
+    "TRIP": "[사설차단기복구]",
+    "트립": "[사설차단기복구]",
+    "어댑터": "[전원어댑터교체]",
+    "어뎁터": "[전원어댑터교체]",
+    "아뎁터": "[전원어댑터교체]",
+    "아댑터": "[전원어댑터교체]",
+    "아답터": "[전원어댑터교체]",
+    "아답타": "[전원어댑터교체]",
+    "멀티탭": "[멀티탭 ON/교체]",
+    "콘센트": "[멀티탭 ON/교체]",
+    "멀티탭 교체": "[멀티탭 ON/교체]",
+    "콘센트 교체": "[멀티탭 ON/교체]",
+    "발전기": "[발전기가동]",
+    "파워뱅크": "[전원가복구]",
+    "가복구": "[전원가복구]",
+    "임시": "[전원가복구]",
+    "전기안전검사": "[고객측작업]",
+    "전기검사": "[고객측작업]",
+    "전기작업": "[고객측작업]",
+    "작업": "[고객측작업]",
+    "점검": "[고객측작업]",
+    "검사": "[고객측작업]",
+    "공사": "[고객측작업]",
+    "장비철거": "[장비철거]",
+    "타사전환": "[타사전환]",
+    "감쇄기": "[광커넥터복구]", 
+    "감쇠기": "[광커넥터복구]",
+    "PON": "[모듈교체]",
+    "pon": "[모듈교체]",
+    "PSU": "[모듈교체]",
+    "psu": "[모듈교체]",
+    "모듈": "[모듈교체]",
+    "보드": "[모듈교체]",
+    "장비교체": "[장비교체]",
+    "장비 대개체": "[장비교체]",
+    "대개체": "[장비교체]",
+    "교체": "[장비교체]",
+    "리셋": "[장비리셋]",
+    "익일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "off": "[기타]",
+    "예정": "[기타]",
+    "재발행": "[기타]",
+    "VOC": "[기타]",
+    "voc": "[기타]",
+    "미정": "[기타]",
+    "출입불가": "[폐문]",
+    "출입": "[폐문]",
+    "폐문": "[폐문]"
+}
+
+# B/S 및 민원처리 head_format 데이터
+B_S_head_formats = {
+    "NOC_광레벨불": "[NOC_광레벨불]",
+    "NOC_CRC발생": "[NOC_CRC발생]",
+    "NOC_장비철거": "[NOC_장비철거]",
+    "NOC_형상삭제": "[NOC_형상삭제]",
+    "NOC_PSU교체": "[NOC_PSU교체]",
+    "NOC_PLK_PSU교체": "[NOC_PLK_PSU교체]",
+    "NOC_장비교체": "[NOC_장비교체]",
+    "NOC_점검정비": "[NOC_점검정비]",
+    "NOC_자산관리": "[NOC_자산관리]",
+    "NOC_중복장애": "[NOC_중복장애]",
+    "NOC_kernel정비": "[NOC_kernel정비]"
+}
+
+민원처리_head_formats = {
+    "NOC_장비교체": "[NOC_장비교체]",
+    "NOC_PON모듈교체": "[NOC_PON모듈교체]",
+    "NOC_보드교체": "[NOC_보드교체]",
+    "NOC_BAT교체": "[NOC_BAT교체]",
+    "NOC_어댑터교체": "[NOC_어댑터교체]",
+    "NOC_FAN교체": "[NOC_FAN교체]",
+    "NOC_관련부서이관": "[NOC_관련부서이관]",
+    "NOC_장비철거": "[NOC_장비철거]",
+    "NOC_광커넥터재접속": "[NOC_광커넥터재접속]",
+    "NOC_전원가복구": "[NOC_전원가복구]",
+    "NOC_모자분리": "[NOC_모자분리]",
+    "NOC_전기요금": "[NOC_전기요금]",
+    "NOC_장비재설치": "[NOC_장비재설치]",
+    "NOC_PSU교체": "[NOC_PSU교체]",
+    "NOC_감쇄기실장": "[NOC_감쇄기실장]",
+    "NOC_상태변경": "[NOC_상태변경]",
+    "NOC_장비리셋": "[NOC_장비리셋]",
+    "NOC_자연회복": "[NOC_자연회복]",
+    "NOC_기타": "[NOC_기타]"
+}
+
+# 선조치_NOC에 대한 내용
+선조치_NOC_options = [
+    "원인분석(전원)",
+    "원인분석(선로)",
+    "원인분석(장비)",
+    "전기작업 확인(전화)",
+    "FOLLOW추가",
+    "출동보류",
+    "원격조치(리부팅)",
+    "원격조치(포트리셋)",
+    "원격조치(포트BLK)",
+    "정전알림이 등록",
+    "DB현행화",
+    "고객홍보"
+]
+
+def get_format(text):
+    matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
+    return matched_formats[-1] if matched_formats else None
+
+def main():
+    st.title("MOSS 회복 문구")
+
+    # 초기값 설정
+    if "user_input" not in st.session_state:
+        st.session_state.user_input = ""
+
+    # 텍스트 입력 초기화 함수
+    def clear_text():
+        st.session_state.clear()  # 모든 상태를 초기화
+        st.session_state.user_input = ""  # 다시 설정
+        st.experimental_rerun()  # 상태를 초기화하고 재실행
+
+    results = []
+
+    # B/S 및 민원처리 체크박스
+    col1, col2 = st.columns(2)
+
+    with col1:
+        is_bs_checked = st.checkbox("B/S")
+    with col2:
+        is_complaint_checked = st.checkbox("민원처리")
+
+    if is_bs_checked:
+        selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
+        if selected_bs_format:
+            results.append(selected_bs_format)
+
+    if is_complaint_checked:
+        selected_complaint_format = st.selectbox("민원처리 head_format을 선택하세요:", list(민원처리_head_formats.values()), key="complaint_format")
+        if selected_complaint_format:
+            results.append(selected_complaint_format)
+
+    user_input = st.text_input("입력란", key="user_input")
+
+    if not is_bs_checked and not is_complaint_checked:
+        head_format = get_format(user_input)
+        if head_format:
+            results.append(head_format)
+
+    results.append(user_input)
+    results.append("수고하셨습니다")
+
+    selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
+    if selected_actions:
+        formatted_actions = ", ".join(selected_actions)
+        results.append(f"<선조치_NOC> {formatted_actions}")
+
+    현장_options = [
+        "[현장TM]",
+        "주소",
+        "연락처",
+        "장비위치",
+        "차단기위치",
+        "출입방법",
+        "기타(간단히 내용입력)"
+    ]
+    selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
+
+    현장TM_내용 = ""
+    if "[현장TM]" in selected_locations:
+        현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+        현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
+        if "[TM활동]" in 현장TM_내용:
+            formatted_TM = 현장TM_내용.replace("[현장TM]", "[TM활동]")
+        else:
+            formatted_TM = f"[현장TM] {현장TM_내용}"
+        selected_locations.remove("[현장TM]")
+        if selected_locations:
+            formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations]) + " 수정요청"
+        else:
+            formatted_locations = f"{formatted_TM}"
+    else:
+        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+        if selected_locations:
+            formatted_locations += " 수정요청"
+
+    if selected_locations or 현장TM_내용:
+        results.append(f"<현장> {formatted_locations}")
+
+    출동예방_actions = []
+    if 현장TM_내용 and 현장TM_출동예방:
+        출동예방_actions.append(formatted_TM)
+    if "전기작업 확인(전화)" in selected_actions:
+        출동예방_actions.append("[NOC]전기작업 확인(전화)")
+    if "출동보류" in selected_actions:
+        출동예방_actions.append("[NOC]출동보류")
+
+    if 출동예방_actions:
+        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
+
+    copy_activated = False
+    if st.button("출력"):
+        output_text = "\n".join(results)  # Join results with new lines for the desired format
+        st.text(output_text)  # Print output_text when the "출력" button is pressed
+        if copy_activated:
+            pyperclip.copy(output_text)
+
+    if st.button("입력란 초기화"):
+        clear_text()
+
+if __name__ == "__main__":
+    main()
+
+=====================================
+<version3>
+import streamlit as st
+import pyperclip
+import re
+
+# 포맷 데이터 포함
+formats = {
+    "정전": "[사설정전복구]",
+    "입전": "[사설정전복구]",
+    "복전": "[사설정전복구]",
+    "출동 중 복구": "[사설정전복구]",
+    "출동중복구": "[사설정전복구]",
+    "출동 중 자동복구": "[사설정전복구]",
+    "출동중자동복구": "[사설정전복구]",
+    "자동": "[사설정전복구]",
+    "한전": "[한전정전복구]",
+    "차단기 on": "[사설차단기복구]",
+    "trip": "[사설차단기복구]",
+    "TRIP": "[사설차단기복구]",
+    "트립": "[사설차단기복구]",
+    "어댑터": "[전원어댑터교체]",
+    "어뎁터": "[전원어댑터교체]",
+    "아뎁터": "[전원어댑터교체]",
+    "아댑터": "[전원어댑터교체]",
+    "아답터": "[전원어댑터교체]",
+    "아답타": "[전원어댑터교체]",
+    "멀티탭": "[멀티탭 ON/교체]",
+    "콘센트": "[멀티탭 ON/교체]",
+    "멀티탭 교체": "[멀티탭 ON/교체]",
+    "콘센트 교체": "[멀티탭 ON/교체]",
+    "발전기": "[발전기가동]",
+    "파워뱅크": "[전원가복구]",
+    "가복구": "[전원가복구]",
+    "임시": "[전원가복구]",
+    "전기안전검사": "[고객측작업]",
+    "전기검사": "[고객측작업]",
+    "전기작업": "[고객측작업]",
+    "작업": "[고객측작업]",
+    "점검": "[고객측작업]",
+    "검사": "[고객측작업]",
+    "공사": "[고객측작업]",
+    "장비철거": "[장비철거]",
+    "타사전환": "[타사전환]",
+    "감쇄기": "[광커넥터복구]", 
+    "감쇠기": "[광커넥터복구]",
+    "PON": "[모듈교체]",
+    "pon": "[모듈교체]",
+    "PSU": "[모듈교체]",
+    "psu": "[모듈교체]",
+    "모듈": "[모듈교체]",
+    "보드": "[모듈교체]",
+    "장비교체": "[장비교체]",
+    "장비 대개체": "[장비교체]",
+    "대개체": "[장비교체]",
+    "장교체": "[장비교체]",
+    "리셋": "[장비리셋]",
+    "익일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "off": "[기타]",
+    "예정": "[기타]",
+    "재발행": "[기타]",
+    "VOC": "[기타]",
+    "voc": "[기타]",
+    "미정": "[기타]",
+    "출입불가": "[폐문]",
+    "출입": "[폐문]",
+    "폐문": "[폐문]"
+}
+
+# B/S 및 민원처리 head_format 데이터
+B_S_head_formats = {
+    "NOC_광레벨불": "[NOC_광레벨불]",
+    "NOC_CRC발생": "[NOC_CRC발생]",
+    "NOC_장비철거": "[NOC_장비철거]",
+    "NOC_형상삭제": "[NOC_형상삭제]",
+    "NOC_PSU교체": "[NOC_PSU교체]",
+    "NOC_PLK_PSU교체": "[NOC_PLK_PSU교체]",
+    "NOC_장비교체": "[NOC_장비교체]",
+    "NOC_점검정비": "[NOC_점검정비]",
+    "NOC_자산관리": "[NOC_자산관리]",
+    "NOC_중복장애": "[NOC_중복장애]",
+    "NOC_kernel정비": "[NOC_kernel정비]"
+}
+
+민원처리_head_formats = {
+    "NOC_장비교체": "[NOC_장비교체]",
+    "NOC_PON모듈교체": "[NOC_PON모듈교체]",
+    "NOC_보드교체": "[NOC_보드교체]",
+    "NOC_BAT교체": "[NOC_BAT교체]",
+    "NOC_어댑터교체": "[NOC_어댑터교체]",
+    "NOC_FAN교체": "[NOC_FAN교체]",
+    "NOC_관련부서이관": "[NOC_관련부서이관]",
+    "NOC_장비철거": "[NOC_장비철거]",
+    "NOC_광커넥터재접속": "[NOC_광커넥터재접속]",
+    "NOC_전원가복구": "[NOC_전원가복구]",
+    "NOC_모자분리": "[NOC_모자분리]",
+    "NOC_전기요금": "[NOC_전기요금]",
+    "NOC_장비재설치": "[NOC_장비재설치]",
+    "NOC_PSU교체": "[NOC_PSU교체]",
+    "NOC_감쇄기실장": "[NOC_감쇄기실장]",
+    "NOC_상태변경": "[NOC_상태변경]",
+    "NOC_장비리셋": "[NOC_장비리셋]",
+    "NOC_자연회복": "[NOC_자연회복]",
+    "NOC_기타": "[NOC_기타]"
+}
+
+# 선조치_NOC에 대한 내용
+선조치_NOC_options = [
+    "원인분석(전원)",
+    "원인분석(선로)",
+    "원인분석(장비)",
+    "전기작업 확인(전화)",
+    "FOLLOW추가",
+    "출동보류",
+    "원격조치(리부팅)",
+    "원격조치(포트리셋)",
+    "원격조치(포트BLK)",
+    "정전알림이 등록",
+    "DB현행화",
+    "고객홍보"
+]
+
+def get_format(text):
+    matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
+    if "[기타]" in matched_formats or "[폐문]" in matched_formats:
+        return matched_formats[-1]
+    else:
+        selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
+        return selected_formats[-1] if selected_formats else None
+
+
+def main():
+    st.title("MOSS 회복 문구")
+
+    # 초기값 설정
+    if "user_input" not in st.session_state:
+        st.session_state.user_input = ""
+
+    # 텍스트 입력 초기화 함수
+    def clear_text():
+        st.session_state.clear()  # 모든 상태를 초기화
+        st.session_state.user_input = ""  # 다시 설정
+        st.experimental_rerun()  # 상태를 초기화하고 재실행
+
+    results = []
+
+    # B/S 및 민원처리 체크박스
+    col1, col2 = st.columns(2)
+
+    with col1:
+        is_bs_checked = st.checkbox("B/S")
+    with col2:
+        is_complaint_checked = st.checkbox("민원처리")
+
+    if is_bs_checked:
+        selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
+        if selected_bs_format:
+            results.append(selected_bs_format)
+
+    if is_complaint_checked:
+        selected_complaint_format = st.selectbox("민원처리 head_format을 선택하세요:", list(민원처리_head_formats.values()), key="complaint_format")
+        if selected_complaint_format:
+            results.append(selected_complaint_format)
+
+    user_input = st.text_input("입력란", key="user_input")
+
+    if not is_bs_checked and not is_complaint_checked:
+        head_format = get_format(user_input)
+        if head_format:
+            results.append(head_format)
+
+    results.append(user_input)
+    results.append("수고하셨습니다")
+
+    selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
+    if selected_actions:
+        formatted_actions = ", ".join(selected_actions)
+        results.append(f"<선조치_NOC> {formatted_actions}")
+
+    현장_options = [
+        "[현장TM]",
+        "주소",
+        "연락처",
+        "장비위치",
+        "차단기위치",
+        "출입방법",
+        "기타(간단히 내용입력)"
+    ]
+    selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
+
+    현장TM_내용 = ""
+    if "[현장TM]" in selected_locations:
+        현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+        현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
+        if "[TM활동]" in 현장TM_내용:
+            formatted_TM = 현장TM_내용.replace("[현장TM]", "[TM활동]")
+        else:
+            formatted_TM = f"[현장TM] {현장TM_내용}"
+        selected_locations.remove("[현장TM]")
+        if selected_locations:
+            formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations]) + " 수정요청"
+        else:
+            formatted_locations = f"{formatted_TM}"
+    else:
+        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+        if selected_locations:
+            formatted_locations += " 수정요청"
+
+    if selected_locations or 현장TM_내용:
+        results.append(f"<현장> {formatted_locations}")
+
+    출동예방_actions = []
+    if 현장TM_내용 and 현장TM_출동예방:
+        출동예방_actions.append(formatted_TM)
+    if "전기작업 확인(전화)" in selected_actions:
+        출동예방_actions.append("[NOC]전기작업 확인(전화)")
+    if "출동보류" in selected_actions:
+        출동예방_actions.append("[NOC]출동보류")
+
+    if 출동예방_actions:
+        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
+
+    copy_activated = False
+    if st.button("출력"):
+        output_text = "\n".join(results)  # Join results with new lines for the desired format
+        st.text(output_text)  # Print output_text when the "출력" button is pressed
+        if copy_activated:
+            pyperclip.copy(output_text)
+
+    if st.button("입력란 초기화"):
+        clear_text()
+
+if __name__ == "__main__":
+    main()
+=========================================================
+<version 4>
+import streamlit as st
+import pandas as pd
+import pyperclip
+import re
+
+# 포맷 데이터 포함
+formats = {
+    "정전": "[사설정전복구]",
+    "입전": "[사설정전복구]",
+    "복전": "[사설정전복구]",
+    "출동 중 복구": "[사설정전복구]",
+    "출동중복구": "[사설정전복구]",
+    "출동 중 자동복구": "[사설정전복구]",
+    "출동중자동복구": "[사설정전복구]",
+    "자동": "[사설정전복구]",
+    "한전": "[한전정전복구]",
+    "차단기 on": "[사설차단기복구]",
+    "trip": "[사설차단기복구]",
+    "TRIP": "[사설차단기복구]",
+    "트립": "[사설차단기복구]",
+    "어댑터": "[전원어댑터교체]",
+    "어뎁터": "[전원어댑터교체]",
+    "아뎁터": "[전원어댑터교체]",
+    "아댑터": "[전원어댑터교체]",
+    "아답터": "[전원어댑터교체]",
+    "아답타": "[전원어댑터교체]",
+    "멀티탭": "[멀티탭 ON/교체]",
+    "콘센트": "[멀티탭 ON/교체]",
+    "멀티탭 교체": "[멀티탭 ON/교체]",
+    "콘센트 교체": "[멀티탭 ON/교체]",
+    "발전기": "[발전기가동]",
+    "파워뱅크": "[전원가복구]",
+    "가복구": "[전원가복구]",
+    "임시": "[전원가복구]",
+    "전기안전검사": "[고객측작업]",
+    "전기검사": "[고객측작업]",
+    "전기작업": "[고객측작업]",
+    "작업": "[고객측작업]",
+    "점검": "[고객측작업]",
+    "검사": "[고객측작업]",
+    "공사": "[고객측작업]",
+    "장비철거": "[장비철거]",
+    "타사전환": "[타사전환]",
+    "감쇄기": "[광커넥터복구]", 
+    "감쇠기": "[광커넥터복구]",
+    "PON": "[모듈교체]",
+    "pon": "[모듈교체]",
+    "PSU": "[모듈교체]",
+    "psu": "[모듈교체]",
+    "모듈": "[모듈교체]",
+    "보드": "[모듈교체]",
+    "장비교체": "[장비교체]",
+    "장비 대개체": "[장비교체]",
+    "대개체": "[장비교체]",
+    "장교체": "[장비교체]",
+    "리셋": "[장비리셋]",
+    "익일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "off": "[기타]",
+    "예정": "[기타]",
+    "재발행": "[기타]",
+    "VOC": "[기타]",
+    "voc": "[기타]",
+    "미정": "[기타]",
+    "출입불가": "[폐문]",
+    "출입": "[폐문]",
+    "폐문": "[폐문]"
+}
+
+# B/S 및 민원처리 head_format 데이터
+B_S_head_formats = {
+    "NOC_광레벨불": "[NOC_광레벨불]",
+    "NOC_CRC발생": "[NOC_CRC발생]",
+    "NOC_장비철거": "[NOC_장비철거]",
+    "NOC_형상삭제": "[NOC_형상삭제]",
+    "NOC_PSU교체": "[NOC_PSU교체]",
+    "NOC_PLK_PSU교체": "[NOC_PLK_PSU교체]",
+    "NOC_장비교체": "[NOC_장비교체]",
+    "NOC_점검정비": "[NOC_점검정비]",
+    "NOC_자산관리": "[NOC_자산관리]",
+    "NOC_중복장애": "[NOC_중복장애]",
+    "NOC_kernel정비": "[NOC_kernel정비]"
+}
+
+민원처리_head_formats = {
+    "NOC_장비교체": "[NOC_장비교체]",
+    "NOC_PON모듈교체": "[NOC_PON모듈교체]",
+    "NOC_보드교체": "[NOC_보드교체]",
+    "NOC_BAT교체": "[NOC_BAT교체]",
+    "NOC_어댑터교체": "[NOC_어댑터교체]",
+    "NOC_FAN교체": "[NOC_FAN교체]",
+    "NOC_관련부서이관": "[NOC_관련부서이관]",
+    "NOC_장비철거": "[NOC_장비철거]",
+    "NOC_광커넥터재접속": "[NOC_광커넥터재접속]",
+    "NOC_전원가복구": "[NOC_전원가복구]",
+    "NOC_모자분리": "[NOC_모자분리]",
+    "NOC_전기요금": "[NOC_전기요금]",
+    "NOC_장비재설치": "[NOC_장비재설치]",
+    "NOC_PSU교체": "[NOC_PSU교체]",
+    "NOC_감쇄기실장": "[NOC_감쇄기실장]",
+    "NOC_상태변경": "[NOC_상태변경]",
+    "NOC_장비리셋": "[NOC_장비리셋]",
+    "NOC_자연회복": "[NOC_자연회복]",
+    "NOC_기타": "[NOC_기타]"
+}
+
+# 선조치_NOC에 대한 내용
+선조치_NOC_options = [
+    "원인분석(전원)",
+    "원인분석(선로)",
+    "원인분석(장비)",
+    "전기작업 확인(전화)",
+    "FOLLOW추가",
+    "출동보류",
+    "원격조치(리부팅)",
+    "원격조치(포트리셋)",
+    "원격조치(포트BLK)",
+    "정전알림이 등록",
+    "DB현행화",
+    "고객홍보"
+]
+
+def get_format(text):
+    matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
+    if "[기타]" in matched_formats or "[폐문]" in matched_formats:
+        return matched_formats[-1]
+    else:
+        selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
+        return selected_formats[-1] if selected_formats else None
+
+
+def main():
+    df = pd.read_csv('head.csv')
+    df = df.reset_index(drop=True)
+    with st.expander('MOSS 회복 항목 표준') :
+        st.dataframe(df)
+
+    st.title("MOSS 회복 문구")
+
+    # 초기값 설정
+    if "user_input" not in st.session_state:
+        st.session_state.user_input = ""
+
+    # 텍스트 입력 초기화 함수
+    def clear_text():
+        st.session_state.clear()  # 모든 상태를 초기화
+        st.session_state.user_input = ""  # 다시 설정
+        st.experimental_rerun()  # 상태를 초기화하고 재실행
+
+    results = []
+
+    # B/S 및 민원처리 체크박스
+    col1, col2 = st.columns(2)
+
+    with col1:
+        is_bs_checked = st.checkbox("B/S")
+    with col2:
+        is_complaint_checked = st.checkbox("민원처리")
+
+    if is_bs_checked:
+        selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
+        if selected_bs_format:
+            results.append(selected_bs_format)
+
+    if is_complaint_checked:
+        selected_complaint_format = st.selectbox("민원처리 head_format을 선택하세요:", list(민원처리_head_formats.values()), key="complaint_format")
+        if selected_complaint_format:
+            results.append(selected_complaint_format)
+
+    user_input = st.text_input("입력란", key="user_input")
+
+    if not is_bs_checked and not is_complaint_checked:
+        head_format = get_format(user_input)
+        if head_format:
+            results.append(head_format)
+
+    results.append(user_input)
+    results.append("수고하셨습니다")
+
+    selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
+    if selected_actions:
+        formatted_actions = ", ".join(selected_actions)
+        results.append(f"<선조치_NOC> {formatted_actions}")
+
+    현장_options = [
+        "[현장TM]",
+        "주소",
+        "연락처",
+        "장비위치",
+        "차단기위치",
+        "출입방법",
+        "기타(간단히 내용입력)"
+    ]
+    selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
+
+    현장TM_내용 = ""
+    if "[현장TM]" in selected_locations:
+        현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+        현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
+        if "[TM활동]" in 현장TM_내용:
+            formatted_TM = 현장TM_내용.replace("[현장TM]", "[TM활동]")
+        else:
+            formatted_TM = f"[현장TM] {현장TM_내용}"
+        selected_locations.remove("[현장TM]")
+        if selected_locations:
+            formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations]) + " 수정요청"
+        else:
+            formatted_locations = f"{formatted_TM}"
+    else:
+        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+        if selected_locations:
+            formatted_locations += " 수정요청"
+
+    if selected_locations or 현장TM_내용:
+        results.append(f"<현장> {formatted_locations}")
+
+    출동예방_actions = []
+    if 현장TM_내용 and 현장TM_출동예방:
+        출동예방_actions.append(formatted_TM)
+    if "전기작업 확인(전화)" in selected_actions:
+        출동예방_actions.append("[NOC]전기작업 확인(전화)")
+    if "출동보류" in selected_actions:
+        출동예방_actions.append("[NOC]출동보류")
+
+    if 출동예방_actions:
+        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
+
+    copy_activated = False
+    if st.button("출력"):
+        output_text = "\n".join(results)  # Join results with new lines for the desired format
+        st.text(output_text)  # Print output_text when the "출력" button is pressed
+        if copy_activated:
+            pyperclip.copy(output_text)
+
+    if st.button("입력란 초기화"):
+        clear_text()
+
+if __name__ == "__main__":
+    main()
+
+=====================================
+import streamlit as st
+import pandas as pd
+import pyperclip
+import re
+
+# 포맷 데이터 포함
+formats = {
+    "정전": "[사설정전복구]",
+    "입전": "[사설정전복구]",
+    "복전": "[사설정전복구]",
+    "출동 중 복구": "[사설정전복구]",
+    "출동중복구": "[사설정전복구]",
+    "출동 중 자동복구": "[사설정전복구]",
+    "출동중자동복구": "[사설정전복구]",
+    "자동": "[사설정전복구]",
+    "한전": "[한전정전복구]",
+    "한전 작업": "[한전정전복구]",
+    "한전 조치": "[한전정전복구]",
+    "차단기 on": "[사설차단기복구]",
+    "trip": "[사설차단기복구]",
+    "TRIP": "[사설차단기복구]",
+    "트립": "[사설차단기복구]",
+    "어댑터": "[전원어댑터교체]",
+    "어뎁터": "[전원어댑터교체]",
+    "아뎁터": "[전원어댑터교체]",
+    "아댑터": "[전원어댑터교체]",
+    "아답터": "[전원어댑터교체]",
+    "아답타": "[전원어댑터교체]",
+    "멀티탭": "[멀티탭 ON/교체]",
+    "콘센트": "[멀티탭 ON/교체]",
+    "멀티탭 교체": "[멀티탭 ON/교체]",
+    "콘센트 교체": "[멀티탭 ON/교체]",
+    "발전기": "[발전기가동]",
+    "파워뱅크": "[전원가복구]",
+    "가복구": "[전원가복구]",
+    "임시": "[전원가복구]",
+    "전기안전검사": "[고객측작업]",
+    "전기검사": "[고객측작업]",
+    "전기작업": "[고객측작업]",
+    "작업": "[고객측작업]",
+    "점검": "[고객측작업]",
+    "검사": "[고객측작업]",
+    "공사": "[고객측작업]",
+    "장비철거": "[장비철거]",
+    "타사전환": "[타사전환]",
+    "감쇄기": "[광커넥터복구]", 
+    "감쇠기": "[광커넥터복구]",
+    "PON": "[모듈교체]",
+    "pon": "[모듈교체]",
+    "PSU": "[모듈교체]",
+    "psu": "[모듈교체]",
+    "모듈": "[모듈교체]",
+    "보드": "[모듈교체]",
+    "장비교체": "[장비교체]",
+    "장비 대개체": "[장비교체]",
+    "대개체": "[장비교체]",
+    "장비 교체": "[장비교체]",
+    "리셋": "[장비리셋]",
+    "익일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "off": "[기타]",
+    "예정": "[기타]",
+    "재발행": "[기타]",
+    "VOC": "[기타]",
+    "voc": "[기타]",
+    "미정": "[기타]",
+    "불가": "[기타]",
+    "출입불가": "[폐문]",
+    "출입": "[폐문]",
+    "폐문": "[폐문]"
+}
+
+# B/S 및 민원처리 head_format 데이터
+B_S_head_formats = {
+    "NOC_광레벨불": "[NOC_광레벨불]",
+    "NOC_CRC발생": "[NOC_CRC발생]",
+    "NOC_장비철거": "[NOC_장비철거]",
+    "NOC_형상삭제": "[NOC_형상삭제]",
+    "NOC_PSU교체": "[NOC_PSU교체]",
+    "NOC_PLK_PSU교체": "[NOC_PLK_PSU교체]",
+    "NOC_장비교체": "[NOC_장비교체]",
+    "NOC_점검정비": "[NOC_점검정비]",
+    "NOC_자산관리": "[NOC_자산관리]",
+    "NOC_중복장애": "[NOC_중복장애]",
+    "NOC_kernel정비": "[NOC_kernel정비]"
+}
+
+민원처리_head_formats = {
+    "NOC_장비교체": "[NOC_장비교체]",
+    "NOC_PON모듈교체": "[NOC_PON모듈교체]",
+    "NOC_보드교체": "[NOC_보드교체]",
+    "NOC_BAT교체": "[NOC_BAT교체]",
+    "NOC_어댑터교체": "[NOC_어댑터교체]",
+    "NOC_FAN교체": "[NOC_FAN교체]",
+    "NOC_관련부서이관": "[NOC_관련부서이관]",
+    "NOC_장비철거": "[NOC_장비철거]",
+    "NOC_광커넥터재접속": "[NOC_광커넥터재접속]",
+    "NOC_전원가복구": "[NOC_전원가복구]",
+    "NOC_모자분리": "[NOC_모자분리]",
+    "NOC_전기요금": "[NOC_전기요금]",
+    "NOC_장비재설치": "[NOC_장비재설치]",
+    "NOC_PSU교체": "[NOC_PSU교체]",
+    "NOC_감쇄기실장": "[NOC_감쇄기실장]",
+    "NOC_상태변경": "[NOC_상태변경]",
+    "NOC_장비리셋": "[NOC_장비리셋]",
+    "NOC_자연회복": "[NOC_자연회복]",
+    "NOC_기타": "[NOC_기타]"
+}
+
+# 선조치_NOC에 대한 내용
+선조치_NOC_options = [
+    "원인분석(전원)",
+    "원인분석(선로)",
+    "원인분석(장비)",
+    "전기작업 확인(전화)",
+    "FOLLOW추가",
+    "출동보류",
+    "원격조치(리부팅)",
+    "원격조치(포트리셋)",
+    "원격조치(포트BLK)",
+    "정전알림이 등록",
+    "DB현행화",
+    "고객홍보"
+]
+
+def get_format(text):
+    matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
+    if "[한전정전복구]" in matched_formats and ("[기타]" in matched_formats or "[폐문]" in matched_formats):
+        return "[폐문]" if "[폐문]" in matched_formats else "[기타]"
+    elif "[한전정전복구]" in matched_formats:
+        return "[한전정전복구]"
+    elif "[기타]" in matched_formats or "[폐문]" in matched_formats:
+        return matched_formats[-1]
+    else:
+        selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
+        return selected_formats[-1] if selected_formats else None
+
+
+
+
+
+
+def main():
+    df = pd.read_csv('head.csv', index_col=0)
+    with st.expander('MOSS 회복 항목 표준') :
+        st.dataframe(df)
+
+    st.title("MOSS 회복 문구")
+
+    # 초기값 설정
+    if "user_input" not in st.session_state:
+        st.session_state.user_input = ""
+
+    # 텍스트 입력 초기화 함수
+    def clear_text():
+        st.session_state.clear()  # 모든 상태를 초기화
+        st.session_state.user_input = ""  # 다시 설정
+        st.experimental_rerun()  # 상태를 초기화하고 재실행
+
+    results = []
+
+    # B/S 및 민원처리 체크박스
+    col1, col2 = st.columns(2)
+
+    with col1:
+        is_bs_checked = st.checkbox("B/S")
+    with col2:
+        is_complaint_checked = st.checkbox("민원처리")
+
+    if is_bs_checked:
+        selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
+        if selected_bs_format:
+            results.append(selected_bs_format)
+
+    if is_complaint_checked:
+        selected_complaint_format = st.selectbox("민원처리 head_format을 선택하세요:", list(민원처리_head_formats.values()), key="complaint_format")
+        if selected_complaint_format:
+            results.append(selected_complaint_format)
+
+    user_input = st.text_input("입력란", key="user_input")
+
+    if not is_bs_checked and not is_complaint_checked:
+        head_format = get_format(user_input)
+        if head_format:
+            results.append(head_format)
+
+    results.append(user_input)
+    results.append("수고하셨습니다")
+
+    selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
+    if selected_actions:
+        formatted_actions = ", ".join(selected_actions)
+        results.append(f"<선조치_NOC> {formatted_actions}")
+
+    현장_options = [
+        "[현장TM]",
+        "주소",
+        "연락처",
+        "장비위치",
+        "차단기위치",
+        "출입방법",
+        "기타(간단히 내용입력)"
+    ]
+    selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
+
+    현장TM_내용 = ""
+    if "[현장TM]" in selected_locations:
+        현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+        현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
+        if "[TM활동]" in 현장TM_내용:
+            formatted_TM = 현장TM_내용.replace("[현장TM]", "[TM활동]")
+        else:
+            formatted_TM = f"[현장TM] {현장TM_내용}"
+        selected_locations.remove("[현장TM]")
+        if selected_locations:
+            formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations]) + " 수정요청"
+        else:
+            formatted_locations = f"{formatted_TM}"
+    else:
+        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+        if selected_locations:
+            formatted_locations += " 수정요청"
+
+    if selected_locations or 현장TM_내용:
+        results.append(f"<현장> {formatted_locations}")
+
+    출동예방_actions = []
+    if 현장TM_내용 and 현장TM_출동예방:
+        출동예방_actions.append(formatted_TM)
+    if "전기작업 확인(전화)" in selected_actions:
+        출동예방_actions.append("[NOC]전기작업 확인(전화)")
+    if "출동보류" in selected_actions:
+        출동예방_actions.append("[NOC]출동보류")
+
+    if 출동예방_actions:
+        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
+
+    copy_activated = False
+    if st.button("출력"):
+        output_text = "\n".join(results)  # Join results with new lines for the desired format
+        st.text(output_text)  # Print output_text when the "출력" button is pressed
+        if copy_activated:
+            pyperclip.copy(output_text)
+
+    if st.button("입력란 초기화"):
+        clear_text()
+
+if __name__ == "__main__":
+    main()
+================================
+06.06
+<version1>
+import streamlit as st
+import pandas as pd
+import pyperclip
+import re
+
+# 포맷 데이터 포멧
+formats = {
+    "정전": "[사설정전복구]",
+    "입전": "[사설정전복구]",
+    "복전": "[사설정전복구]",
+    "출동 중 복구": "[사설정전복구]",
+    "출동중복구": "[사설정전복구]",
+    "출동 중 자동복구": "[사설정전복구]",
+    "출동중자동복구": "[사설정전복구]",
+    "자동": "[사설정전복구]",
+    "루트변경": "[사설정전복구]",
+    "루트 변경": "[사설정전복구]",
+    "한전": "[한전정전복구]",
+    "변압기": "[한전정전복구]",
+    "차단기": "[사설차단기복구]",
+    "차단기 on": "[사설차단기복구]",
+    "차단기 ON": "[사설차단기복구]",
+    "차단기on": "[사설차단기복구]",
+    "차단기ON": "[사설차단기복구]",
+    "On": "[사설차단기복구]",
+    "trip": "[사설차단기복구]",
+    "TRIP": "[사설차단기복구]",
+    "트립": "[사설차단기복구]",
+    "어댑터": "[전원어댑터교체]",
+    "어뎁터": "[전원어댑터교체]",
+    "아뎁터": "[전원어댑터교체]",
+    "아댑터": "[전원어댑터교체]",
+    "아답터": "[전원어댑터교체]",
+    "아답타": "[전원어댑터교체]",
+    "멀티탭": "[멀티탭 ON/교체]",
+    "멀티탭 교체": "[멀티탭 ON/교체]",
+    "발전기": "[발전기가동]",
+    "파워뱅크": "[전원가복구]",
+    "가복구": "[전원가복구]",
+    "임시": "[전원가복구]",
+    "전기안전검사": "[고객측작업]",
+    "전기검사": "[고객측작업]",
+    "전기작업": "[고객측작업]",
+    "작업": "[고객측작업]",
+    "점검": "[고객측작업]",
+    "검사": "[고객측작업]",
+    "공사": "[고객측작업]",
+    "장비철거": "[장비철거]",
+    "타사전환": "[타사전환]",
+    "감쇄기": "[광커넥터복구]", 
+    "감쇠기": "[광커넥터복구]",
+    "dbm": "[광커넥터복구]",
+    "취부": "[광커넥터복구]",
+    "PON": "[모듈교체]",
+    "pon": "[모듈교체]",
+    "PSU": "[모듈교체]",
+    "psu": "[모듈교체]",
+    "모듈": "[모듈교체]",
+    "보드": "[모듈교체]",
+    "장비교체": "[장비교체]",
+    "장비 대개체": "[장비교체]",
+    "대개체": "[장비교체]",
+    "장비 교체": "[장비교체]",
+    "리셋": "[장비리셋]",
+    "익일": "[기타]",
+    "담당조": "[기타]",
+    "OFF": "[기타]",
+    "off": "[기타]",
+    "예정": "[기타]",
+    "재발행": "[기타]",
+    "VOC": "[기타]",
+    "voc": "[기타]",
+    "미정": "[기타]",
+    "불가": "[기타]",
+    "접근불가": "[폐문]",
+    "접근 불가": "[폐문]",
+    "출입불가": "[폐문]",
+    "출입": "[폐문]",
+    "폐문": "[폐문]"
+}
+
+# B/S 및 민원처리 head_format 데이터
+B_S_head_formats = {
+    "NOC_광레벨불": "[NOC_광레벨불]",
+    "NOC_CRC발생": "[NOC_CRC발생]",
+    "NOC_장비철거": "[NOC_장비철거]",
+    "NOC_형상삭제": "[NOC_형상삭제]",
+    "NOC_PSU교체": "[NOC_PSU교체]",
+    "NOC_PLK_PSU교체": "[NOC_PLK_PSU교체]",
+    "NOC_장비교체": "[NOC_장비교체]",
+    "NOC_점검정비": "[NOC_점검정비]",
+    "NOC_자산관리": "[NOC_자산관리]",
+    "NOC_중복장애": "[NOC_중복장애]",
+    "NOC_kernel정비": "[NOC_kernel정비]"
+}
+
+민원처리_head_formats = {
+    "NOC_장비교체": "[NOC_장비교체]",
+    "NOC_PON모듈교체": "[NOC_PON모듈교체]",
+    "NOC_보드교체": "[NOC_보드교체]",
+    "NOC_BAT교체": "[NOC_BAT교체]",
+    "NOC_어댑터교체": "[NOC_어댑터교체]",
+    "NOC_FAN교체": "[NOC_FAN교체]",
+    "NOC_관련부서이관": "[NOC_관련부서이관]",
+    "NOC_장비철거": "[NOC_장비철거]",
+    "NOC_광커넥터재접속": "[NOC_광커넥터재접속]",
+    "NOC_전원가복구": "[NOC_전원가복구]",
+    "NOC_모자분리": "[NOC_모자분리]",
+    "NOC_전기요금": "[NOC_전기요금]",
+    "NOC_장비재설치": "[NOC_장비재설치]",
+    "NOC_PSU교체": "[NOC_PSU교체]",
+    "NOC_감쇄기실장": "[NOC_감쇄기실장]",
+    "NOC_상태변경": "[NOC_상태변경]",
+    "NOC_장비리셋": "[NOC_장비리셋]",
+    "NOC_자연회복": "[NOC_자연회복]",
+    "NOC_기타": "[NOC_기타]"
+}
+
+# 선조치_NOC에 대한 내용
+선조치_NOC_options = [
+    "원인분석(전원)",
+    "원인분석(선로)",
+    "원인분석(장비)",
+    "전기작업 확인(전화)",
+    "FOLLOW추가",
+    "출동보류",
+    "원격조치(리부팅)",
+    "원격조치(포트리셋)",
+    "원격조치(포트BLK)",
+    "정전알림이 등록",
+    "DB현행화",
+    "고객홍보"
+]
+
+@st.cache_data
+def get_format(text):
+    matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
+    if "[한전정전복구]" in matched_formats and ("[기타]" in matched_formats or "[폐문]" in matched_formats):
+        return "[폐문]" if "[폐문]" in matched_formats else "[기타]"
+    elif "[한전정전복구]" in matched_formats:
+        return "[한전정전복구]"
+    elif "[전원어댑터교체]" in matched_formats:
+        return "[전원어댑터교체]"
+    elif "[기타]" in matched_formats or "[폐문]" in matched_formats:
+        return matched_formats[-1]
+    else:
+        selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
+        return selected_formats[-1] if selected_formats else None
+
+st.session_state.sidebar_expanded = False
+
+# Load the CSV file
+df = pd.read_csv('head.csv', index_col=0)
+
+# Sidebar for MOSS recovery items
+st.sidebar.title("Menu")
+
+# Expander in sidebar
+with st.sidebar.expander('MOSS 회복 항목 표준'):
+    st.dataframe(df)
+
+def clear_tm_content(content):
+    keywords_to_remove = ["[현장TM]", "[TM활동]", "[TM 활동]", "[현장 TM]"]
+    for keyword in keywords_to_remove:
+        content = content.replace(keyword, "")
+    return content.strip()
+
+
+def moss_page():
+
+    df1 = pd.read_csv('bs_head.csv')
+
+    # 인덱스를 제거한 새로운 데이터프레임 생성
+    df1_reset = df1.reset_index(drop=True)
+
+    # Streamlit 애플리케이션
+    with st.expander('MOSS BS 발행 HEAD'):
+        st.dataframe(df1_reset)
+    
+    st.title("MOSS 회복 문구")
+
+    # 초기값 설정
+    if "user_input" not in st.session_state:
+        st.session_state.user_input = ""
+
+    # 텍스트 입력 초기화 함수
+    def clear_text():
+        st.session_state.clear()  # 모든 상태를 초기화
+        
+
+    results = []
+
+    # B/S 및 민원처리 체크박스
+    col1, col2 = st.columns(2)
+
+    with col1:
+        is_bs_checked = st.checkbox("B/S")
+    with col2:
+        is_complaint_checked = st.checkbox("민원처리")
+
+    if is_bs_checked:
+        selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
+        if selected_bs_format:
+            results.append(selected_bs_format)
+
+    if is_complaint_checked:
+        selected_complaint_format = st.selectbox("민원처리 head_format을 선택하세요:", list(민원처리_head_formats.values()), key="complaint_format")
+        if selected_complaint_format:
+            results.append(selected_complaint_format)
+
+    user_input = st.text_input("입력란", key="user_input")
+
+    if not is_bs_checked and not is_complaint_checked:
+        head_format = get_format(user_input)
+        if head_format:
+            results.append(head_format)
+
+    results.append(user_input)
+    results.append("수고하셨습니다")
 
     출동예방_actions = []
     selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
-
-    기타_results = []
-
-    if "DB 삭제 여부" in selected_actions:
-        if "기타_고객DB_neoss_불가" not in st.session_state:
-            st.session_state.기타_고객DB_neoss_불가 = False
-        if "기타_neoss_완료" not in st.session_state:
-            st.session_state.기타_neoss_완료 = False
-
-        def 기타_고객DB_neoss_불가_callback():
-            st.session_state.기타_neoss_완료 = False
-
-        def 기타_neoss_완료_callback():
-            st.session_state.기타_고객DB_neoss_불가 = False
-        
-        기타_고객DB_neoss_불가 = st.checkbox("고객DB 존재 NeOSS 삭제 불가", key="기타_고객DB_neoss_불가", on_change=기타_고객DB_neoss_불가_callback)
-        기타_neoss_완료 = st.checkbox("NeOSS 삭제 완료", key="기타_neoss_완료", on_change=기타_neoss_완료_callback)
-    
-        if 기타_고객DB_neoss_불가:
-            기타_results.append("고객DB 존재/NeOSS 삭제 불가")
-        if 기타_neoss_완료:
-            기타_results.append("NeOSS 삭제 완료")
-
-
-    results.extend(기타_results)
-    results.append("수고하셨습니다")
-
-    
-    filtered_actions = [action for action in selected_actions if action != "DB 삭제 여부"]
-    if filtered_actions:
-        formatted_actions = ", ".join(filtered_actions)
+    if selected_actions:
+        formatted_actions = ", ".join(selected_actions)
         results.append(f"<선조치_NOC> {formatted_actions}")
         if "전기작업 확인(전화)" in selected_actions:
             출동예방_actions.append("[NOC]전기작업 확인(전화)")
         if "출동보류" in selected_actions:
             출동예방_actions.append("[NOC]출동보류")
 
-    
     현장_options = [
         "[현장TM]",
         "주소",
@@ -523,11 +3252,9 @@ def moss_page():
     if 출동예방_actions:
         results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
-
     copy_activated = False
 
-
-    col1, col2 , col3= st.columns([2.8, 0.5, 0.7])
+    col1, col2 = st.columns(2)
 
     with col1:
         if st.button("출력"):
@@ -539,81 +3266,44 @@ def moss_page():
     with col2:
         if st.button("입력란 초기화"):
             clear_text()
-
-    with col3:
-        if 'button_clicked' not in st.session_state:
-            st.session_state['button_clicked'] = False
-            
-        if st.button('MOSS 회복 항목 표준'):
-            st.session_state['button_clicked'] = not st.session_state['button_clicked']
-
-        if st.session_state['button_clicked']:
-            placeholder = st.empty()
-            with placeholder.container():
-                st.markdown(
-            """
-            <style>
-            /* 데이터프레임이 최대한 화면에 가깝게 보이도록 스타일 조정 */
-            .css-1l02zno {
-                width: 100%;
-                max-width: 100%;
-                height: calc(100vh - 200px); /* 높이를 화면 높이의 일부분으로 설정 */
-                overflow: auto; /* 스크롤이 필요한 경우 스크롤 허용 */
-            }
-            </style>
-            """,
-            unsafe_allow_html=True
-        )
-                st.dataframe(df)
-                
+        
 # Worksync 페이지
 def worksync_page():  
-    st.title("Worksync")
-
+    st.title("Worksync 페이지 준비중...")
+    
     # 데이터 파일 불러오기
-    work = pd.read_csv("ws_data.csv")
+    work = pd.read_csv("데이터.csv")  # 파일 경로를 실제 파일 경로로 변경해주세요
 
-    # '장비ID'와 '업무명'이 동일한 경우 중복된 행 제거
-    df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
-
-    # 장비ID 순서대로 정렬
-    df_no_duplicates = df_no_duplicates.sort_values(by='장비ID')
+    # 'ip'와 '업무'가 동일한 경우 중복된 행 제거
+    df_no_duplicates = work.drop_duplicates(subset=['ip', '업무'])
 
     # IP 입력 받기
     ip_input = st.text_input("IP 입력", "")
     
     # IP 입력이 있을 경우
     if ip_input:
-        # 입력된 IP에 해당되는 행 찾기
-        if ip_input in df_no_duplicates['장비ID'].values:
-            # 해당 IP의 사업장 찾기
-            address = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]['사업장'].values[0]
-            st.write("★동일국소 점검 대상★")
+        # 입력된 IP에 해당되는 주소 찾기
+        if ip_input in df_no_duplicates['ip'].values:
+            address = df_no_duplicates[df_no_duplicates['ip'] == ip_input]['주소'].values[0]
+            st.write("입력된 IP에 해당하는 주소")
             
-            same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
+            # 동일 주소지의 업무 찾기
+            same_address_work = df_no_duplicates[df_no_duplicates['주소'] == address]
+            
+            # 장비명-업무 형식으로 보여주기
             for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
-                st.text(f"{idx}. {row['장비ID']} - {row['장비명/국사명']} - {row['업무명']}")
+                st.text(f"{idx}. {row['장비명']} - {row['업무']}")
         else:
             st.text("Work-Sync 없습니다.")
 
 
   
-# 옵션 메뉴 생성
-selected = option_menu(
-    menu_title=None,  # 메뉴 제목 (원하지 않으면 None)
-    options=["Home","MOSS", "Worksync","Manage"],  # 옵션 이름들
-    icons=["house", "box-arrow-down","calendar2-check","gear"],  # 각 옵션에 해당하는 아이콘
-    menu_icon="cast",  # 메뉴 아이콘
-    default_index=0,  # 기본 선택 옵션
-    orientation="horizontal"  # 메뉴 방향 (수평)
-)
+# 탭 생성
+tab1, tab2= st.tabs(["MOSS", "worksync"])
 
-# 탭 내용 생성
-if selected == "Home":
-    home_page()
-elif selected == "MOSS":
+with tab1:
     moss_page()
-elif selected == "Worksync":
+
+with tab2:
     worksync_page()
-elif selected == "Manage":
-    manage_page()
+
