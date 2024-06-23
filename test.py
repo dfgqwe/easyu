@@ -258,7 +258,7 @@ def manage_page():
     # GitHub 업데이트 함수
     def update_github_file(repo, path, content, message, branch, token):
         url = f"url = "https://raw.githubusercontent.com/user/repository/branch/" + urllib.parse.quote("데이터.csv")"
-        work = pd.read_csv(url)"
+        work = pd.read_csv(url)
         headers = {"Authorization": f"token {token}"}
     
         # 파일 정보를 가져옴
