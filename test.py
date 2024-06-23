@@ -292,7 +292,9 @@ def manage_page():
 
             if st.button("선택된 업무 삭제"):
                 if selected_tasks:
+                    st.write(f"Before deletion: {df_no_duplicates.shape[0]} rows")
                     df_no_duplicates = df_no_duplicates.drop(selected_tasks)
+                    st.write(f"After deletion: {df_no_duplicates.shape[0]} rows")
                     update_data_on_github(repo_name, file_path, github_token, df_no_duplicates)
                     st.success("선택된 업무가 성공적으로 삭제되었습니다.")
                 else:
