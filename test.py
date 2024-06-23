@@ -257,7 +257,8 @@ def manage_page():
 
     # GitHub 업데이트 함수
     def update_github_file(repo, path, content, message, branch, token):
-        url = f"https://api.github.com/repos/{repo}/contents/{path}"
+        url = f"url = "https://raw.githubusercontent.com/user/repository/branch/" + urllib.parse.quote("데이터.csv")
+        work = pd.read_csv(url)"
         headers = {"Authorization": f"token {token}"}
     
         # 파일 정보를 가져옴
@@ -283,7 +284,7 @@ def manage_page():
     path = "main/%EB%8D%B0%EC%9D%B4%ED%84%B0.csv"  # 파일 경로
     message = "데이터 업데이트"
     branch = "main"  # 브랜치 이름
-    token = os.getenv("GITHUB_TOKEN")  # 환경 변수에서 GitHub Personal Access Token 읽기
+    token = "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"  # GitHub Personal Access Token 직접 포함
 
     # 데이터 수정 및 GitHub 업데이트
     if st.button("수정된 데이터 GitHub에 저장"):
