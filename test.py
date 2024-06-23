@@ -3,6 +3,7 @@ import pandas as pd
 import pyperclip
 import re
 from streamlit_option_menu import option_menu
+import requests
 
 # 포맷 데이터 포멧
 formats = {
@@ -197,27 +198,21 @@ def load_csv():
 
 @st.cache_data
 def get_format(text):
-    # formats는 어딘가에 미리 정의되어 있는 딕셔너리로 가정합니다.
     matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
-
-    # "복구"라는 단어가 포함된 경우
-    if "복구" in text:
-        for format in matched_formats:
-            if format not in ["[기타]", "[폐문]"]:
-                return format
-    
-    # 복구라는 단어가 없는 경우 기존 로직을 그대로 사용
     if "[한전정전복구]" in matched_formats and ("[기타]" in matched_formats or "[폐문]" in matched_formats):
         return "[폐문]" if "[폐문]" in matched_formats else "[기타]"
     elif "[한전정전복구]" in matched_formats:
         return "[한전정전복구]"
     elif "[전원어댑터교체]" in matched_formats:
         return "[전원어댑터교체]"
+    elif "[사설차단기복구]" in matched_formats:
+        return "[사설차단기복구]"
     elif "[기타]" in matched_formats or "[폐문]" in matched_formats:
         return matched_formats[-1]
     else:
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
         return selected_formats[-1] if selected_formats else None
+
 
 
 # Load the CSV file
@@ -334,6 +329,17 @@ def manage_page():
     
     if st.session_state.manage_logged_in:
         # 비밀번호 입력 후에만 Radio 버튼을 표시
+        st.markdown(
+        """
+        <style>
+        .stRadio > div {
+            display: flex;
+            flex-direction: row;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
         content_option = st.radio("인수 인계", ["주간", "야간"])
 
         if content_option == "주간":
