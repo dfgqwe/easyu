@@ -212,6 +212,7 @@ def home_page():
 
 
 
+# Function to delete a file from GitHub repository
 def delete_file_from_github(GITHUB_TOKEN, repo_owner, repo_name, filepath):
     url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
     headers = {
@@ -289,9 +290,9 @@ def delete_tasks_based_on_ip(ip_input):
     # IP에 해당하는 업무 찾기
     if ip_input in df_no_duplicates['장비ID'].values:
         tasks = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input][['장비명/국사명', '업무명']]
-        selected_tasks = st.multiselect("삭제할 업무 선택", list(tasks['업무명']))
+        selected_tasks = st.multiselect("삭제할 업무 선택", list(tasks['업무명']), key="delete_tasks")
 
-        if st.button("GitHub에서 업무 삭제"):
+        if st.button("GitHub에서 업무 삭제", key="delete_button"):
             for task_name in selected_tasks:
                 # 여기에서 GitHub API를 사용하여 해당 업무 삭제
                 # 예시로 하나의 업무 파일을 삭제하는 코드를 호출
@@ -302,6 +303,9 @@ def delete_tasks_based_on_ip(ip_input):
                 delete_file_from_github(GITHUB_TOKEN, repo_owner, repo_name, filepath)
     else:
         st.warning("해당 IP에 대한 업무가 없습니다.")
+
+
+
 def moss_page():
 
     st.title("MOSS 회복 문구")
