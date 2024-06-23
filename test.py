@@ -211,8 +211,6 @@ def home_page():
 
 
 
-
-# Function to delete a file from GitHub repository
 def delete_file_from_github(GITHUB_TOKEN, repo_owner, repo_name, filepath):
     url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
     headers = {
@@ -271,7 +269,7 @@ def manage_page():
     ip_input = st.text_input("IP 입력", "")
 
     # Button to trigger deletion
-    if st.button("업무 확인"):
+    if st.button("GitHub에서 업무 삭제"):
         if ip_input:
             delete_tasks_based_on_ip(ip_input)
 
@@ -290,17 +288,14 @@ def delete_tasks_based_on_ip(ip_input):
     # IP에 해당하는 업무 찾기
     if ip_input in df_no_duplicates['장비ID'].values:
         tasks = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input][['장비명/국사명', '업무명']]
-        selected_tasks = st.multiselect("삭제할 업무 선택", list(tasks['업무명']), key="delete_tasks")
+        selected_task = st.selectbox("삭제할 업무 선택", list(tasks['업무명']))
 
-        if st.button("GitHub에서 업무 삭제", key="delete_button"):
-            for task_name in selected_tasks:
-                # 여기에서 GitHub API를 사용하여 해당 업무 삭제
-                # 예시로 하나의 업무 파일을 삭제하는 코드를 호출
-                GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')  # 환경 변수에서 토큰을 가져옴
-                repo_owner = "dfgqwe"
-                repo_name = "easyu"
-                filepath = f"blob/main/{task_name}.csv"  # 예시 파일 경로 (업무명을 파일명으로 사용할 수 있음)
-                delete_file_from_github(GITHUB_TOKEN, repo_owner, repo_name, filepath)
+        if st.button("선택한 업무 삭제"):
+            GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')  # 환경 변수에서 토큰을 가져옴
+            repo_owner = "dfgqwe"
+            repo_name = "easyu"
+            filepath = f"blob/main/{selected_task}.csv"  # 예시 파일 경로 (업무명을 파일명으로 사용할 수 있음)
+            delete_file_from_github(GITHUB_TOKEN, repo_owner, repo_name, filepath)
     else:
         st.warning("해당 IP에 대한 업무가 없습니다.")
 
