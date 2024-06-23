@@ -197,7 +197,7 @@ def fetch_data_from_github(repo_name, file_path, github_token):
         return None
 
 # Function to update data on GitHub
-def update_data_on_github(repo_name, file_path, github_token, df):
+def update_data_on_github(repo_name, file_path, github_token, df_no_duplicates1):
     try:
         g = Github(github_token)
         repo = g.get_repo(repo_name)
