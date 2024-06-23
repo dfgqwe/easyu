@@ -299,8 +299,8 @@ def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, github_token):
             work.to_csv("ws_data.csv", index=False)
             st.success(f"Task '{selected_task}' deleted successfully.")
 
-            # Delete the file from GitHub repository
-            delete_file_from_github(repo_owner, repo_name, "ws_data.csv", github_token)
+            # Update the file in GitHub repository
+            update_file_in_github(repo_owner, repo_name, "ws_data.csv", "main", "Update data file", work.to_csv(index=False), github_token)
     else:
         st.warning("No tasks found for the given IP.")
 
@@ -341,7 +341,6 @@ def manage_page():
     if st.button("Delete tasks from GitHub"):
         if ip_input:
             delete_tasks_based_on_ip(ip_input, "YourGitHubUsername", "YourRepositoryName", os.getenv('GITHUB_TOKEN'))
-
 
 
 
