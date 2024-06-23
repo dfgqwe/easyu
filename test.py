@@ -212,6 +212,36 @@ def home_page():
 
 
 
+def delete_file_from_github(GITHUB_TOKEN, repo_owner, repo_name, filepath):
+    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
+    headers = {
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    # Step 1: Get current file information
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        file_data = response.json()
+        sha = file_data['sha']  # Get the current file's SHA hash
+        commit_message = "Delete file via API"  # Commit message for deletion
+
+        # Step 2: Delete the file
+        delete_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
+        delete_data = {
+            "message": commit_message,
+            "sha": sha
+        }
+        delete_response = requests.delete(delete_url, headers=headers, json=delete_data)
+
+        if delete_response.status_code == 200:
+            st.success(f"File {filepath} successfully deleted.")
+        else:
+            st.error(f"Failed to delete file {filepath}. Status code: {delete_response.status_code}")
+    else:
+        st.error(f"Failed to get file information. Status code: {response.status_code}")
+
+# Function to manage page
 def manage_page():
     st.title("Manage")
 
@@ -236,40 +266,42 @@ def manage_page():
         st.header("야간")
         st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.night_content, height=200)
 
-    # Manage Worksync data
-    GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')  # 환경 변수에서 토큰을 가져옴
-    repo_owner = "dfgqwe"
-    repo_name = "easyu"
-    filepath = "blob/main/ws_data.csv"  # GitHub 저장소 내 파일 경로
+    # IP 입력 받기
+    ip_input = st.text_input("IP 입력", "")
 
-def delete_file_from_github(GITHUB_TOKEN, repo_owner, repo_name, filepath):
-    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
-    headers = {
-        "Authorization": f"Bearer {GITHUB_TOKEN}",
-        "Accept": "application/vnd.github.v3+json"
-    }
+    # Button to trigger deletion
+    if st.button("선택된 업무 삭제"):
+        if ip_input:
+            delete_tasks_based_on_ip(ip_input)
 
-    # Step 1: Get current file information
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        file_data = response.json()
-        sha = file_data['sha']  # Get the current file's SHA hash
-        commit_message = "Delete file via API"  # Commit message for deletion
+# Function to delete tasks based on IP address
+def delete_tasks_based_on_ip(ip_input):
+    # 데이터 파일 불러오기
+    try:
+        work = pd.read_csv("ws_data.csv")
+    except FileNotFoundError:
+        st.error("데이터 파일을 찾을 수 없습니다.")
+        return
 
-        # Step 2: Delete the file
-        delete_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
-        delete_data = {
-            "message": commit_message,
-            "sha": sha
-        }
-        delete_response = requests.delete(delete_url, headers=headers, json=delete_data)
+    # '장비ID'와 '업무명'이 동일한 경우 중복된 행 제거
+    df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
 
-        if delete_response.status_code == 200:
-            print(f"File {filepath} successfully deleted.")
-        else:
-            print(f"Failed to delete file {filepath}. Status code: {delete_response.status_code}")
+    # IP에 해당하는 업무 찾기
+    if ip_input in df_no_duplicates['장비ID'].values:
+        tasks = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input][['장비명/국사명', '업무명']]
+        selected_tasks = st.multiselect("삭제할 업무 선택", list(tasks['업무명']))
+
+        if st.button("GitHub에서 업무 삭제"):
+            for task_name in selected_tasks:
+                # 여기에서 GitHub API를 사용하여 해당 업무 삭제
+                # 예시로 하나의 업무 파일을 삭제하는 코드를 호출
+                GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')  # 환경 변수에서 토큰을 가져옴
+                repo_owner = "dfgqwe"
+                repo_name = "easyu"
+                filepath = f"blob/main/{task_name}.csv"  # 예시 파일 경로 (업무명을 파일명으로 사용할 수 있음)
+                delete_file_from_github(GITHUB_TOKEN, repo_owner, repo_name, filepath)
     else:
-        print(f"Failed to get file information. Status code: {response.status_code}")
+        st.warning("해당 IP에 대한 업무가 없습니다.")
 
 def moss_page():
 
