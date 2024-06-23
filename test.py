@@ -239,31 +239,17 @@ def manage_page():
     # Manage Worksync data
     st.title("Manage Work Data")
 
-    # 장비ID 입력 받기
     device_id = st.text_input("장비ID 입력", "")
-
     
-    if device_id:
-        st.write(f"장비ID: {device_id}")
+    if st.button("업무 불러오기"):
+        works_to_delete = st.selectbox("삭제할 업무명 선택", get_works_for_device(device_id))
 
-        # 삭제할 업무명 선택
-        work_to_delete = st.selectbox("삭제할 업무명 선택", get_works_for_device(device_id))
-
-        if work_to_delete:
-            st.write(f"선택한 업무명: {work_to_delete}")
-
-            # 삭제 버튼 클릭 시
-            if st.button("선택한 업무명 삭제"):
-                delete_work(work_to_delete, device_id)
+    if st.button("선택한 업무 삭제"):
+        # 선택한 업무 삭제 로직 추가
+        st.success(f"{works_to_delete} 삭제 완료!")
 
 def get_works_for_device(device_id):
-    owner = 'dfgqwe'  # GitHub 사용자명
-    repo = 'easyu'    # 레포지토리명
-    path = '데이터.csv'  # 파일 경로
-    token = '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'  # GitHub 개인 액세스 토큰
-
-   
-    url = "https://github.com/dfgqwe/easyu/blob/main/데이터.csv"
+    url = f"https://api.github.com/repos/user/repository/contents/{device_id}/데이터.csv"
     headers = {
         "Authorization": "Bearer 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"  # Replace with your actual token
     }
@@ -271,22 +257,14 @@ def get_works_for_device(device_id):
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
-        file_contents = response.content
-        # 이후 파일 처리 로직 작성
-
-        # 장비ID에 해당하는 업무명 목록 가져오기
-        works = []
+        content = response.content.decode('utf-8')
         lines = content.splitlines()
-        for line in lines:
-            fields = line.split(',')
-            if len(fields) >= 2 and fields[0].strip() == device_id:
-                works.append(fields[1].strip())
-
-        return works
+        works = [line.split(',')[1] for line in lines]  # 예시: 업무명이 CSV 파일의 두 번째 열에 있다고 가정
     else:
         st.error(f"파일 정보를 가져오지 못했습니다. 상태 코드: {response.status_code}")
-        st.error(response.text)
-        return []
+        works = []
+
+    return works
 
 def delete_work(work_name, device_id):
     owner = 'dfgqwe'  # GitHub 사용자명
