@@ -201,16 +201,20 @@ def update_data_on_github(repo_name, file_path, github_token, df_no_duplicates):
     try:
         g = Github(github_token)
         repo = g.get_repo(repo_name)
+        
+        # Get current file contents and SHA
         file_content = repo.get_contents(file_path)
+        current_sha = file_content.sha
+        
+        # Prepare updated content
+        updated_content = df_no_duplicates.to_csv(index=False)
         
         # Update file on GitHub
-        updated_content = df_no_duplicates.to_csv(index=False)
-        repo.update_file(file_path, "Data update", updated_content, file_content.sha)
+        repo.update_file(file_path, "Data update", updated_content, current_sha)
         
         st.success("Data successfully updated on GitHub.")
     except Exception as e:
         st.error(f"Error updating data on GitHub: {e}")
-
 
 
 def home_page():
