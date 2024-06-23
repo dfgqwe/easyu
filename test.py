@@ -309,7 +309,7 @@ def manage_page():
     # Button to trigger deletion
     if st.button("Delete tasks from GitHub"):
         if ip_input:
-            delete_tasks_based_on_ip(ip_input, "YourGitHubUsername", "YourRepositoryName", os.getenv('GITHUB_TOKEN'))
+            delete_tasks_based_on_ip(ip_input, "dfgqwe", "easyu", os.getenv('GITHUB_TOKEN'))
 
 
 
