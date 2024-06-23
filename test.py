@@ -145,10 +145,6 @@ B_S_head_formats = {
     "DB 삭제 여부"
 ]
 
-GITHUB_USER = 'dfgqwe'
-GITHUB_REPO = 'easyue'
-GITHUB_FILE_PATH = '데이터.csv'
-GITHUB_TOKEN = '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'
 
 def get_file_content():
     url = f'https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}'
