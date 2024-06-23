@@ -211,6 +211,7 @@ def home_page():
 
 
 
+# Function to delete a file from GitHub repository
 def delete_file_from_github(GITHUB_TOKEN, repo_owner, repo_name, filepath):
     url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
     headers = {
@@ -277,7 +278,7 @@ def manage_page():
 def delete_tasks_based_on_ip(ip_input):
     # 데이터 파일 불러오기
     try:
-        work = pd.read_csv("ws_data.csv")
+        work = pd.read_csv("ws_data.csv")  # 파일 경로 설정
     except FileNotFoundError:
         st.error("데이터 파일을 찾을 수 없습니다.")
         return
