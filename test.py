@@ -227,49 +227,23 @@ def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name):
         tasks = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input][['장비명/국사명', '업무명']]
         selected_task = st.selectbox("Select task to delete", list(tasks['업무명']))
 
-        if st.button("Delete selected task"):
-            # Delete selected task from the data
-            work = work[~((work['장비ID'] == ip_input) & (work['업무명'] == selected_task))]
-            # Save modified data back to CSV
-            work.to_csv("ws_data.csv", index=False)
-            st.success(f"Task '{selected_task}' deleted successfully.")
-
-            # Update the file in GitHub repository
-            github_token = os.getenv('github_token')
-            update_file_in_github(repo_owner, repo_name, "ws_data.csv", "main", "Update data file", work.to_csv(index=False), github_token)
-    else:
-        st.warning("No tasks found for the given IP.")
-
-# Function to update file in GitHub repository
-def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name):
-    # Load data file
-    try:
-        work = pd.read_csv("ws_data.csv")
-    except FileNotFoundError:
-        st.error("Failed to find the data file.")
-        return
-
-    # Remove duplicate rows based on '장비ID' and '업무명'
-    df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
-
-    # Find tasks associated with the IP
-    if ip_input in df_no_duplicates['장비ID'].values:
-        tasks = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input][['장비명/국사명', '업무명']]
-        selected_task = st.selectbox("Select task to delete", list(tasks['업무명']))
+        # Store the selected task in session state
+        st.session_state.selected_task = selected_task
 
         if st.button("Delete selected task"):
-            # Delete selected task from the data
-            work = work[~((work['장비ID'] == ip_input) & (work['업무명'] == selected_task))]
-            # Save modified data back to CSV
-            work.to_csv("ws_data.csv", index=False)
-            st.success(f"Task '{selected_task}' deleted successfully.")
+            if 'selected_task' in st.session_state:
+                # Delete selected task from the data
+                work = work[~((work['장비ID'] == ip_input) & (work['업무명'] == st.session_state.selected_task))]
+                # Save modified data back to CSV
+                work.to_csv("ws_data.csv", index=False)
+                st.success(f"Task '{st.session_state.selected_task}' deleted successfully.")
 
-            # Update the file in GitHub repository
-            github_token = os.getenv('GITHUB_TOKEN')
-            if github_token:
-                update_file_in_github(repo_owner, repo_name, "ws_data.csv", "main", "Update data file", work.to_csv(index=False), github_token)
-            else:
-                st.error("GitHub token not found.")
+                # Update the file in GitHub repository
+                github_token = os.getenv('GITHUB_TOKEN')
+                if github_token:
+                    update_file_in_github(repo_owner, repo_name, "ws_data.csv", "main", "Update data file", work.to_csv(index=False), github_token)
+                else:
+                    st.error("GitHub token not found.")
     else:
         st.warning("No tasks found for the given IP.")
 
@@ -296,7 +270,7 @@ def update_file_in_github(repo_owner, repo_name, filepath, branch, commit_messag
             "message": commit_message,
             "content": content_base64,
             "sha": sha,
-            "branch": main
+            "branch": "main"  # 이 부분을 실제 사용하는 브랜치 이름으로 수정하세요
         }
         update_response = requests.put(url, headers=headers, json=update_data)
 
