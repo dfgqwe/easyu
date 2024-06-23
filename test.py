@@ -211,7 +211,8 @@ def home_page():
 
 
 # Function to delete tasks based on IP address
-def delete_tasks_based_on_ip(ip_input):
+def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name):
+    # Load data file
     try:
         work = pd.read_csv("ws_data.csv")
     except FileNotFoundError:
@@ -226,21 +227,53 @@ def delete_tasks_based_on_ip(ip_input):
         tasks = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input][['장비명/국사명', '업무명']]
         selected_task = st.selectbox("Select task to delete", list(tasks['업무명']))
 
-        # Display selected task
-        st.write(f"Selected task: {selected_task}")
+        if st.button("Delete selected task"):
+            # Delete selected task from the data
+            work = work[~((work['장비ID'] == ip_input) & (work['업무명'] == selected_task))]
+            # Save modified data back to CSV
+            work.to_csv("ws_data.csv", index=False)
+            st.success(f"Task '{selected_task}' deleted successfully.")
 
-        if selected_task:
-            if st.button("Delete selected task"):
-                # Delete selected task from the data
-                work = work[~((work['장비ID'] == ip_input) & (work['업무명'] == selected_task))]
-                try:
-                    # Save modified data back to CSV
-                    work.to_csv("ws_data.csv", index=False)
-                    st.success(f"Task '{selected_task}' deleted successfully.")
-                except Exception as e:
-                    st.error(f"Failed to save data to CSV: {str(e)}")
+            # Update the file in GitHub repository
+            github_token = os.getenv('GITHUB_TOKEN')
+            update_file_in_github(repo_owner, repo_name, "ws_data.csv", "main", "Update data file", work.to_csv(index=False), github_token)
     else:
         st.warning("No tasks found for the given IP.")
+
+# Function to update file in GitHub repository
+def update_file_in_github(repo_owner, repo_name, filepath, branch, commit_message, new_content, github_token):
+    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
+    headers = {
+        "Authorization": f"Bearer {github_token}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    # Step 1: Get current file information
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        file_data = response.json()
+        sha = file_data['sha']  # Get the current file's SHA hash
+
+        # Step 2: Encode new content to base64
+        content_bytes = new_content.encode('utf-8')
+        content_base64 = base64.b64encode(content_bytes).decode('utf-8')
+
+        # Step 3: Update the file
+        update_data = {
+            "message": commit_message,
+            "content": content_base64,
+            "sha": sha,
+            "branch": main
+        }
+        update_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
+        update_response = requests.put(update_url, headers=headers, json=update_data)
+
+        if update_response.status_code == 200:
+            st.success(f"File {filepath} updated successfully.")
+        else:
+            st.error(f"Failed to update file {filepath}. Status code: {update_response.status_code}")
+    else:
+        st.error(f"Failed to get file information. Status code: {response.status_code}")
 
 def manage_page():
     st.title("Manage")
@@ -273,9 +306,12 @@ def manage_page():
 
     ip_input = st.text_input("Enter IP", "")
 
-    if st.button("Find tasks"):
+     if st.button("Find tasks"):
         if ip_input:
-            delete_tasks_based_on_ip(ip_input)
+            # Replace with your actual GitHub repository information and token
+            repo_owner = "dfgqwe"
+            repo_name = "easyu"
+            delete_tasks_based_on_ip(ip_input, repo_owner, repo_name)
 
 
 
