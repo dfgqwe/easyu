@@ -5,6 +5,7 @@ import re
 from streamlit_option_menu import option_menu
 import os
 import requests
+from github import Github
 
 # 포맷 데이터 포멧
 formats = {
@@ -250,6 +251,7 @@ def manage_page():
     ip_input = st.text_input("IP 입력", "")
     
     if ip_input:
+        # Ensure you have set your GitHub token in Streamlit secrets
         github_token = st.secrets["GITHUB_TOKEN"]
         repo_name = "your_github_username/your_repo_name"
         file_path = "path/to/your/data.csv"
@@ -277,7 +279,6 @@ def manage_page():
                     st.success("선택된 업무가 성공적으로 삭제되었습니다.")
                 else:
                     st.warning("삭제할 업무를 선택하세요.")
-
 
 
 
