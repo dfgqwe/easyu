@@ -145,41 +145,37 @@ B_S_head_formats = {
     "DB 삭제 여부"
 ]
 
-# GitHub 설정
 GITHUB_USER = 'dfgqwe'
 GITHUB_REPO = 'easyue'
 GITHUB_FILE_PATH = '데이터.csv'
 GITHUB_TOKEN = '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'
 
-# GitHub 파일 내용 가져오기
 def get_file_content():
-    url = f"https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
-    headers = {'Authorization': f'token {GITHUB_TOKEN}'}
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        content = response.json()
-        decoded_content = base64.b64decode(content['content']).decode('utf-8')
-        sha = content['sha']
-        return decoded_content, sha
-    else:
-        st.error("파일을 가져오는 데 실패했습니다.")
-        return "", ""
-
-# GitHub 파일 내용 업데이트
-def update_file_content(new_content, sha):
-    url = f"https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
-    headers = {'Authorization': f'token {GITHUB_TOKEN}'}
-    encoded_content = base64.b64encode(new_content.encode('utf-8')).decode('utf-8')
-    data = {
-        "message": "Updated via Streamlit",
-        "content": encoded_content,
-        "sha": sha
+    url = f'https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}'
+    headers = {
+        'Authorization': f'token {GITHUB_TOKEN}',
+        'Accept': 'application/vnd.github.v3.raw'
     }
-    response = requests.put(url, json=data, headers=headers)
-    if response.status_code == 200:
-        st.success("파일이 성공적으로 업데이트되었습니다.")
-    else:
-        st.error("파일 업데이트에 실패했습니다.")
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    content = base64.b64decode(response.json()['content']).decode('utf-8')
+    sha = response.json()['sha']
+    return content, sha
+
+def update_file_content(content, sha):
+    url = f'https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}'
+    headers = {
+        'Authorization': f'token {GITHUB_TOKEN}',
+        'Accept': 'application/vnd.github.v3+json'
+    }
+    data = {
+        'message': 'Update 데이터.csv',
+        'content': base64.b64encode(content.encode('utf-8')).decode('utf-8'),
+        'sha': sha
+    }
+    response = requests.put(url, headers=headers, json=data)
+    response.raise_for_status()
+    return response.json()
 
 # Load the CSV file
 def load_csv():
@@ -329,17 +325,6 @@ def manage_page():
     
     if st.session_state.manage_logged_in:
         # 비밀번호 입력 후에만 Radio 버튼을 표시
-        st.markdown(
-        """
-        <style>
-        .stRadio > div {
-            display: flex;
-            flex-direction: row;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
         content_option = st.radio("인수 인계", ["주간", "야간"])
 
         if content_option == "주간":
@@ -350,36 +335,51 @@ def manage_page():
             st.header("야간")
             st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.get("night_content", ""), height=200)
 
-        # Worksync 데이터 추가 및 삭제 기능
-        st.subheader("Worksync 데이터 관리")
+        st.header("Worksync 데이터 관리")
 
-        df, sha = load_csv()
+        # CSV 파일 로드
+        try:
+            content, sha = get_file_content()
+            work = pd.read_csv(pd.compat.StringIO(content))
+        except Exception as e:
+            st.error(f"Error loading data: {e}")
+            return
 
-        if not df.empty:
-            st.dataframe(df)
+        # '장비ID'와 '업무명'이 동일한 경우 중복된 행 제거
+        df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
 
-            st.markdown("### 데이터 추가")
-            new_data = {}
-            for column in df.columns:
-                new_data[column] = st.text_input(f"{column}", key=f"new_{column}")
+        # 장비ID 순서대로 정렬
+        df_no_duplicates = df_no_duplicates.sort_values(by='장비ID')
 
-            if st.button("추가"):
-                new_row = pd.DataFrame([new_data])
-                df = pd.concat([df, new_row], ignore_index=True)
-                csv_content = df.to_csv(index=False)
-                update_file_content(csv_content, sha)
+        # IP 입력 받기
+        ip_input = st.text_input("IP 입력", "")
 
-            st.markdown("### 데이터 삭제")
-            if not df.empty:
-                row_to_delete = st.number_input("삭제할 행 번호를 입력하세요", min_value=0, max_value=len(df)-1, step=1)
-                if st.button("삭제"):
-                    df = df.drop(index=row_to_delete).reset_index(drop=True)
-                    csv_content = df.to_csv(index=False)
-                    update_file_content(csv_content, sha)
+        # IP 입력이 있을 경우
+        if ip_input:
+            # 입력된 IP에 해당되는 행 찾기
+            if ip_input in df_no_duplicates['장비ID'].values:
+                # 해당 IP의 사업장 찾기
+                address = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]['사업장'].values[0]
+                st.write("★동일국소 점검 대상★")
+
+                same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
+                selected_indices = []
+
+                for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
+                    if st.checkbox(f"{idx}. {row['장비ID']} - {row['장비명/국사명']} - {row['업무명']}", key=index):
+                        selected_indices.append(index)
+
+                if st.button("선택 항목 삭제"):
+                    if selected_indices:
+                        df_no_duplicates = df_no_duplicates.drop(selected_indices)
+                        updated_content = df_no_duplicates.to_csv(index=False)
+                        update_file_content(updated_content, sha)
+                        st.success("선택된 항목이 삭제되었습니다.")
+                    else:
+                        st.warning("삭제할 항목을 선택하세요.")
             else:
-                st.error("삭제할 데이터가 없습니다.")
-        else:
-            st.error("데이터를 불러오는 데 실패했습니다.")
+                st.text("Work-Sync 없습니다.")
+                
 def moss_page():
 
     st.title("MOSS 회복 문구")
