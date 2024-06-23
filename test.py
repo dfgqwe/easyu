@@ -150,7 +150,19 @@ GITHUB_REPO = 'easyue'
 GITHUB_FILE_PATH = '데이터.csv'
 GITHUB_TOKEN = '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'
 
-
+# GitHub 파일 내용 가져오기
+def get_file_content():
+    url = f"https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
+    headers = {'Authorization': f'token {GITHUB_TOKEN}'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        content = response.json()
+        decoded_content = base64.b64decode(content['content']).decode('utf-8')
+        sha = content['sha']
+        return decoded_content, sha
+    else:
+        st.error("파일을 가져오는 데 실패했습니다.")
+        return "", ""
 
 # GitHub 파일 내용 업데이트
 def update_file_content(new_content, sha):
@@ -172,7 +184,11 @@ def update_file_content(new_content, sha):
 def load_csv():
     content, sha = get_file_content()
     if content:
-        return pd.read_csv(pd.compat.StringIO(content)), sha
+        try:
+            return pd.read_csv(pd.compat.StringIO(content)), sha
+        except Exception as e:
+            st.error(f"CSV 파일을 읽는 중 오류가 발생했습니다: {e}")
+            return pd.DataFrame(), ""
     else:
         return pd.DataFrame(), ""
 
