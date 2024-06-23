@@ -6,6 +6,7 @@ from streamlit_option_menu import option_menu
 import os
 import requests
 from github import Github
+import time
 
 # 포맷 데이터 포멧
 formats = {
