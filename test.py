@@ -239,17 +239,12 @@ def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, github_token):
     else:
         st.warning("No tasks found for the given IP.")
 
-# Function to update file in GitHub repository
-def update_file_in_github(repo_owner, repo_name, filepath, branch, commit_message, content, github_token):
+def update_file_in_github(repo_owner, repo_name, filepath, branch, commit_message, new_content, github_token):
     url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
     headers = {
         "Authorization": f"Bearer {github_token}",
         "Accept": "application/vnd.github.v3+json"
     }
-
-    # Encode content to base64
-    content_bytes = content.encode('utf-8')
-    content_base64 = base64.b64encode(content_bytes).decode('utf-8')
 
     # Step 1: Get current file information
     response = requests.get(url, headers=headers)
@@ -257,22 +252,26 @@ def update_file_in_github(repo_owner, repo_name, filepath, branch, commit_messag
         file_data = response.json()
         sha = file_data['sha']  # Get the current file's SHA hash
 
-        # Step 2: Update the file
-        update_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
+        # Step 2: Encode new content to base64
+        content_bytes = new_content.encode('utf-8')
+        content_base64 = base64.b64encode(content_bytes).decode('utf-8')
+
+        # Step 3: Update the file
         update_data = {
             "message": commit_message,
             "content": content_base64,
             "sha": sha,
             "branch": branch
         }
+        update_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
         update_response = requests.put(update_url, headers=headers, json=update_data)
 
         if update_response.status_code == 200:
-            st.success(f"File {filepath} updated successfully on GitHub.")
+            print(f"File {filepath} updated successfully.")
         else:
-            st.error(f"Failed to update file {filepath} on GitHub. Status code: {update_response.status_code}")
+            print(f"Failed to update file {filepath}. Status code: {update_response.status_code}")
     else:
-        st.error(f"Failed to get file information from GitHub. Status code: {response.status_code}")
+        print(f"Failed to get file information. Status code: {response.status_code}")
 
 # Function to manage page
 def manage_page():
