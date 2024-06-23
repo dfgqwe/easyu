@@ -212,18 +212,26 @@ def home_page():
 
 
 def fetch_data_from_github(repo_name, file_path, github_token):
-    g = Github(github_token)
-    repo = g.get_repo(repo_name)
-    file_content = repo.get_contents(file_path)
-    df = pd.read_csv(file_content.download_url)
-    return df
+    try:
+        g = Github(github_token)
+        repo = g.get_repo(repo_name)
+        file_content = repo.get_contents(file_path)
+        df = pd.read_csv(file_content.download_url)
+        return df
+    except Exception as e:
+        st.error(f"Error fetching data from GitHub: {e}")
+        return None
 
 # Function to update data on GitHub
 def update_data_on_github(repo_name, file_path, github_token, df):
-    g = Github(github_token)
-    repo = g.get_repo(repo_name)
-    file_content = repo.get_contents(file_path)
-    repo.update_file(file_content.path, "Update data", df.to_csv(index=False), file_content.sha)
+    try:
+        g = Github(github_token)
+        repo = g.get_repo(repo_name)
+        file_content = repo.get_contents(file_path)
+        repo.update_file(file_content.path, "Update data", df.to_csv(index=False), file_content.sha)
+    except Exception as e:
+        st.error(f"Error updating data on GitHub: {e}")
+
 def manage_page():
     st.title("Manage")
 
@@ -252,11 +260,19 @@ def manage_page():
     
     if ip_input:
         # Ensure you have set your GitHub token in Streamlit secrets
-        github_token = st.secrets["GITHUB_TOKEN"]
+        try:
+            github_token = st.secrets["GITHUB_TOKEN"]
+        except KeyError:
+            st.error("GitHub token is not set. Please set it in Streamlit secrets.")
+            return
+        
         repo_name = "your_github_username/your_repo_name"
         file_path = "path/to/your/data.csv"
         
         df_no_duplicates = fetch_data_from_github(repo_name, file_path, github_token)
+        if df_no_duplicates is None:
+            st.error("Failed to fetch data from GitHub.")
+            return
 
         if ip_input in df_no_duplicates['장비ID'].values:
             address = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]['사업장'].values[0]
@@ -279,7 +295,6 @@ def manage_page():
                     st.success("선택된 업무가 성공적으로 삭제되었습니다.")
                 else:
                     st.warning("삭제할 업무를 선택하세요.")
-
 
 
 
