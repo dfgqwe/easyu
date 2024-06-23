@@ -463,11 +463,17 @@ def worksync_page():
 
 manage_password = "1234"
 def manage_page():
-     
-     st.title("Manage")
+    st.title("Manage")
 
-     if 'manage_logged_in' not in st.session_state:
-         st.session_state.manage_logged_in = False
+    # Set session_state variables
+    if 'manage_logged_in' not in st.session_state:
+        st.session_state.manage_logged_in = False
+    if 'last_activity_time' not in st.session_state:
+        st.session_state.last_activity_time = time.time()
+
+    # Check if timeout (5 minutes) has passed since the last activity
+    if time.time() - st.session_state.last_activity_time > 300:
+        st.session_state.manage_logged_in = False
 
      if not st.session_state.manage_logged_in:
          password = st.text_input("Manage 페이지 비밀번호 입력", type="password")
