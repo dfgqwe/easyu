@@ -210,7 +210,7 @@ def home_page():
         st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
 
 
-# Function to delete tasks based on IP address
+# Function to delete file from GitHub repository
 def delete_file_from_github(repo_owner, repo_name, filepath, github_token):
     url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
     headers = {
@@ -240,34 +240,69 @@ def delete_file_from_github(repo_owner, repo_name, filepath, github_token):
     else:
         st.error(f"Failed to get file information from GitHub. Status code: {response.status_code}")
 
+# Function to update file in GitHub repository
+def update_file_in_github(repo_owner, repo_name, filepath, branch, commit_message, content, github_token):
+    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
+    headers = {
+        "Authorization": f"Bearer {github_token}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    # Encode content to base64
+    content_bytes = content.encode('utf-8')
+    content_base64 = base64.b64encode(content_bytes).decode('utf-8')
+
+    # Step 1: Get current file information
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        file_data = response.json()
+        sha = file_data['sha']  # Get the current file's SHA hash
+
+        # Step 2: Update the file
+        update_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
+        update_data = {
+            "message": commit_message,
+            "content": content_base64,
+            "sha": sha,
+            "branch": branch
+        }
+        update_response = requests.put(update_url, headers=headers, json=update_data)
+
+        if update_response.status_code == 200:
+            st.success(f"File {filepath} updated successfully on GitHub.")
+        else:
+            st.error(f"Failed to update file {filepath} on GitHub. Status code: {update_response.status_code}")
+    else:
+        st.error(f"Failed to get file information from GitHub. Status code: {response.status_code}")
+
+# Function to delete tasks based on IP address
 def delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, github_token):
-    # 데이터 파일 불러오기
+    # Load data file
     try:
-        work = pd.read_csv("ws_data.csv")  # 파일 경로 설정
+        work = pd.read_csv("ws_data.csv")
     except FileNotFoundError:
-        st.error("데이터 파일을 찾을 수 없습니다.")
+        st.error("Failed to find the data file.")
         return
 
-    # '장비ID'와 '업무명'이 동일한 경우 중복된 행 제거
+    # Remove duplicate rows based on '장비ID' and '업무명'
     df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
 
-    # IP에 해당하는 업무 찾기
+    # Find tasks associated with the IP
     if ip_input in df_no_duplicates['장비ID'].values:
         tasks = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input][['장비명/국사명', '업무명']]
-        selected_task = st.selectbox("삭제할 업무 선택", list(tasks['업무명']))
+        selected_task = st.selectbox("Select task to delete", list(tasks['업무명']))
 
-        if st.button("선택한 업무 삭제"):
-            # 선택한 업무를 데이터에서 삭제
+        if st.button("Delete selected task"):
+            # Delete selected task from the data
             work = work[~((work['장비ID'] == ip_input) & (work['업무명'] == selected_task))]
-            # 수정된 데이터를 다시 저장
+            # Save modified data back to CSV
             work.to_csv("ws_data.csv", index=False)
-            st.success(f"업무 '{selected_task}' 삭제 완료.")
+            st.success(f"Task '{selected_task}' deleted successfully.")
 
-            # GitHub에서도 파일 삭제하기
-            filepath = "ws_data.csv"  # GitHub 저장소 내 파일 경로
-            delete_file_from_github(repo_owner, repo_name, filepath, github_token)
+            # Delete the file from GitHub repository
+            delete_file_from_github(repo_owner, repo_name, "ws_data.csv", github_token)
     else:
-        st.warning("해당 IP에 대한 업무가 없습니다.")
+        st.warning("No tasks found for the given IP.")
 
 # Function to manage page
 def manage_page():
@@ -284,32 +319,28 @@ def manage_page():
         """,
         unsafe_allow_html=True
     )
-    content_option = st.radio("인수 인계", ["주간", "야간"])
 
-    if content_option == "주간":
-        st.header("주간")
+    content_option = st.radio("Handover", ["Day", "Night"])
+
+    if content_option == "Day":
+        st.header("Day")
         if 'day_content' not in st.session_state:
             st.session_state.day_content = ""
-        st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.day_content, height=200)
+        st.session_state.day_content = st.text_area("Day to Night handover", st.session_state.day_content, height=200)
 
     else:
-        st.header("야간")
+        st.header("Night")
         if 'night_content' not in st.session_state:
             st.session_state.night_content = ""
-        st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.night_content, height=200)
+        st.session_state.night_content = st.text_area("Night to Day handover", st.session_state.night_content, height=200)
 
-    # IP 입력 받기
-    ip_input = st.text_input("IP 입력", "")
-
-    # GitHub 설정
-    github_token = os.getenv('GITHUB_TOKEN')  # 환경 변수에서 GitHub 토큰을 가져옵니다
-    repo_owner = "YourGitHubUsername"  # GitHub 사용자명 또는 조직명
-    repo_name = "YourRepositoryName"  # GitHub 저장소명
+    # IP input
+    ip_input = st.text_input("IP input", "")
 
     # Button to trigger deletion
-    if st.button("GitHub에서 업무 삭제"):
+    if st.button("Delete tasks from GitHub"):
         if ip_input:
-            delete_tasks_based_on_ip(ip_input, repo_owner, repo_name, github_token)
+            delete_tasks_based_on_ip(ip_input, "YourGitHubUsername", "YourRepositoryName", os.getenv('GITHUB_TOKEN'))
 
 
 
