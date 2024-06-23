@@ -210,30 +210,34 @@ def home_page():
         st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
 
 
-def delete_tasks_based_on_ip(ip_input):
-    # 데이터 파일 불러오기
-    try:
-        work = pd.read_csv("ws_data.csv")  # 파일 경로 설정
-    except FileNotFoundError:
-        st.error("데이터 파일을 찾을 수 없습니다.")
-        return
+def delete_file_from_github(GITHUB_TOKEN, repo_owner, repo_name, filepath):
+    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
+    headers = {
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json"
+    }
 
-    # '장비ID'와 '업무명'이 동일한 경우 중복된 행 제거
-    df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
+    # Step 1: Get current file information
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        file_data = response.json()
+        sha = file_data['sha']  # Get the current file's SHA hash
+        commit_message = "Delete file via API"  # Commit message for deletion
 
-    # IP에 해당하는 업무 찾기
-    if ip_input in df_no_duplicates['장비ID'].values:
-        tasks = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input][['장비명/국사명', '업무명']]
-        selected_task = st.selectbox("삭제할 업무 선택", list(tasks['업무명']))
+        # Step 2: Delete the file
+        delete_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{filepath}"
+        delete_data = {
+            "message": commit_message,
+            "sha": sha
+        }
+        delete_response = requests.delete(delete_url, headers=headers, json=delete_data)
 
-        if st.button("선택한 업무 삭제"):
-            # 선택한 업무를 데이터에서 삭제
-            work = work[~((work['장비ID'] == ip_input) & (work['업무명'] == selected_task))]
-            # 수정된 데이터를 다시 저장
-            work.to_csv("ws_data.csv", index=False)
-            st.success(f"업무 '{selected_task}' 삭제 완료.")
+        if delete_response.status_code == 200:
+            print(f"File {filepath} successfully deleted.")
+        else:
+            print(f"Failed to delete file {filepath}. Status code: {delete_response.status_code}")
     else:
-        st.warning("해당 IP에 대한 업무가 없습니다.")
+        print(f"Failed to get file information. Status code: {response.status_code}")
 
 # Function to manage page
 def manage_page():
