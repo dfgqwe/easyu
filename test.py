@@ -210,42 +210,6 @@ def home_page():
         st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
 
 
-
-        
-# Function to manage page
-def manage_page():
-    st.title("Manage")
-
-    st.markdown(
-        """
-        <style>
-        .stRadio > div {
-            display: flex;
-            flex-direction: row;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-    content_option = st.radio("인수 인계", ["주간", "야간"])
-
-    if content_option == "주간":
-        st.header("주간")
-        st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.day_content, height=200)
-
-    else:
-        st.header("야간")
-        st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.night_content, height=200)
-
-    # IP 입력 받기
-    ip_input = st.text_input("IP 입력", "")
-
-    # Button to trigger deletion
-    if st.button("GitHub에서 업무 삭제"):
-        if ip_input:
-            delete_tasks_based_on_ip(ip_input)
-
-# Function to delete tasks based on IP address
 def delete_tasks_based_on_ip(ip_input):
     # 데이터 파일 불러오기
     try:
@@ -270,6 +234,43 @@ def delete_tasks_based_on_ip(ip_input):
             st.success(f"업무 '{selected_task}' 삭제 완료.")
     else:
         st.warning("해당 IP에 대한 업무가 없습니다.")
+
+# Function to manage page
+def manage_page():
+    st.title("Manage")
+
+    st.markdown(
+        """
+        <style>
+        .stRadio > div {
+            display: flex;
+            flex-direction: row;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+    content_option = st.radio("인수 인계", ["주간", "야간"])
+
+    if content_option == "주간":
+        st.header("주간")
+        if 'day_content' not in st.session_state:
+            st.session_state.day_content = ""
+        st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.day_content, height=200)
+
+    else:
+        st.header("야간")
+        if 'night_content' not in st.session_state:
+            st.session_state.night_content = ""
+        st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.night_content, height=200)
+
+    # IP 입력 받기
+    ip_input = st.text_input("IP 입력", "")
+
+    # Button to trigger deletion
+    if st.button("GitHub에서 업무 삭제"):
+        if ip_input:
+            delete_tasks_based_on_ip(ip_input)
 
 
 
