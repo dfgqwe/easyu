@@ -197,14 +197,15 @@ def fetch_data_from_github(repo_name, file_path, github_token):
         return None
 
 # Function to update data on GitHub
-def update_data_on_github(repo_name, file_path, github_token, df_no_duplicates1):
+def update_data_on_github(repo_name, file_path, github_token, df_no_duplicates):
     try:
         g = Github(github_token)
         repo = g.get_repo(repo_name)
         file_content = repo.get_contents(file_path)
         
         # Update file on GitHub
-        repo.update_file(file_content.path, "ws_data.csv", df_no_duplicates1.to_csv(index=False), file_content.sha)
+        updated_content = df_no_duplicates.to_csv(index=False)
+        repo.update_file(file_path, "Data update", updated_content, file_content.sha)
         
         st.success("Data successfully updated on GitHub.")
     except Exception as e:
