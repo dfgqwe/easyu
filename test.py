@@ -318,7 +318,7 @@ def manage_page():
     
     if st.session_state.manage_logged_in:
         # 비밀번호 입력 후에만 Radio 버튼을 표시
-         st.markdown(
+        st.markdown(
         """
         <style>
         .stRadio > div {
