@@ -462,33 +462,29 @@ def worksync_page():
             st.text("Work-Sync 없습니다.")
 
 
-
 def manage_page():
-    manage_password = "1234"
+     manage_password = "1234"
+     st.title("Manage")
 
-def manage_page():
-    st.title("Manage")
+     if 'manage_logged_in' not in st.session_state:
+         st.session_state.manage_logged_in = False
 
-    if 'manage_logged_in' not in st.session_state:
-        st.session_state.manage_logged_in = False
+     if not st.session_state.manage_logged_in:
+         password = st.text_input("Manage 페이지 비밀번호 입력", type="password")
 
-    if not st.session_state.manage_logged_in:
-        password = st.text_input("Manage 페이지 비밀번호 입력", type="password")
-
-        if password == manage_password:
-            st.session_state.manage_logged_in = True
-        elif password:
-            st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
-            return
+         if password == manage_password:
+             st.session_state.manage_logged_in = True
+         elif password:
+             st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
+             return
     
-    if st.session_state.manage_logged_in:
-        # 비밀번호 입력 후에만 Radio 버튼을 표시
-        content_option = st.radio("인수 인계", ["주간", "야간"])
+     if st.session_state.manage_logged_in:
+         # 비밀번호 입력 후에만 Radio 버튼을 표시
+         content_option = st.radio("인수 인계", ["주간", "야간"])
 
         if content_option == "주간":
             st.header("주간")
             st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.get("day_content", ""), height=200)
-
         else:
             st.header("야간")
             st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.get("night_content", ""), height=200)
