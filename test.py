@@ -144,17 +144,59 @@ B_S_head_formats = {
     "DB 삭제 여부"
 ]
 
+# GitHub 설정
+GITHUB_USER = 'dfgqwe'
+GITHUB_REPO = 'easyue'
+GITHUB_FILE_PATH = '데이터.csv'
+GITHUB_TOKEN = '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'
+
+
+
+# GitHub 파일 내용 업데이트
+def update_file_content(new_content, sha):
+    url = f"https://api.github.com/repos/{GITHUB_USER}/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
+    headers = {'Authorization': f'token {GITHUB_TOKEN}'}
+    encoded_content = base64.b64encode(new_content.encode('utf-8')).decode('utf-8')
+    data = {
+        "message": "Updated via Streamlit",
+        "content": encoded_content,
+        "sha": sha
+    }
+    response = requests.put(url, json=data, headers=headers)
+    if response.status_code == 200:
+        st.success("파일이 성공적으로 업데이트되었습니다.")
+    else:
+        st.error("파일 업데이트에 실패했습니다.")
+
+# Load the CSV file
+def load_csv():
+    content, sha = get_file_content()
+    if content:
+        return pd.read_csv(pd.compat.StringIO(content)), sha
+    else:
+        return pd.DataFrame(), ""
+
+
+
+
 @st.cache_data
 def get_format(text):
+    # formats는 어딘가에 미리 정의되어 있는 딕셔너리로 가정합니다.
     matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
+
+    # "복구"라는 단어가 포함된 경우
+    if "복구" in text:
+        for format in matched_formats:
+            if format not in ["[기타]", "[폐문]"]:
+                return format
+    
+    # 복구라는 단어가 없는 경우 기존 로직을 그대로 사용
     if "[한전정전복구]" in matched_formats and ("[기타]" in matched_formats or "[폐문]" in matched_formats):
         return "[폐문]" if "[폐문]" in matched_formats else "[기타]"
     elif "[한전정전복구]" in matched_formats:
         return "[한전정전복구]"
     elif "[전원어댑터교체]" in matched_formats:
         return "[전원어댑터교체]"
-    elif "[사설차단기복구]" in matched_formats:
-        return "[사설차단기복구]"
     elif "[기타]" in matched_formats or "[폐문]" in matched_formats:
         return matched_formats[-1]
     else:
@@ -179,6 +221,41 @@ if 'day_content' not in st.session_state:
 if 'night_content' not in st.session_state:
     st.session_state.night_content = ""
 
+# 전화번호 정보를 저장하는 딕셔너리
+phone_numbers = {
+    "충청": [
+        {"부서명": "OSP", "전화번호": "02-500-6150"},
+        {"부서명": "phone", "전화번호": "041-234-5678"},
+        {"부서명": "phone", "전화번호": "041-345-6789"},
+        {"부서명": "phone", "전화번호": "041-456-7890"},
+        {"부서명": "phone", "전화번호": "041-567-8901"},
+        {"부서명": "phone", "전화번호": "041-678-9012"}
+    ],
+    "호남": [
+        {"부서명": "OSP", "전화번호": "02-500-6150"},
+        {"부서명": "phone", "전화번호": "061-234-5678"},
+        {"부서명": "phone", "전화번호": "061-345-6789"},
+        {"부서명": "phone", "전화번호": "061-456-7890"},
+        {"부서명": "phone", "전화번호": "061-567-8901"},
+        {"부서명": "phone", "전화번호": "061-678-9012"}
+    ],
+    "부산": [
+        {"부서명": "OSP", "전화번호": "02-500-6150"},
+        {"부서명": "phone", "전화번호": "051-234-5678"},
+        {"부서명": "phone", "전화번호": "051-345-6789"},
+        {"부서명": "phone", "전화번호": "051-456-7890"},
+        {"부서명": "phone", "전화번호": "051-567-8901"},
+        {"부서명": "phone", "전화번호": "051-678-9012"}
+    ],
+    "대구": [
+        {"부서명": "OSP", "전화번호": "02-500-6150"},
+        {"부서명": "phone", "전화번호": "053-234-5678"},
+        {"부서명": "phone", "전화번호": "053-345-6789"},
+        {"부서명": "phone", "전화번호": "053-456-7890"},
+        {"부서명": "phone", "전화번호": "053-567-8901"},
+        {"부서명": "phone", "전화번호": "053-678-9012"}
+    ]
+}
 
 def home_page():
     st.title("Home")
@@ -203,35 +280,62 @@ def home_page():
     else:
         st.header("야간")
         st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
+        
+    # 전화번호 정보를 선택하는 selectbox 추가
+    st.header("전화번호 안내")
+    region = st.selectbox("본부 선", ["충청", "호남", "부산", "대구"])
+    
+    # 선택된 지역의 전화번호 정보 표시
+    st.subheader(f"{region} 지역 전화번호")
+    phone_data = phone_numbers.get(region, [])
+    
+    chunk_size = 3
+    for i in range(0, len(phone_data), chunk_size):
+        chunk = phone_data[i:i+chunk_size]
+        df = pd.DataFrame(chunk)
+        df.set_index('부서명', inplace=True)  # 'name'을 인덱스로 설정
+        st.dataframe(df)
 
 
 
+# 예시로 사용할 비밀번호
+manage_password = "1234"
 
 def manage_page():
     st.title("Manage")
 
-    st.markdown(
-        """
-        <style>
-        .stRadio > div {
-            display: flex;
-            flex-direction: row;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-    content_option = st.radio("인수 인계", ["주간", "야간"])
+    if 'manage_logged_in' not in st.session_state:
+        st.session_state.manage_logged_in = False
 
-    if content_option == "주간":
-        st.header("주간")
-        st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.day_content, height=200)
+    if not st.session_state.manage_logged_in:
+        password = st.text_input("Manage 페이지 비밀번호 입력", type="password")
 
+        if password == manage_password:
+            st.session_state.manage_logged_in = True
+        elif password:
+            st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
+            return
+    
+    if st.session_state.manage_logged_in:
+        # 비밀번호 입력 후에만 Radio 버튼을 표시
+        content_option = st.radio("인수 인계", ["주간", "야간"])
+
+        if content_option == "주간":
+            st.header("주간")
+            st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.get("day_content", ""), height=200)
+
+        else:
+            st.header("야간")
+            st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.get("night_content", ""), height=200)
+
+    st.markdown("### 데이터 삭제")
+    row_to_delete = st.number_input("삭제할 행 번호를 입력하세요", min_value=0, max_value=len(df)-1, step=1)
+    if st.button("삭제"):
+        df = df.drop(index=row_to_delete).reset_index(drop=True)
+        csv_content = df.to_csv(index=False)
+        update_file_content(csv_content, sha)
     else:
-        st.header("야간")
-        st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.night_content, height=200)
-
-
+        st.error("데이터를 불러오는 데 실패했습니다.")
 
 
 def moss_page():
@@ -445,7 +549,7 @@ def worksync_page():
             
             same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
             for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
-                st.text(f"{idx}.{row['장비명/국사명']} - {row['장비ID']}({row['업무명']})")
+                st.text(f"{idx}. {row['장비ID']} - {row['장비명/국사명']} - {row['업무명']}")
         else:
             st.text("Work-Sync 없습니다.")
 
