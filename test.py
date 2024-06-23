@@ -477,6 +477,8 @@ def manage_page():
         """,
         unsafe_allow_html=True
     )
+    
+    # 라디오 버튼으로 주간/야간 선택
     content_option = st.radio("인수 인계", ["주간", "야간"])
 
     if content_option == "주간":
@@ -487,49 +489,57 @@ def manage_page():
         st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.night_content, height=200)
 
     # IP 입력 받기
-    ip_input1 = st.text_input("IP 입력", "")
-    
-    if ip_input1:
-        # Ensure you have set your GitHub token in Streamlit secrets
-        try:
-            github_token = st.secrets["GITHUB_TOKEN"]
-        except KeyError:
-            st.error("GitHub token is not set. Please set it in Streamlit secrets.")
-            return
-        
-        repo_name = "dfgqwe/easyu"
-        file_path = "ws_data.csv"
-        
-        df_no_duplicates1 = fetch_data_from_github(repo_name, file_path, github_token)
-        if df_no_duplicates1 is None:
-            st.error("Failed to fetch data from GitHub.")
-            return
+    ip_input = st.text_input("IP 입력", "")
 
-        df_no_duplicates1 = df_no_duplicates1.drop_duplicates(subset=['장비ID', '업무명'])
-        
-        if ip_input1 in df_no_duplicates1['장비ID'].values:
-            address = df_no_duplicates1[df_no_duplicates1['장비ID'] == ip_input1]['사업장'].values[0]
-            st.write("★동일국소 점검 대상★")
-            
-            same_address_work = df_no_duplicates1[df_no_duplicates1['사업장'] == address]
-            for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
-                st.text(f"{idx}. {row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})")
+    # IP 입력 후 업무 찾기 버튼
+    if st.button("업무 찾기"):
+        if ip_input:
+            # GitHub 토큰 확인
+            try:
+                github_token = st.secrets["GITHUB_TOKEN"]
+            except KeyError:
+                st.error("GitHub token is not set. Please set it in Streamlit secrets.")
+                return
 
-            selected_tasks = st.multiselect(
-                "삭제할 업무를 선택하세요:",
-                same_address_work.index,
-                format_func=lambda x: f"{same_address_work.loc[x, '장비명/국사명']} - {same_address_work.loc[x, '장비ID']} ({same_address_work.loc[x, '업무명']})"
-            )
+            # GitHub에서 데이터 가져오기
+            repo_name = "dfgqwe/easyu"
+            file_path = "ws_data.csv"
+            df_no_duplicates = fetch_data_from_github(repo_name, file_path, github_token)
+            if df_no_duplicates is None:
+                st.error("Failed to fetch data from GitHub.")
+                return
 
-            if st.button("선택된 업무 삭제"):
-                if selected_tasks:
-                    st.write(f"Before deletion: {df_no_duplicates1.shape[0]} rows")
-                    df_no_duplicates1 = df_no_duplicates1.drop(selected_tasks)
-                    st.write(f"After deletion: {df_no_duplicates1.shape[0]} rows")
-                    update_data_on_github(repo_name, file_path, github_token, df_no_duplicates1)
-                    st.success("선택된 업무가 성공적으로 삭제되었습니다.")
-                else:
-                    st.warning("삭제할 업무를 선택하세요.")
+            # 중복 제거
+            df_no_duplicates = df_no_duplicates.drop_duplicates(subset=['장비ID', '업무명'])
+
+            # IP에 해당하는 업무 찾기
+            if ip_input in df_no_duplicates['장비ID'].values:
+                address = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]['사업장'].values[0]
+                st.write("★동일국소 점검 대상★")
+                
+                same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
+                for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
+                    st.text(f"{idx}. {row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})")
+
+                # 삭제할 업무 선택
+                selected_tasks = st.multiselect(
+                    "삭제할 업무를 선택하세요:",
+                    same_address_work.index,
+                    format_func=lambda x: f"{same_address_work.loc[x, '장비명/국사명']} - {same_address_work.loc[x, '장비ID']} ({same_address_work.loc[x, '업무명']})"
+                )
+
+                # 선택된 업무 삭제 버튼
+                if st.button("선택된 업무 삭제"):
+                    if selected_tasks:
+                        st.write(f"Before deletion: {df_no_duplicates.shape[0]} rows")
+                        df_no_duplicates = df_no_duplicates.drop(selected_tasks)
+                        st.write(f"After deletion: {df_no_duplicates.shape[0]} rows")
+                        update_data_on_github(repo_name, file_path, github_token, df_no_duplicates)
+                        st.success("선택된 업무가 성공적으로 삭제되었습니다.")
+                    else:
+                        st.warning("삭제할 업무를 선택하세요.")
+            else:
+                st.warning("해당 IP에 대한 업무를 찾을 수 없습니다.")
 
 
 
