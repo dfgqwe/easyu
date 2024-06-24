@@ -3,7 +3,6 @@ pandas
 pyperclip
 streamlit-option-menu
 Github
-requests
 gdown
 google-auth
 google-auth-oauthlib
