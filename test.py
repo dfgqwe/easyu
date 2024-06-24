@@ -156,6 +156,17 @@ B_S_head_formats = {
     "DB 삭제 여부"
 ]
 
+# Google Drive API credentials 파일 경로
+CLIENT_SECRET_FILE = 'client_secrets.json'
+
+# Google Drive API scope
+SCOPES = ['https://www.googleapis.com/auth/drive']
+
+# 데이터 파일 ID 및 경로
+file_id = '1fqY7-rh1wk5UWRckQ9ZihoQx4GGmCnsF'
+dest_path = 'ws_data.csv'
+
+
 @st.cache_data
 def get_format(text):
     matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
@@ -242,16 +253,6 @@ def load_data(file_id, dest_path):
     if not os.path.exists(dest_path):
         fetch_data_from_google_drive(file_id, dest_path)
     return pd.read_csv(dest_path)
-
-# Google Drive API credentials 파일 경로
-CLIENT_SECRET_FILE = 'client_secrets.json'
-
-# Google Drive API scope
-SCOPES = ['https://www.googleapis.com/auth/drive']
-
-# 데이터 파일 ID 및 경로
-file_id = '1fqY7-rh1wk5UWRckQ9ZihoQx4GGmCnsF'
-dest_path = 'ws_data.csv'
 
 
 
