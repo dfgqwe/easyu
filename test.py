@@ -571,16 +571,14 @@ def manage_page():
             if 'selected_indices' not in st.session_state:
                 st.session_state.selected_indices = []
     
-            # IP 입력이 있을 경우
             if ip_input:
                 # 입력된 IP에 해당되는 행 찾기
                 if ip_input in df_no_duplicates['장비ID'].values:
                     # 해당 IP의 사업장 찾기
                     address = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]['사업장'].values[0]
                     st.write("★동일국소 점검 대상★")
-        
+
                     same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
-                    selected_indices = []  # 선택된 체크박스의 인덱스를 저장할 리스트
 
                     for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
                         checkbox_value = st.checkbox(f"{row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})", key=f"checkbox_{index}", value=index in st.session_state.selected_indices)
@@ -589,20 +587,20 @@ def manage_page():
                         elif not checkbox_value and index in st.session_state.selected_indices:
                             st.session_state.selected_indices.remove(index)  # 선택 해제된 체크박스를 리스트에서 제거
 
-                    if st.button("선택된 업무 삭제"):
-                        if st.session_state.selected_indices:
-                            st.write(f"Before deletion: {df_no_duplicates.shape[0]} rows")
-                            df_no_duplicates = df_no_duplicates.drop(st.session_state.selected_indices)
-                            st.write(f"After deletion: {df_no_duplicates.shape[0]} rows")
+                if st.button("선택된 업무 삭제"):
+                    if st.session_state.selected_indices:
+                        st.write(f"Before deletion: {df_no_duplicates.shape[0]} rows")
+                        df_no_duplicates = df_no_duplicates.drop(st.session_state.selected_indices)
+                        st.write(f"After deletion: {df_no_duplicates.shape[0]} rows")
     
-                            # 수정된 데이터를 다시 Google Drive에 업데이트
-                            df_no_duplicates.to_csv(dest_path, index=False)
-                            update_data_on_google_drive(file_id, dest_path)
+                        # 수정된 데이터를 다시 Google Drive에 업데이트
+                        df_no_duplicates.to_csv(dest_path, index=False)
+                        update_data_on_google_drive(file_id, dest_path, folder_id)
     
-                            st.success("데이터가 성공적으로 업데이트 되었습니다.")
-                            st.session_state.selected_indices = []  # 삭제 후 선택된 인덱스 초기화
-                    else:
-                        st.warning("삭제할 업무를 선택하세요.")
+                        st.success("데이터가 성공적으로 업데이트 되었습니다.")
+                        st.session_state.selected_indices = []  # 삭제 후 선택된 인덱스 초기화
+            else:
+                st.warning("삭제할 업무를 선택하세요.")
 
   
 # 옵션 메뉴 생성
