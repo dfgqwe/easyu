@@ -209,7 +209,7 @@ def download_file_from_google_drive(file_id, dest_path):
 
 def update_data_on_google_drive(file_id, dest_path, folder_id):
     SCOPES = ['https://www.googleapis.com/auth/drive']
-    SERVICE_ACCOUNT_FILE = 'path_to_your_service_account.json'  # 서비스 계정 JSON 파일 경로
+    SERVICE_ACCOUNT_FILE = 'client_secrets.json'  # 서비스 계정 JSON 파일 경로
 
     credentials = service_account.Credentials.from_service_account_file(
         SERVICE_ACCOUNT_FILE, scopes=SCOPES)
