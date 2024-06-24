@@ -2,8 +2,21 @@ import streamlit as st
 import pandas as pd
 import pyperclip
 import re
+from streamlit_option_menu import option_menu
+import os
+import requests
+#from github import Github
+import time
+import gdown
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+import io
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
 
-# 포맷 데이터 포함
+
+# 포맷 데이터 포멧
 formats = {
     "정전": "[사설정전복구]",
     "입전": "[사설정전복구]",
@@ -12,6 +25,7 @@ formats = {
     "출동중복구": "[사설정전복구]",
     "출동 중 자동복구": "[사설정전복구]",
     "출동중자동복구": "[사설정전복구]",
+    "출동중 자동복구": "[사설정전복구]",
     "자동": "[사설정전복구]",
     "루트변경": "[사설정전복구]",
     "루트 변경": "[사설정전복구]",
@@ -25,6 +39,7 @@ formats = {
     "On": "[사설차단기복구]",
     "trip": "[사설차단기복구]",
     "TRIP": "[사설차단기복구]",
+    "Trip": "[사설차단기복구]",
     "트립": "[사설차단기복구]",
     "어댑터": "[전원어댑터교체]",
     "어뎁터": "[전원어댑터교체]",
@@ -34,6 +49,8 @@ formats = {
     "아답타": "[전원어댑터교체]",
     "멀티탭": "[멀티탭 ON/교체]",
     "멀티탭 교체": "[멀티탭 ON/교체]",
+    "콘센트": "[멀티탭 ON/교체]",
+    "콘샌트": "[멀티탭 ON/교체]",
     "발전기": "[발전기가동]",
     "파워뱅크": "[전원가복구]",
     "가복구": "[전원가복구]",
@@ -47,16 +64,18 @@ formats = {
     "공사": "[고객측작업]",
     "장비철거": "[장비철거]",
     "타사전환": "[타사전환]",
+    "타사 전환": "[타사전환]",
     "감쇄기": "[광커넥터복구]", 
     "감쇠기": "[광커넥터복구]",
+    "dbm": "[광커넥터복구]",
+    "취부": "[광커넥터복구]",
     "PON": "[모듈교체]",
     "pon": "[모듈교체]",
+    "Pon": "[모듈교체]",
+    "PoN": "[모듈교체]",
     "PSU": "[모듈교체]",
     "psu": "[모듈교체]",
     "모듈": "[모듈교체]",
-    "pon 모듈": "[모듈교체]",
-    "Pon 모듈": "[모듈교체]",
-    "PON 모듈": "[모듈교체]",
     "보드": "[모듈교체]",
     "장비교체": "[장비교체]",
     "장비 대개체": "[장비교체]",
@@ -73,6 +92,8 @@ formats = {
     "voc": "[기타]",
     "미정": "[기타]",
     "불가": "[기타]",
+    "망실": "[기타]",
+    "예정": "[기타]",
     "접근불가": "[폐문]",
     "접근 불가": "[폐문]",
     "출입불가": "[폐문]",
@@ -92,7 +113,8 @@ B_S_head_formats = {
     "NOC_점검정비": "[NOC_점검정비]",
     "NOC_자산관리": "[NOC_자산관리]",
     "NOC_중복장애": "[NOC_중복장애]",
-    "NOC_kernel정비": "[NOC_kernel정비]"
+    "NOC_kernel정비": "[NOC_kernel정비]",
+    "기타": "[기타]"
 }
 
 민원처리_head_formats = {
@@ -130,9 +152,14 @@ B_S_head_formats = {
     "원격조치(포트BLK)",
     "정전알림이 등록",
     "DB현행화",
-    "고객홍보"
+    "고객홍보",
+    "DB 삭제 여부"
 ]
 
+
+
+
+@st.cache_data
 def get_format(text):
     matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
     if "[한전정전복구]" in matched_formats and ("[기타]" in matched_formats or "[폐문]" in matched_formats):
@@ -141,21 +168,18 @@ def get_format(text):
         return "[한전정전복구]"
     elif "[전원어댑터교체]" in matched_formats:
         return "[전원어댑터교체]"
+    elif "[사설차단기복구]" in matched_formats:
+        return "[사설차단기복구]"
     elif "[기타]" in matched_formats or "[폐문]" in matched_formats:
         return matched_formats[-1]
     else:
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
         return selected_formats[-1] if selected_formats else None
 
+
 # Load the CSV file
 df = pd.read_csv('head.csv', index_col=0)
 
-# Sidebar for MOSS recovery items
-st.sidebar.title("Menu")
-
-# Expander in sidebar
-with st.sidebar.expander('MOSS 회복 항목 표준'):
-    st.dataframe(df)
 
 def clear_tm_content(content):
     keywords_to_remove = ["[현장TM]", "[TM활동]", "[TM 활동]", "[현장 TM]"]
@@ -163,7 +187,103 @@ def clear_tm_content(content):
         content = content.replace(keyword, "")
     return content.strip()
 
+
+# Initialize session state for day and night content if not already present
+if 'day_content' not in st.session_state:
+    st.session_state.day_content = ""
+if 'night_content' not in st.session_state:
+    st.session_state.night_content = ""
+
+
+# Function to read data from GitHub
+@st.cache_data
+def authenticate_google_drive():
+    gauth = GoogleAuth()
+    gauth.LocalWebserverAuth()
+    drive = GoogleDrive(gauth)
+    return drive
+
+def download_file_from_google_drive(file_id, dest_path):
+    url = f'https://drive.google.com/uc?id={file_id}'
+    gdown.download(url, dest_path, quiet=False)
+
+def update_data_on_google_drive(file_id, dest_path, folder_id):
+    SCOPES = ['https://www.googleapis.com/auth/drive']
+    SERVICE_ACCOUNT_FILE = 'client_secrets.json'  # 서비스 계정 JSON 파일 경로
+
+    credentials = service_account.Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+    
+    service = build('drive', 'v3', credentials=credentials)
+
+    media = MediaFileUpload(dest_path, mimetype='text/csv')
+
+    file_metadata = {
+        'name': os.path.basename(dest_path),
+        'parents': [folder_id]
+    }
+
+    service.files().update(
+        fileId=file_id,
+        media_body=media,
+        body=file_metadata
+    ).execute()
+
+# Google Drive에서 데이터 파일 다운로드
+file_id = '1fqY7-rh1wk5UWRckQ9ZihoQx4GGmCnsF'  # Google Drive 파일 ID
+folder_id = '1E49euLLfQxeH_-padydigX5a5CYNFq5z'  # Google Drive 폴더 ID
+dest_path = 'ws_data.csv'  # 로컬 파일 경로
+if not os.path.exists(dest_path):
+    download_file_from_google_drive(file_id, dest_path)
+
+# Google Drive API credentials 파일 경로
+CLIENT_SECRET_FILE = 'client_secrets.json'
+
+# Google Drive API scope
+SCOPES = ['https://www.googleapis.com/auth/drive']
+
+
+@st.cache_data  # Streamlit의 캐시를 사용하여 함수 결과를 메모리에 저장
+def load_data(file_id, dest_path):
+    # Download the data file from Google Drive if not already downloaded
+    if not os.path.exists(dest_path):
+        fetch_data_from_google_drive(file_id, dest_path)
+    return pd.read_csv(dest_path)
+
+
+
+def home_page():
+    st.title("Home")
+    st.markdown(
+        """
+        <style>
+        .stRadio > div {
+            display: flex;
+            flex-direction: row;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Radio button for choosing between Day Content and Night Content
+    content_option = st.radio("인수 인계", ["주간", "야간"])
+
+    if content_option == "주간":
+        st.header("주간")
+        st.markdown(st.session_state.day_content.replace('\n', '<br>'), unsafe_allow_html=True)
+    else:
+        st.header("야간")
+        st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
+
+
+
+
+
+
 def moss_page():
+
+    st.title("MOSS 회복 문구")
 
     df1 = pd.read_csv('bs_head.csv')
 
@@ -173,8 +293,6 @@ def moss_page():
     # Streamlit 애플리케이션
     with st.expander('MOSS BS 발행 HEAD'):
         st.dataframe(df1_reset)
-    
-    st.title("MOSS 회복 문구")
 
     # 초기값 설정
     if "user_input" not in st.session_state:
@@ -185,16 +303,29 @@ def moss_page():
         st.session_state.clear()  # 모든 상태를 초기화
         st.session_state.user_input = ""  # 다시 설정
         st.experimental_rerun()  # 상태를 초기화하고 재실행
+        
 
     results = []
 
+
+    if "bs_checked" not in st.session_state:
+        st.session_state.bs_checked = False
+    if "complaint_checked" not in st.session_state:
+        st.session_state.complaint_checked = False
+
+    def bs_checkbox_callback():
+        st.session_state.complaint_checked = False
+
+    def complaint_checkbox_callback():
+        st.session_state.bs_checked = False
+    
     # B/S 및 민원처리 체크박스
     col1, col2 = st.columns(2)
 
     with col1:
-        is_bs_checked = st.checkbox("B/S")
+        is_bs_checked = st.checkbox("B/S", key="bs_checked", on_change=bs_checkbox_callback)
     with col2:
-        is_complaint_checked = st.checkbox("민원처리")
+        is_complaint_checked = st.checkbox("민원처리", key="complaint_checked", on_change=complaint_checkbox_callback)
 
     if is_bs_checked:
         selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
@@ -214,18 +345,48 @@ def moss_page():
             results.append(head_format)
 
     results.append(user_input)
-    results.append("수고하셨습니다")
+
 
     출동예방_actions = []
     selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
-    if selected_actions:
-        formatted_actions = ", ".join(selected_actions)
+
+    기타_results = []
+
+    if "DB 삭제 여부" in selected_actions:
+        if "기타_고객DB_neoss_불가" not in st.session_state:
+            st.session_state.기타_고객DB_neoss_불가 = False
+        if "기타_neoss_완료" not in st.session_state:
+            st.session_state.기타_neoss_완료 = False
+
+        def 기타_고객DB_neoss_불가_callback():
+            st.session_state.기타_neoss_완료 = False
+
+        def 기타_neoss_완료_callback():
+            st.session_state.기타_고객DB_neoss_불가 = False
+        
+        기타_고객DB_neoss_불가 = st.checkbox("고객DB 존재 NeOSS 삭제 불가", key="기타_고객DB_neoss_불가", on_change=기타_고객DB_neoss_불가_callback)
+        기타_neoss_완료 = st.checkbox("NeOSS 삭제 완료", key="기타_neoss_완료", on_change=기타_neoss_완료_callback)
+    
+        if 기타_고객DB_neoss_불가:
+            기타_results.append("고객DB 존재/NeOSS 삭제 불가")
+        if 기타_neoss_완료:
+            기타_results.append("NeOSS 삭제 완료")
+
+
+    results.extend(기타_results)
+    results.append("수고하셨습니다")
+
+    
+    filtered_actions = [action for action in selected_actions if action != "DB 삭제 여부"]
+    if filtered_actions:
+        formatted_actions = ", ".join(filtered_actions)
         results.append(f"<선조치_NOC> {formatted_actions}")
         if "전기작업 확인(전화)" in selected_actions:
             출동예방_actions.append("[NOC]전기작업 확인(전화)")
         if "출동보류" in selected_actions:
             출동예방_actions.append("[NOC]출동보류")
 
+    
     현장_options = [
         "[현장TM]",
         "주소",
@@ -262,54 +423,202 @@ def moss_page():
     if 출동예방_actions:
         results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
-    copy_activated = st.checkbox("출력 시 클립보드에 복사")
 
-    if st.button("출력"):
-        output_text = "\n".join(results)  # Join results with new lines for the desired format
-        st.text(output_text)  # Print output_text when the "출력" button is pressed
-        if copy_activated:
-            pyperclip.copy(output_text)
+    copy_activated = False
 
-    if st.button("초기화"):
-        clear_text()
 
+    col1, col2 , col3= st.columns([2.8, 0.5, 0.7])
+
+    with col1:
+        if st.button("출력"):
+            output_text = "\n".join(results)  # Join results with new lines for the desired format
+            st.text(output_text)  # Print output_text when the "출력" button is pressed
+            if copy_activated:
+                pyperclip.copy(output_text)
+                
+    with col2:
+        if st.button("입력란 초기화"):
+            clear_text()
+
+    with col3:
+        if 'button_clicked' not in st.session_state:
+            st.session_state['button_clicked'] = False
+            
+        if st.button('MOSS 회복 항목 표준'):
+            st.session_state['button_clicked'] = not st.session_state['button_clicked']
+
+        if st.session_state['button_clicked']:
+            placeholder = st.empty()
+            with placeholder.container():
+                st.markdown(
+            """
+            <style>
+            /* 데이터프레임이 최대한 화면에 가깝게 보이도록 스타일 조정 */
+            .css-1l02zno {
+                width: 100%;
+                max-width: 100%;
+                height: calc(100vh - 200px); /* 높이를 화면 높이의 일부분으로 설정 */
+                overflow: auto; /* 스크롤이 필요한 경우 스크롤 허용 */
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+                st.dataframe(df)
+                
 # Worksync 페이지
 def worksync_page():  
-    st.title("Worksync 페이지 준비중...")
-    
-    # 데이터 파일 불러오기
-    work = pd.read_csv("데이터.csv")  # 파일 경로를 실제 파일 경로로 변경해주세요
+    st.title("Worksync")
 
-    # 'ip'와 '업무'가 동일한 경우 중복된 행 제거
-    df_no_duplicates = work.drop_duplicates(subset=['ip', '업무'])
+    # Download the data file from Google Drive
+    file_id = '1fqY7-rh1wk5UWRckQ9ZihoQx4GGmCnsF'
+    dest_path = 'ws_data.csv'
+
+    # 데이터 파일 불러오기
+    work = load_data(file_id, dest_path)
+
+
+
+    # '장비ID'와 '업무명'이 동일한 경우 중복된 행 제거
+    df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
+
+    # 장비ID 순서대로 정렬
+    df_no_duplicates = df_no_duplicates.sort_values(by='장비ID')
 
     # IP 입력 받기
     ip_input = st.text_input("IP 입력", "")
     
     # IP 입력이 있을 경우
     if ip_input:
-        # 입력된 IP에 해당되는 주소 찾기
-        if ip_input in df_no_duplicates['ip'].values:
-            address = df_no_duplicates[df_no_duplicates['ip'] == ip_input]['주소'].values[0]
-            st.write("입력된 IP에 해당하는 주소")
+        # 입력된 IP에 해당되는 행 찾기
+        if ip_input in df_no_duplicates['장비ID'].values:
+            # 해당 IP의 사업장 찾기
+            address = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]['사업장'].values[0]
+            st.write("★동일국소 점검 대상★")
             
-            # 동일 주소지의 업무 찾기
-            same_address_work = df_no_duplicates[df_no_duplicates['주소'] == address]
-            
-            # 장비명-업무 형식으로 보여주기
+            same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
             for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
-                st.text(f"{idx}. {row['장비명']} - {row['업무']}")
+                st.text(f"{idx}.{row['장비명/국사명']} - {row['업무명']}({row['장비ID']})")
         else:
             st.text("Work-Sync 없습니다.")
 
-def main():
-    # Sidebar navigation
-    page = st.sidebar.radio("Menu", ["MOSS", "Worksync"])
 
-    if page == "MOSS":
-        moss_page()
-    elif page == "Worksync":
-        worksync_page()
+manage_password = '1234'
 
-if __name__ == "__main__":
-    main()
+# 관리 페이지
+def manage_page():
+    st.title("Manage")
+
+    # Set session_state variables
+    if 'manage_logged_in' not in st.session_state:
+        st.session_state.manage_logged_in = False
+    if 'last_activity_time' not in st.session_state:
+        st.session_state.last_activity_time = time.time()
+
+    # Check if timeout (5 minutes) has passed since the last activity
+    if time.time() - st.session_state.last_activity_time > 300:
+        st.session_state.manage_logged_in = False
+
+    if not st.session_state.manage_logged_in:
+         password = st.text_input("Manage 페이지 비밀번호 입력", type="password")
+
+    
+         if password == manage_password:
+            st.session_state.manage_logged_in = True
+         elif password:
+            st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
+            return
+    
+         if st.session_state.manage_logged_in:
+            st.markdown(
+            """
+            <style>
+            .stRadio > div {
+                display: flex;
+                flex-direction: row;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+            )
+            # 비밀번호 입력 후에만 Radio 버튼을 표시
+            content_option = st.radio("인수 인계", ["주간", "야간"])
+
+            if content_option == "주간":
+                st.header("주간")
+                st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.get("day_content", ""), height=200)
+            else:
+                st.header("야간")
+                st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.get("night_content", ""), height=200)
+
+                # Google Drive에서 데이터 파일 다운로드
+            if not os.path.exists(dest_path):
+                download_file_from_google_drive(file_id, dest_path)
+
+            # 데이터 파일 불러오기
+            work = pd.read_csv(dest_path)
+
+            # '장비ID'와 '업무명'이 동일한 경우 중복된 행 제거
+            df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
+
+            # 장비ID 순서대로 정렬
+            df_no_duplicates = df_no_duplicates.sort_values(by='장비ID')
+
+            # IP 입력 받기
+            ip_input = st.text_input("IP 입력", "")
+
+            # 선택된 체크박스의 인덱스를 저장할 리스트 초기화
+            if 'selected_indices' not in st.session_state:
+                st.session_state.selected_indices = []
+    
+            if ip_input:
+                # 입력된 IP에 해당되는 행 찾기
+                if ip_input in df_no_duplicates['장비ID'].values:
+                    # 해당 IP의 사업장 찾기
+                    address = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]['사업장'].values[0]
+                    st.write("★동일국소 점검 대상★")
+
+                    same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
+
+                    for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
+                        checkbox_value = st.checkbox(f"{row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})", key=f"checkbox_{index}", value=index in st.session_state.selected_indices)
+                        if checkbox_value and index not in st.session_state.selected_indices:
+                            st.session_state.selected_indices.append(index)  # 선택된 체크박스의 인덱스를 리스트에 추가
+                        elif not checkbox_value and index in st.session_state.selected_indices:
+                            st.session_state.selected_indices.remove(index)  # 선택 해제된 체크박스를 리스트에서 제거
+
+                if st.button("선택된 업무 삭제"):
+                    if st.session_state.selected_indices:
+                        st.write(f"Before deletion: {df_no_duplicates.shape[0]} rows")
+                        df_no_duplicates = df_no_duplicates.drop(st.session_state.selected_indices)
+                        st.write(f"After deletion: {df_no_duplicates.shape[0]} rows")
+    
+                        # 수정된 데이터를 다시 Google Drive에 업데이트
+                        df_no_duplicates.to_csv(dest_path, index=False)
+                        update_data_on_google_drive(file_id, dest_path, folder_id)
+    
+                        st.success("데이터가 성공적으로 업데이트 되었습니다.")
+                        st.session_state.selected_indices = []  # 삭제 후 선택된 인덱스 초기화
+            else:
+                st.warning("삭제할 업무를 선택하세요.")
+
+  
+# 옵션 메뉴 생성
+selected = option_menu(
+    menu_title=None,  # 메뉴 제목 (원하지 않으면 None)
+    options=["Home","MOSS", "Worksync","Manage"],  # 옵션 이름들
+    icons=["house", "box-arrow-down","calendar2-check","gear"],  # 각 옵션에 해당하는 아이콘
+    menu_icon="cast",  # 메뉴 아이콘
+    default_index=0,  # 기본 선택 옵션
+    orientation="horizontal"  # 메뉴 방향 (수평)
+)
+
+# 탭 내용 생성
+if selected == "Home":
+    home_page()
+elif selected == "MOSS":
+    moss_page()
+elif selected == "Worksync":
+    worksync_page()
+elif selected == "Manage":
+    manage_page()
