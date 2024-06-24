@@ -569,6 +569,10 @@ def manage_page():
 
             # IP 입력 받기
             ip_input = st.text_input("IP 입력", "")
+
+            # 선택된 체크박스의 인덱스를 저장할 리스트 초기화
+            if 'selected_indices' not in st.session_state:
+                st.session_state.selected_indices = []
     
             # IP 입력이 있을 경우
             if ip_input:
