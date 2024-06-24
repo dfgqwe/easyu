@@ -3,3 +3,10 @@ pyperclip
 streamlit-option-menu
 requests
 PyGithub
+gdown
+service_account
+build
+io
+Credentials
+build
+InstalledAppFlow
