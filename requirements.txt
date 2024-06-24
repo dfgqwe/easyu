@@ -1,6 +1,6 @@
 pip
 pyperclip
 streamlit-option-menu
-Github
+PyGithub==1.55
 requests
 
