@@ -1,9 +1,7 @@
 streamlit
 pandas
 pyperclip
-re
 streamlit-option-menu
-os
 requests
 gdown
 google-auth
