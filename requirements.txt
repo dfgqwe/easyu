@@ -1,3 +1,4 @@
+pip
 pyperclip
 streamlit-option-menu
 Github
