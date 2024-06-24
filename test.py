@@ -208,9 +208,8 @@ def authenticate_google_drive():
 
 # Google Drive에서 파일 다운로드
 def download_file_from_google_drive(file_id, dest_path):
-    credentials = authenticate_google_drive()
-    service = build('drive', 'v3', credentials=credentials)
-    request = service.files().get_media(fileId=file_id)
+    url = f'https://drive.google.com/uc?id={file_id}'
+    gdown.download(url, dest_path, quiet=False)
 
     with open(dest_path, 'wb') as f:
         downloader = MediaIoBaseDownload(f, request)
@@ -220,15 +219,21 @@ def download_file_from_google_drive(file_id, dest_path):
             print(f"Download {int(status.progress() * 100)}%.")
 
 # 데이터 파일 업데이트 함수
-def update_data_on_google_drive(file_id, file_path):
-    credentials = authenticate_google_drive()
+def update_data_on_google_drive(file_id, dest_path):
+    SCOPES = SCOPES
+    SERVICE_ACCOUNT_FILE = CLIENT_SECRET_FILE  # 서비스 계정 JSON 파일 경로
+
+    credentials = service_account.Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+    
     service = build('drive', 'v3', credentials=credentials)
 
-    file_metadata = {'name': os.path.basename(file_path)}
-    media = MediaFileUpload(file_path, resumable=True)
+    media = MediaFileUpload(dest_path, mimetype='text/csv')
 
-    file = service.files().update(fileId=file_id, body=file_metadata, media_body=media).execute()
-    print('File ID: %s' % file.get('id'))
+    service.files().update(
+        fileId=file_id,
+        media_body=media
+    ).execute()
 
 
 @st.cache_data  # Streamlit의 캐시를 사용하여 함수 결과를 메모리에 저장
@@ -577,25 +582,26 @@ def manage_page():
                     selected_indices = []  # 선택된 체크박스의 인덱스를 저장할 리스트
 
                     for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
-                        checkbox_value = st.checkbox(f"{row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})", key=f"checkbox_{index}")
-                        if checkbox_value:
-                            selected_indices.append(index)  # 선택된 체크박스의 인덱스를 리스트에 추가
-        
+                        checkbox_value = st.checkbox(f"{row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})", key=f"checkbox_{index}", value=index in st.session_state.selected_indices)
+                        if checkbox_value and index not in st.session_state.selected_indices:
+                            st.session_state.selected_indices.append(index)  # 선택된 체크박스의 인덱스를 리스트에 추가
+                        elif not checkbox_value and index in st.session_state.selected_indices:
+                            st.session_state.selected_indices.remove(index)  # 선택 해제된 체크박스를 리스트에서 제거
+
                     if st.button("선택된 업무 삭제"):
-                        if selected_indices:
+                        if st.session_state.selected_indices:
                             st.write(f"Before deletion: {df_no_duplicates.shape[0]} rows")
-                            df_no_duplicates = df_no_duplicates.drop(selected_indices)
+                            df_no_duplicates = df_no_duplicates.drop(st.session_state.selected_indices)
                             st.write(f"After deletion: {df_no_duplicates.shape[0]} rows")
-                
+    
                             # 수정된 데이터를 다시 Google Drive에 업데이트
                             df_no_duplicates.to_csv(dest_path, index=False)
                             update_data_on_google_drive(file_id, dest_path)
-                
+    
                             st.success("데이터가 성공적으로 업데이트 되었습니다.")
-                        else:
-                            st.warning("삭제할 업무를 선택하세요.")
-            else:
-                st.text("Work-Sync 없습니다.")
+                            st.session_state.selected_indices = []  # 삭제 후 선택된 인덱스 초기화
+                    else:
+                        st.warning("삭제할 업무를 선택하세요.")
 
   
 # 옵션 메뉴 생성
