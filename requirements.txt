@@ -3,5 +3,5 @@ pandas
 pyperclip
 streamlit-option-menu
 Github
-requests
+time
 
