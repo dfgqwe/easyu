@@ -1,4 +1,4 @@
-
+aiohttp
 pyperclip
 streamlit-option-menu
 Github
