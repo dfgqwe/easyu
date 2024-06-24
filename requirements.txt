@@ -4,6 +4,7 @@ streamlit-option-menu
 requests
 PyGithub
 gdown
+--upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
 service_account
 build
 io
