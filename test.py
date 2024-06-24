@@ -156,15 +156,7 @@ B_S_head_formats = {
     "DB 삭제 여부"
 ]
 
-# Google Drive API credentials 파일 경로
-CLIENT_SECRET_FILE = 'client_secrets.json'
 
-# Google Drive API scope
-SCOPES = ['https://www.googleapis.com/auth/drive']
-
-# 데이터 파일 ID 및 경로
-file_id = '1fqY7-rh1wk5UWRckQ9ZihoQx4GGmCnsF'
-dest_path = 'ws_data.csv'
 
 
 @st.cache_data
@@ -211,28 +203,13 @@ def authenticate_google_drive():
     drive = GoogleDrive(gauth)
     return drive
 
-# Google Drive API 인증 함수
-def authenticate_google_drive():
-    flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE, SCOPES)
-    credentials = flow.run_local_server(port=0)
-    return credentials
-
-# Google Drive에서 파일 다운로드
 def download_file_from_google_drive(file_id, dest_path):
     url = f'https://drive.google.com/uc?id={file_id}'
     gdown.download(url, dest_path, quiet=False)
 
-    with open(dest_path, 'wb') as f:
-        downloader = MediaIoBaseDownload(f, request)
-        done = False
-        while not done:
-            status, done = downloader.next_chunk()
-            print(f"Download {int(status.progress() * 100)}%.")
-
-# 데이터 파일 업데이트 함수
-def update_data_on_google_drive(file_id, dest_path):
-    SCOPES = SCOPES
-    SERVICE_ACCOUNT_FILE = CLIENT_SECRET_FILE  # 서비스 계정 JSON 파일 경로
+def update_data_on_google_drive(file_id, dest_path, folder_id):
+    SCOPES = ['https://www.googleapis.com/auth/drive']
+    SERVICE_ACCOUNT_FILE = 'path_to_your_service_account.json'  # 서비스 계정 JSON 파일 경로
 
     credentials = service_account.Credentials.from_service_account_file(
         SERVICE_ACCOUNT_FILE, scopes=SCOPES)
@@ -241,10 +218,29 @@ def update_data_on_google_drive(file_id, dest_path):
 
     media = MediaFileUpload(dest_path, mimetype='text/csv')
 
+    file_metadata = {
+        'name': os.path.basename(dest_path),
+        'parents': [folder_id]
+    }
+
     service.files().update(
         fileId=file_id,
-        media_body=media
+        media_body=media,
+        body=file_metadata
     ).execute()
+
+# Google Drive에서 데이터 파일 다운로드
+file_id = '1fqY7-rh1wk5UWRckQ9ZihoQx4GGmCnsF'  # Google Drive 파일 ID
+folder_id = '1E49euLLfQxeH_-padydigX5a5CYNFq5z'  # Google Drive 폴더 ID
+dest_path = 'ws_data.csv'  # 로컬 파일 경로
+if not os.path.exists(dest_path):
+    download_file_from_google_drive(file_id, dest_path)
+
+# Google Drive API credentials 파일 경로
+CLIENT_SECRET_FILE = 'client_secrets.json'
+
+# Google Drive API scope
+SCOPES = ['https://www.googleapis.com/auth/drive']
 
 
 @st.cache_data  # Streamlit의 캐시를 사용하여 함수 결과를 메모리에 저장
