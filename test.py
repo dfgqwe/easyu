@@ -250,7 +250,7 @@ def home_page():
 
     with col2:
         # Streamlit 애플리케이션 제목 설정
-        st.header('기상 레이')
+        st.markdown('기상 레이더')
 
         # 외부 API 호출 및 데이터 가져오기
         url = 'http://apis.data.go.kr/1360000/RadarImgInfoService/getCmpImg'
