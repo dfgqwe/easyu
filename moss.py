@@ -157,9 +157,6 @@ B_S_head_formats = {
 ]
 
 
-
-
-@st.cache_data
 def get_format(text):
     matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
     if "[한전정전복구]" in matched_formats and ("[기타]" in matched_formats or "[폐문]" in matched_formats):
@@ -649,6 +646,8 @@ def manage_page():
                                     st.session_state.selected_indices = []  # 삭제 후 선택된 인덱스 초기화
                                 else:
                                     st.warning("삭제할 업무를 선택하세요.")
+                            else:
+                                st.warning("해당 장비 ID에 대한 업무가 없습니다.")
                             
 
                         else:
