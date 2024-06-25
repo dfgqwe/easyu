@@ -649,16 +649,14 @@ def manage_page():
                                     st.session_state.selected_indices = []  # 삭제 후 선택된 인덱스 초기화
                                 else:
                                     st.warning("삭제할 업무를 선택하세요.")
-                            else:
-                                st.warning("해당 장비 ID에 대한 업무가 없습니다.")
+                            
 
                         else:
                             st.warning(f"장비 ID '{st.session_state.device_id}'에 대한 업무가 없습니다.")
 
                     except KeyError:
                         st.error("데이터프레임에 '장비ID' 열이 존재하지 않습니다.")
-                else:
-                    st.error("데이터를 로드하는 데 문제가 발생하였습니다. 로그를 확인하세요.")
+  
   
 # 옵션 메뉴 생성
 selected = option_menu(
