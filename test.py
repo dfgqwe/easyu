@@ -170,10 +170,17 @@ def load_radar_image():
         with urlopen(url, params=params) as response:
             image_bytes = response.read()
         
-        # PIL을 사용하여 이미지 열기
-        radar_image = Image.open(BytesIO(image_bytes))
+        # 이미지 파일 여부 확인 (헤더 체크)
+        if image_bytes.startswith(b'\xff\xd8'):
+            # JPEG 형식인 경우
+            image = Image.open(BytesIO(image_bytes))
+        elif image_bytes.startswith(b'\x89PNG\r\n\x1a\n'):
+            # PNG 형식인 경우
+            image = Image.open(BytesIO(image_bytes))
+        else:
+            raise ValueError("Unsupported image format")
         
-        return radar_image
+        return image
     
     except Exception as e:
         raise ValueError(f"Failed to process radar image: {str(e)}")
