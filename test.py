@@ -8,6 +8,7 @@ import requests
 from github import Github
 import time
 import xml.etree.ElementTree as ET
+import json
 
 # 포맷 데이터 포멧
 formats = {
