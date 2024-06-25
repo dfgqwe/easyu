@@ -231,9 +231,8 @@ def load_data_from_google_drive(file_id):
 
 def update_data_on_google_drive(file_id, data, folder_id):
     try:
-        # 데이터프레임을 CSV 파일로 변환하여 바이트 스트림으로 읽기
-        data_csv = data.to_csv(index=False).encode('utf-8')
-        media = io.BytesIO(data_csv)
+        # 데이터프레임을 CSV 파일로 변환
+        csv_data = data.to_csv(index=False)
 
         # 서비스 계정 정보 로드
         service_account_info = {
@@ -262,10 +261,11 @@ def update_data_on_google_drive(file_id, data, folder_id):
         }
 
         # 파일 업로드
-        service.files().update(
+        media = service.files().update(
             fileId=file_id,
             body=file_metadata,
-            media_body=media
+            media_body=csv_data,
+            fields='id'
         ).execute()
 
         st.success("데이터가 성공적으로 업데이트 되었습니다.")
