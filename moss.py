@@ -262,7 +262,7 @@ def update_data_on_google_drive(file_id, data, folder_id):
         }
 
         # 파일 업로드
-        media = io.FileIO(csv_filename, mimetype='text/csv')
+        media = pd.DataFrame.to_csv(data, encoding='utf-8')
         service.files().update(
             fileId=file_id,
             body=file_metadata,
