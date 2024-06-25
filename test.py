@@ -156,22 +156,23 @@ B_S_head_formats = {
 
 def load_radar_image():
     try:
-        url = 'https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf'
+        base_url = 'https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf'
         params = {
             'tm': '201807091620',
             'cmp': 'HSR',
             'qcd': 'MSK',
             'authKey': 'duw75FWOQuqsO-RVjiLqdQ'
         }
+        
         # Construct the full URL with query parameters
-        full_url = f'{url}?{"&".join(f"{key}={value}" for key, value in params.items())}'
+        full_url = f"{base_url}?{'&'.join(f'{key}={value}' for key, value in params.items())}"
         
         # API request and read image data
         with urlopen(full_url) as response:
-            image_data = response.read()
+            image_bytes = response.read()
         
         # Convert image data to PIL Image
-        image = Image.open(BytesIO(image_data))
+        image = Image.open(BytesIO(image_bytes))
         return image
     except Exception as e:
         st.error(f"Failed to load radar image: {str(e)}")
