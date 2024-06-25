@@ -203,31 +203,37 @@ def authenticate_google_drive():
     drive = GoogleDrive(gauth)
     return drive
 
-def download_file_from_google_drive(file_id, dest_path):
-    url = f'https://drive.google.com/uc?id={file_id}'
-    gdown.download(url, dest_path, quiet=False)
-
-def update_data_on_google_drive(file_id, dest_path, folder_id):
-    SCOPES = ['https://www.googleapis.com/auth/drive']
-    SERVICE_ACCOUNT_FILE = 'client_secrets.json'  # 서비스 계정 JSON 파일 경로
-
-    credentials = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
-    
+# Google Drive 연동을 위한 함수
+def load_data_from_google_drive(file_id):
+    credentials = service_account.Credentials.from_service_account_info(
+        st.secrets["gcp_service_account"]
+    )
     service = build('drive', 'v3', credentials=credentials)
+    request = service.files().get_media(fileId=file_id)
+    file_content = io.BytesIO(request.execute())
+    data = pd.read_csv(file_content)
+    return data
 
-    media = MediaFileUpload(dest_path, mimetype='text/csv')
-
-    file_metadata = {
-        'name': os.path.basename(dest_path),
-        'parents': [folder_id]
-    }
-
+def update_data_on_google_drive(file_id, data, folder_id):
+    credentials = service_account.Credentials.from_service_account_info(
+        st.secrets["client_id "]
+    )
+    service = build('drive', 'v3', credentials=credentials)
+    
+    # 데이터프레임을 CSV 파일로 변환
+    data_csv = data.to_csv(index=False)
+    file_metadata = {'name': 'ws_data.csv', 'parents': [folder_id]}
+    media = io.BytesIO(data_csv.encode('utf-8'))
+    media.seek(0)
+    
+    # 파일 업데이트 (파일을 새 버전으로 교체)
     service.files().update(
         fileId=file_id,
         media_body=media,
-        body=file_metadata
+        fields='id'
     ).execute()
+    
+    st.success("데이터가 성공적으로 업데이트 되었습니다.")
 
 # Google Drive에서 데이터 파일 다운로드
 file_id = '1fqY7-rh1wk5UWRckQ9ZihoQx4GGmCnsF'  # Google Drive 파일 ID
@@ -551,35 +557,26 @@ def manage_page():
                 st.header("야간")
                 st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.get("night_content", ""), height=200)
 
-                # Google Drive에서 데이터 파일 다운로드
-            if not os.path.exists(dest_path):
-                download_file_from_google_drive(file_id, dest_path)
-
-            # 데이터 파일 불러오기
-            work = pd.read_csv(dest_path)
-
-            # '장비ID'와 '업무명'이 동일한 경우 중복된 행 제거
-            df_no_duplicates = work.drop_duplicates(subset=['장비ID', '업무명'])
-
-            # 장비ID 순서대로 정렬
-            df_no_duplicates = df_no_duplicates.sort_values(by='장비ID')
-
             # IP 입력 받기
-            ip_input = st.text_input("IP 입력", "")
+            ip_address = st.text_input("IP 주소를 입력하세요:")
+             
+            if ip_address:
+                file_id = "1fqY7-rh1wk5UWRckQ9ZihoQx4GGmCnsF"  # 실제 파일 ID로 대체
+                folder_id = "1E49euLLfQxeH_-padydigX5a5CYNFq5z"  # 실제 폴더 ID로 대체
 
-            # 선택된 체크박스의 인덱스를 저장할 리스트 초기화
-            if 'selected_indices' not in st.session_state:
-                st.session_state.selected_indices = []
-    
-            if ip_input:
-                # 입력된 IP에 해당되는 행 찾기
-                if ip_input in df_no_duplicates['장비ID'].values:
-                    # 해당 IP의 사업장 찾기
-                    address = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]['사업장'].values[0]
-                    st.write("★동일국소 점검 대상★")
 
-                    same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
+                # Google Drive에서 데이터 로드
+                df = load_data_from_google_drive(file_id)
+        
+                # 입력된 IP에 해당하는 데이터 필터링
+                same_address_work = df[df['IP주소'] == ip_address]
+        
+                if not same_address_work.empty:
+                    st.write(f"입력된 IP 주소: {ip_address}")
+                    st.write("관련된 업무 목록:")
 
+                    st.session_state.selected_indices = st.session_state.get("selected_indices", [])
+                    
                     for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
                         checkbox_value = st.checkbox(f"{row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})", key=f"checkbox_{index}", value=index in st.session_state.selected_indices)
                         if checkbox_value and index not in st.session_state.selected_indices:
@@ -589,18 +586,19 @@ def manage_page():
 
                 if st.button("선택된 업무 삭제"):
                     if st.session_state.selected_indices:
-                        st.write(f"Before deletion: {df_no_duplicates.shape[0]} rows")
-                        df_no_duplicates = df_no_duplicates.drop(st.session_state.selected_indices)
-                        st.write(f"After deletion: {df_no_duplicates.shape[0]} rows")
-    
-                        # 수정된 데이터를 다시 Google Drive에 업데이트
-                        df_no_duplicates.to_csv(dest_path, index=False)
-                        update_data_on_google_drive(file_id, dest_path, folder_id)
-    
+                        st.write(f"삭제 전: {df.shape[0]} 행")
+                        df = df.drop(st.session_state.selected_indices)
+                        st.write(f"삭제 후: {df.shape[0]} 행")
+
+                        # 수정된 데이터를 Google Drive에 업데이트
+                        update_data_on_google_drive(file_id, df, folder_id)
                         st.success("데이터가 성공적으로 업데이트 되었습니다.")
                         st.session_state.selected_indices = []  # 삭제 후 선택된 인덱스 초기화
-            else:
-                st.warning("삭제할 업무를 선택하세요.")
+                    else:
+                        st.warning("삭제할 업무를 선택하세요.")
+                    
+                else:
+                    st.warning("해당 IP 주소에 대한 업무가 없습니다.")
 
   
 # 옵션 메뉴 생성
