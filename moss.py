@@ -580,42 +580,50 @@ def manage_page():
                 st.session_state.ip_address = ""
             if "selected_indices" not in st.session_state:
                 st.session_state.selected_indices = []
+                
 
             # IP 입력 받기
             st.session_state.ip_address = st.text_input("IP 주소를 입력하세요:", st.session_state.ip_address)
             if st.session_state.ip_address:
-                
-                # Google Drive에서 데이터 로드
-                df = load_data_from_google_drive(file_id)
+                try:
+                    # Google Drive에서 데이터 로드
+                    df = load_data_from_google_drive(file_id)  # file_id를 어디서 가져오는지 확인 필요
         
-                # 입력된 IP에 해당하는 데이터 필터링
-                same_address_work = df[df['IP주소'] == st.session_state.ip_address]
-        
-                if not same_address_work.empty:
-                    st.write(f"입력된 IP 주소: {st.session_state.ip_address}")
-                    st.write("관련된 업무 목록:")
+                    # 입력된 IP에 해당하는 데이터 필터링
+                    if 'IP주소' in df.columns:  # 'IP주소' 열이 있는지 확인
+                        same_address_work = df[df['IP주소'] == st.session_state.ip_address]
 
-                    for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
-                        checkbox_value = st.checkbox(f"{row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})", key=f"checkbox_{index}", value=index in st.session_state.selected_indices)
-                        if checkbox_value and index not in st.session_state.selected_indices:
-                            st.session_state.selected_indices.append(index)  # 선택된 체크박스의 인덱스를 리스트에 추가
-                        elif not checkbox_value and index in st.session_state.selected_indices:
-                            st.session_state.selected_indices.remove(index)  # 선택 해제된 체크박스를 리스트에서 제거
+                        if not same_address_work.empty:
+                            st.write(f"입력된 IP 주소: {st.session_state.ip_address}")
+                            st.write("관련된 업무 목록:")
 
-                    if st.button("선택된 업무 삭제"):
-                        if st.session_state.selected_indices:
-                            st.write(f"삭제 전: {df.shape[0]} 행")
-                            df = df.drop(st.session_state.selected_indices)
-                            st.write(f"삭제 후: {df.shape[0]} 행")
+                            # 체크박스로 선택된 업무 관리
+                            for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
+                                checkbox_value = st.checkbox(f"{row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})", key=f"checkbox_{index}", value=index in st.session_state.selected_indices)
+                                if checkbox_value and index not in st.session_state.selected_indices:
+                                    st.session_state.selected_indices.append(index)
+                                elif not checkbox_value and index in st.session_state.selected_indices:
+                                    st.session_state.selected_indices.remove(index)
 
-                            # 수정된 데이터를 Google Drive에 업데이트
-                            update_data_on_google_drive(file_id, df, folder_id)
-                            st.success("데이터가 성공적으로 업데이트 되었습니다.")
-                            st.session_state.selected_indices = []  # 삭제 후 선택된 인덱스 초기화
+                            # 선택된 업무 삭제 버튼
+                            if st.button("선택된 업무 삭제"):
+                                if st.session_state.selected_indices:
+                                    st.write(f"삭제 전: {df.shape[0]} 행")
+                                    df = df.drop(st.session_state.selected_indices)
+                                    st.write(f"삭제 후: {df.shape[0]} 행")
+
+                                    # 수정된 데이터를 Google Drive에 업데이트
+                                    update_data_on_google_drive(file_id, df, folder_id)
+                                    st.success("데이터가 성공적으로 업데이트 되었습니다.")
+                                    st.session_state.selected_indices = []  # 선택된 인덱스 초기화
+                                else:
+                                    st.warning("삭제할 업무를 선택하세요.")
+                            else:
+                                st.warning("해당 IP 주소에 대한 업무가 없습니다.")
                         else:
-                            st.warning("삭제할 업무를 선택하세요.")
-                    else:
-                        st.warning("해당 IP 주소에 대한 업무가 없습니다.")
+                            st.error("데이터프레임에 'IP주소' 열이 존재하지 않습니다.")
+                    except Exception as e:
+                        st.error(f"오류 발생: {e}")
 
   
 # 옵션 메뉴 생성
