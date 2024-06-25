@@ -491,7 +491,6 @@ def worksync_page():
     st.title("Worksync")
 
     # Download the data file from Google Drive
-    file_id = '1fqY7-rh1wk5UWRckQ9ZihoQx4GGmCnsF'
     dest_path = 'ws_data.csv'
 
     # 데이터 파일 불러오기
