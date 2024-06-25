@@ -231,9 +231,9 @@ def load_data_from_google_drive(file_id):
 
 def update_data_on_google_drive(file_id, data, folder_id):
     try:
-        # 데이터프레임을 CSV 파일로 저장
-        csv_filename = 'updated_data.csv'
-        data.to_csv(csv_filename, index=False)
+        # 데이터프레임을 CSV 파일로 변환하여 바이트 스트림으로 읽기
+        data_csv = data.to_csv(index=False).encode('utf-8')
+        media = io.BytesIO(data_csv)
 
         # 서비스 계정 정보 로드
         service_account_info = {
@@ -257,12 +257,11 @@ def update_data_on_google_drive(file_id, data, folder_id):
 
         # 파일 메타데이터 설정
         file_metadata = {
-            'name': csv_filename,
+            'name': 'updated_data.csv',
             'parents': [folder_id]
         }
 
         # 파일 업로드
-        media = pd.DataFrame.to_csv(data, encoding='utf-8')
         service.files().update(
             fileId=file_id,
             body=file_metadata,
