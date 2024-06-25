@@ -203,31 +203,31 @@ def authenticate_google_drive():
     drive = GoogleDrive(gauth)
     return drive
 
-# Google Drive 연동을 위한 함수
 def load_data_from_google_drive(file_id):
-    client_id = st.secrets["installed"]["client_id"]
-    project_id = st.secrets["installed"]["project_id"]
-    auth_uri = st.secrets["installed"]["auth_uri"]
-    token_uri = st.secrets["installed"]["token_uri"]
-    auth_provider_x509_cert_url = st.secrets["installed"]["auth_provider_x509_cert_url"]
-    client_secret = st.secrets["installed"]["client_secret"]
-    redirect_uris = st.secrets["installed"]["redirect_uris"]
-    
-    credentials = service_account.Credentials.from_service_account_info({
-        "client_id": client_id,
-        "project_id": project_id,
-        "auth_uri": auth_uri,
-        "token_uri": token_uri,
-        "auth_provider_x509_cert_url": auth_provider_x509_cert_url,
-        "client_secret": client_secret,
-        "redirect_uris": redirect_uris
-    })
-    
+    # 서비스 계정 정보 로드
+    service_account_info = {
+        "type": st.secrets["service_account"]["type"],
+        "project_id": st.secrets["service_account"]["project_id"],
+        "private_key_id": st.secrets["service_account"]["private_key_id"],
+        "private_key": st.secrets["service_account"]["private_key"],
+        "client_email": st.secrets["service_account"]["client_email"],
+        "client_id": st.secrets["service_account"]["client_id"],
+        "auth_uri": st.secrets["service_account"]["auth_uri"],
+        "token_uri": st.secrets["service_account"]["token_uri"],
+        "auth_provider_x509_cert_url": st.secrets["service_account"]["auth_provider_x509_cert_url"],
+        "client_x509_cert_url": st.secrets["service_account"]["client_x509_cert_url"]
+    }
+
+    # 자격 증명 생성
+    credentials = service_account.Credentials.from_service_account_info(service_account_info)
+
+    # Google Drive API 클라이언트 생성
     service = build('drive', 'v3', credentials=credentials)
+
+    # 파일 로드
     request = service.files().get_media(fileId=file_id)
-    file_content = io.BytesIO(request.execute())
-    data = pd.read_csv(file_content)
-    return data
+    file_data = request.execute()
+    return file_data
 
 def update_data_on_google_drive(file_id, data, folder_id):
     credentials = service_account.Credentials.from_service_account_info(
