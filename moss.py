@@ -273,6 +273,9 @@ def update_data_on_google_drive(file_id, data, folder_id):
     except Exception as e:
         st.error(f"데이터 업데이트 중 오류 발생: {e}")
 
+
+
+
 # Google Drive에서 데이터 파일 다운로드
 file_id = '1vx-OkPaIElM28UCFu0sj-0pyBpZEq5pm'  # Google Drive 파일 ID
 folder_id = '1NdTleLh_UnC7b-wAYEXC0RtOIfKQninGz'  # Google Drive 폴더 ID
