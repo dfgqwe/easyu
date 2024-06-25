@@ -9,6 +9,7 @@ from github import Github
 import time
 import xml.etree.ElementTree as ET
 import json
+from urllib.request import urlopen
 
 # 포맷 데이터 포멧
 formats = {
@@ -254,12 +255,15 @@ def home_page():
         st.markdown('기상 레이더')
 
         # 외부 API 호출 및 데이터 가져오기
-        url = 'https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf?cmp=HSR&qcd=MSK&authKey=duw75FWOQuqsO-RVjiLqdQ'
+        domain = 'https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf?'
+        cmp='HSR'
+        qcd='MSK'
+        authKey='duw75FWOQuqsO-RVjiLqdQ'
+        url = domain + cmp + qcd + authKey
 
-
-        response = requests.get(url, verify=False)
-        res = json.loads(response.text)
-        st.write(res)
+        with urlopen(url) as f:
+            html = f.read()
+            st.write(html)
 
 
 
