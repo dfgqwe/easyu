@@ -250,8 +250,8 @@ def update_data_on_google_drive(file_id, data, folder_id):
     
     st.success("데이터가 성공적으로 업데이트 되었습니다.")
 # Google Drive에서 데이터 파일 다운로드
-file_id = '1fqY7-rh1wk5UWRckQ9ZihoQx4GGmCnsF'  # Google Drive 파일 ID
-folder_id = '1E49euLLfQxeH_-padydigX5a5CYNFq5z'  # Google Drive 폴더 ID
+file_id = '1vx-OkPaIElM28UCFu0sj-0pyBpZEq5pm'  # Google Drive 파일 ID
+folder_id = '1NdTleLh_UnC7b-wAYEXC0RtOIfKQninGz'  # Google Drive 폴더 ID
 dest_path = 'ws_data.csv'  # 로컬 파일 경로
 if not os.path.exists(dest_path):
     download_file_from_google_drive(file_id, dest_path)
