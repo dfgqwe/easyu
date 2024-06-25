@@ -202,7 +202,7 @@ def authenticate_google_drive():
     gauth.LocalWebserverAuth()
     drive = GoogleDrive(gauth)
     return drive
-
+@st.cache_data
 def load_data_from_google_drive(file_id):
     # 서비스 계정 정보 로드
     service_account_info = {
@@ -237,7 +237,7 @@ def load_data_from_google_drive(file_id):
     except Exception as e:
         st.error(f"파일을 로드하는 중 오류 발생: {str(e)}")
         return None
-
+@st.cache_data
 def update_data_on_google_drive(file_id, data, folder_id):
     try:
         # 데이터프레임을 CSV 파일로 변환
