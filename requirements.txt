@@ -8,3 +8,5 @@ streamlit==1.25.0
 streamlit-option-menu==0.3.2
 gdown==4.7.1
 openpyxl==3.0.10
+PyGithub==1.55
+requests
