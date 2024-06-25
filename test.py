@@ -257,6 +257,7 @@ def home_page():
 
 
         response = requests.get(url)
+        st.write(response.json())
 
 
 
