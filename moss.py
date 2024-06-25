@@ -656,6 +656,8 @@ def manage_page():
 
                     except KeyError:
                         st.error("데이터프레임에 '장비ID' 열이 존재하지 않습니다.")
+                else:
+                    st.error("데이터를 로드하는 데 문제가 발생하였습니다. 로그를 확인하세요.")
   
   
 # 옵션 메뉴 생성
