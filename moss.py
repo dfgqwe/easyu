@@ -205,6 +205,14 @@ def authenticate_google_drive():
 
 # Google Drive 연동을 위한 함수
 def load_data_from_google_drive(file_id):
+    client_id = st.secrets["installed"]["client_id"]
+    project_id = st.secrets["installed"]["project_id"]
+    auth_uri = st.secrets["installed"]["auth_uri"]
+    token_uri = st.secrets["installed"]["token_uri"]
+    auth_provider_x509_cert_url = st.secrets["installed"]["auth_provider_x509_cert_url"]
+    client_secret = st.secrets["installed"]["client_secret"]
+    redirect_uris = st.secrets["installed"]["redirect_uris"]
+    
     credentials = service_account.Credentials.from_service_account_info(
         st.secrets["client_id "]
     )
