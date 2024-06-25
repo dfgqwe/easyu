@@ -224,10 +224,19 @@ def load_data_from_google_drive(file_id):
     # Google Drive API 클라이언트 생성
     service = build('drive', 'v3', credentials=credentials)
 
-    # 파일 로드
-    request = service.files().get_media(fileId=file_id)
-    file_data = request.execute()
-    return file_data
+    try:
+        # 파일 로드
+        request = service.files().get_media(fileId=file_id)
+        file_bytes = request.execute()
+
+        # BytesIO를 사용하여 바이트 스트림을 데이터프레임으로 변환
+        df = pd.read_csv(io.BytesIO(file_bytes))
+
+        return df
+
+    except Exception as e:
+        st.error(f"파일을 로드하는 중 오류 발생: {str(e)}")
+        return None
 
 def update_data_on_google_drive(file_id, data, folder_id):
     try:
