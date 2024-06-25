@@ -256,8 +256,9 @@ def home_page():
         url = 'https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf?cmp=HSR&qcd=MSK&authKey=duw75FWOQuqsO-RVjiLqdQ'
 
 
-        response = requests.get(url)
-        st.write(response.json())
+        response = requests.get(url, verify=False)
+        res = json.loads(response.text)
+        st.write(res)
 
 
 
