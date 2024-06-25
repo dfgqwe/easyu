@@ -155,7 +155,7 @@ B_S_head_formats = {
 
 def load_radar_image():
     # 기상 레이더 데이터 API URL
-    url = 'https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf'
+    base_url = 'https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf'
     
     # API 호출 파라미터 설정
     params = {
@@ -165,9 +165,12 @@ def load_radar_image():
         'authKey': 'duw75FWOQuqsO-RVjiLqdQ'
     }
     
+    # URL 조립
+    url = f'{base_url}?{urlencode(params)}'
+    
     try:
-        # API 요청 및 이미지 데이터 읽기
-        with urlopen(url, params=params) as response:
+        # API 요청 및 데이터 읽기
+        with urlopen(url) as response:
             image_bytes = response.read()
         
         # 이미지 파일 여부 확인 (헤더 체크)
