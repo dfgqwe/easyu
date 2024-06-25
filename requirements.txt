@@ -5,7 +5,7 @@ google-api-python-client==2.96.0
 pandas==1.5.3
 pyperclip==1.8.2
 streamlit==1.25.0
-streamlit-option-menu==0.3.2
+streamlit-option-menu
 gdown==4.7.1
 openpyxl==3.0.10
 PyGithub==1.55
