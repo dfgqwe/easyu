@@ -172,13 +172,16 @@ def load_radar_image():
         
         # 이미지 데이터 읽기
         image_bytes = BytesIO(response.content)
-        radar_image = Image.open(image_bytes)
         
-        return radar_image
+        # 이미지 파일인지 확인 (PIL로 읽어보기)
+        try:
+            radar_image = Image.open(image_bytes)
+            return radar_image
+        except Exception as e:
+            raise ValueError(f"Failed to open image: {str(e)}")
     
     except requests.exceptions.RequestException as e:
-        st.error(f"Failed to retrieve radar image: {e}")
-        return None
+        raise ValueError(f"Failed to retrieve radar image: {str(e)}")
 
 
 
@@ -288,11 +291,7 @@ def home_page():
         # 기상 레이더 이미지 가져오기
         radar_image = load_radar_image()
 
-        if radar_image:
-            # 이미지를 Streamlit에 표시
-            st.image(radar_image, caption='기상 레이더 데이터', use_column_width=True)
-        else:
-            st.error("Failed to load radar image. Please check the API or try again later.")
+        st.image(radar_image, caption='기상 레이더 이미지', use_column_width=True)
 
 
 
