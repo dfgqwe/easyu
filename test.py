@@ -262,9 +262,7 @@ def home_page():
     
         # 이미지 출력
         st.image(image_data, caption='기상 레이더 이미지')
-    
-        except Exception as e:
-            st.error(f"Failed to fetch or display image: {str(e)}")
+
 
 
 
