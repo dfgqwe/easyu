@@ -255,7 +255,7 @@ def home_page():
         # 외부 API 호출 및 데이터 가져오기
         url = 'http://apis.data.go.kr/1360000/RadarImgInfoService/getCmpImg'
         params = {
-            'serviceKey': 'uGp%2B7K3cQU1t20of%2B1jHMPuRCI%2BoPCicOKU5Kh9ler3b7ONl08gNKqsHLgUkEGq0YijO48%2FBO77YaChDwK9nKA%3D%3D',
+            'serviceKey': 'uGp+7K3cQU1t20of+1jHMPuRCI+oPCicOKU5Kh9ler3b7ONl08gNKqsHLgUkEGq0YijO48/BO77YaChDwK9nKA==',
             'pageNo': '1',
             'numOfRows': '10',
             'dataType': 'XML',
