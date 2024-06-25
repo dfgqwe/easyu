@@ -620,10 +620,10 @@ def manage_page():
                                     st.warning("삭제할 업무를 선택하세요.")
                             else:
                                 st.warning("해당 IP 주소에 대한 업무가 없습니다.")
-                        else:
-                            st.error("데이터프레임에 'IP주소' 열이 존재하지 않습니다.")
-                    except Exception as e:
-                        st.error(f"오류 발생: {e}")
+                    else:
+                        st.error("데이터프레임에 'IP주소' 열이 존재하지 않습니다.")
+                except Exception as e:
+                    st.error(f"오류 발생: {e}")
 
   
 # 옵션 메뉴 생성
