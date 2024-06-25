@@ -154,39 +154,28 @@ B_S_head_formats = {
 ]
 
 def load_radar_image():
-    # 기상 레이더 데이터 API URL
-    base_url = 'https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf'
-    
-    # API 호출 파라미터 설정
-    params = {
-        'tm': '201807091620',
-        'cmp': 'HSR',
-        'qcd': 'MSK',
-        'authKey': 'duw75FWOQuqsO-RVjiLqdQ'
-    }
-    
-    # URL 조립
-    url = f'{base_url}?{urlencode(params)}'
-    
     try:
+        url = 'https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf'
+        params = {
+            'tm': '201807091620',
+            'cmp': 'HSR',
+            'qcd': 'MSK',
+            'authKey': 'duw75FWOQuqsO-RVjiLqdQ'
+        }
+        # URL 조합
+        full_url = f'{url}?{"&".join(f"{key}={value}" for key, value in params.items())}'
+        
         # API 요청 및 데이터 읽기
-        with urlopen(url) as response:
-            image_bytes = response.read()
+        with urlopen(full_url) as response:
+            image_data = response.read()
         
-        # 이미지 파일 여부 확인 (헤더 체크)
-        if image_bytes.startswith(b'\xff\xd8'):
-            # JPEG 형식인 경우
-            image = Image.open(BytesIO(image_bytes))
-        elif image_bytes.startswith(b'\x89PNG\r\n\x1a\n'):
-            # PNG 형식인 경우
-            image = Image.open(BytesIO(image_bytes))
-        else:
-            raise ValueError("Unsupported image format")
-        
+        # 이미지 데이터를 PIL Image로 변환
+        image = Image.open(BytesIO(image_data))
         return image
-    
     except Exception as e:
-        raise ValueError(f"Failed to process radar image: {str(e)}")
+        st.error(f"Failed to load radar image: {str(e)}")
+        st.write(traceback.format_exc())
+        return None
 
 
 
@@ -293,8 +282,10 @@ def home_page():
         # Streamlit 애플리케이션 제목 설정
         st.title('기상 레이더 데이터 시각화')
 
+        
         radar_image = load_radar_image()
-        st.image(radar_image, caption='기상 레이더 이미지', use_column_width=True)
+        if radar_image:
+            st.image(radar_image, caption='기상 레이더 이미지', use_column_width=True)
 
 
 
