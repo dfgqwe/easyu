@@ -202,7 +202,7 @@ def authenticate_google_drive():
     gauth.LocalWebserverAuth()
     drive = GoogleDrive(gauth)
     return drive
-@st.cache_data
+
 def load_data_from_google_drive(file_id):
     # 서비스 계정 정보 로드
     service_account_info = {
