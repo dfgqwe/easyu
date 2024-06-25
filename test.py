@@ -154,31 +154,6 @@ B_S_head_formats = {
     "고객홍보"
 ]
 
-def load_radar_image():
-    try:
-        base_url = 'https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf'
-        params = {
-            'tm': '201807091620',
-            'cmp': 'HSR',
-            'qcd': 'MSK',
-            'authKey': 'duw75FWOQuqsO-RVjiLqdQ'
-        }
-        
-        # Construct the full URL with query parameters
-        full_url = f"{base_url}?{'&'.join(f'{key}={value}' for key, value in params.items())}"
-        
-        # API request and read image data
-        with urlopen(full_url) as response:
-            image_bytes = response.read()
-        
-        # Convert image data to PIL Image
-        image = Image.open(BytesIO(image_bytes))
-        return image
-    except Exception as e:
-        st.error(f"Failed to load radar image: {str(e)}")
-        st.write(traceback.format_exc())
-        return None
-
 
 
 
@@ -280,14 +255,6 @@ def home_page():
             st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
 
 
-    with col2:
-        # Streamlit 애플리케이션 제목 설정
-        st.title('기상 레이더 데이터 시각화')
-
-        
-        radar_image = load_radar_image()
-        if radar_image:
-            st.image(radar_image, caption='기상 레이더 이미지', use_column_width=True)
 
 
 
