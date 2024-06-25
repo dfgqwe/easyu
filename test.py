@@ -153,6 +153,36 @@ B_S_head_formats = {
     "고객홍보"
 ]
 
+def load_radar_image():
+    # 기상 레이더 데이터 API URL
+    url = 'https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf'
+    
+    # API 호출 파라미터 설정
+    params = {
+        'tm': '201807091620',
+        'cmp': 'HSR',
+        'qcd': 'MSK',
+        'authKey': 'duw75FWOQuqsO-RVjiLqdQ'
+    }
+    
+    try:
+        # API 요청
+        response = requests.get(url, params=params)
+        response.raise_for_status()  # HTTP 오류 체크
+        
+        # 이미지 데이터 읽기
+        image_bytes = BytesIO(response.content)
+        radar_image = Image.open(image_bytes)
+        
+        return radar_image
+    
+    except requests.exceptions.RequestException as e:
+        st.error(f"Failed to retrieve radar image: {e}")
+        return None
+
+
+
+
 @st.cache_data
 def get_format(text):
     matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
@@ -253,25 +283,16 @@ def home_page():
 
     with col2:
         # Streamlit 애플리케이션 제목 설정
-        st.markdown('기상 레이더')
+        st.title('기상 레이더 데이터 시각화')
 
-        # 외부 API 호출 및 데이터 가져오기
-        url = 'https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf?tm=201807091620&cmp=HSR&qcd=MSK&authKey=duw75FWOQuqsO-RVjiLqdQ'
-        try:
-            # API 요청 및 데이터 읽기 (UTF-8)
-            with urlopen(url) as response:
-                html = response.read().decode('utf-8')
-        except UnicodeDecodeError:
-            try:
-                # API 요청 및 데이터 읽기 (ISO-8859-1)
-                with urlopen(url) as response:
-                    html = response.read().decode('ISO-8859-1')
-            except Exception as e:
-                st.error(f"Failed to decode response: {str(e)}")
-                st.stop()
+        # 기상 레이더 이미지 가져오기
+        radar_image = load_radar_image()
 
-        # 데이터 출력
-        st.write(html)
+        if radar_image:
+            # 이미지를 Streamlit에 표시
+            st.image(radar_image, caption='기상 레이더 데이터', use_column_width=True)
+        else:
+            st.error("Failed to load radar image. Please check the API or try again later.")
 
 
 
