@@ -10,6 +10,7 @@ import time
 import xml.etree.ElementTree as ET
 from urllib.request import urlopen
 from PIL import Image
+from io import BytesIO
 
 # 포맷 데이터 포멧
 formats = {
