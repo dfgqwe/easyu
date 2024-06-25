@@ -204,10 +204,24 @@ def authenticate_google_drive():
     return drive
 
 def load_data_from_google_drive(file_id):
-    # 구글 드라이브 API 클라이언트 생성
-    credentials = service_account.Credentials.from_service_account_info(
-        st.secrets["service_account"]
-    )
+    # 서비스 계정 정보 로드
+    service_account_info = {
+        "type": st.secrets["service_account"]["type"],
+        "project_id": st.secrets["service_account"]["project_id"],
+        "private_key_id": st.secrets["service_account"]["private_key_id"],
+        "private_key": st.secrets["service_account"]["private_key"],
+        "client_email": st.secrets["service_account"]["client_email"],
+        "client_id": st.secrets["service_account"]["client_id"],
+        "auth_uri": st.secrets["service_account"]["auth_uri"],
+        "token_uri": st.secrets["service_account"]["token_uri"],
+        "auth_provider_x509_cert_url": st.secrets["service_account"]["auth_provider_x509_cert_url"],
+        "client_x509_cert_url": st.secrets["service_account"]["client_x509_cert_url"]
+    }
+
+    # 자격 증명 생성
+    credentials = service_account.Credentials.from_service_account_info(service_account_info)
+
+    # Google Drive API 클라이언트 생성
     service = build('drive', 'v3', credentials=credentials)
 
     # 파일 로드
@@ -217,14 +231,28 @@ def load_data_from_google_drive(file_id):
 
 def update_data_on_google_drive(file_id, data, folder_id):
     try:
-        # 데이터프레임을 CSV 파일로 변환하여 로컬에 저장
+        # 데이터프레임을 CSV 파일로 저장
         csv_filename = 'updated_data.csv'
         data.to_csv(csv_filename, index=False)
 
-        # 구글 드라이브 API 클라이언트 생성
-        credentials = service_account.Credentials.from_service_account_info(
-            st.secrets["service_account"]
-        )
+        # 서비스 계정 정보 로드
+        service_account_info = {
+            "type": st.secrets["service_account"]["type"],
+            "project_id": st.secrets["service_account"]["project_id"],
+            "private_key_id": st.secrets["service_account"]["private_key_id"],
+            "private_key": st.secrets["service_account"]["private_key"],
+            "client_email": st.secrets["service_account"]["client_email"],
+            "client_id": st.secrets["service_account"]["client_id"],
+            "auth_uri": st.secrets["service_account"]["auth_uri"],
+            "token_uri": st.secrets["service_account"]["token_uri"],
+            "auth_provider_x509_cert_url": st.secrets["service_account"]["auth_provider_x509_cert_url"],
+            "client_x509_cert_url": st.secrets["service_account"]["client_x509_cert_url"]
+        }
+
+        # 자격 증명 생성
+        credentials = service_account.Credentials.from_service_account_info(service_account_info)
+
+        # Google Drive API 클라이언트 생성
         service = build('drive', 'v3', credentials=credentials)
 
         # 파일 메타데이터 설정
