@@ -4,3 +4,6 @@ streamlit-option-menu
 PyGithub==1.55
 requests
 gdown
+service_account 
+build
+io
