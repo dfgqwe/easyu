@@ -250,12 +250,12 @@ def home_page():
 
     with col2:
         # Streamlit 애플리케이션 제목 설정
-        st.title('외부 API 데이터 가져오기')
+        st.header('기상 레이')
 
         # 외부 API 호출 및 데이터 가져오기
         url = 'http://apis.data.go.kr/1360000/RadarImgInfoService/getCmpImg'
         params = {
-            'serviceKey': '서비스키',
+            'serviceKey': 'uGp%2B7K3cQU1t20of%2B1jHMPuRCI%2BoPCicOKU5Kh9ler3b7ONl08gNKqsHLgUkEGq0YijO48%2FBO77YaChDwK9nKA%3D%3D',
             'pageNo': '1',
             'numOfRows': '10',
             'dataType': 'XML',
