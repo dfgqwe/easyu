@@ -253,17 +253,10 @@ def home_page():
         st.markdown('기상 레이더')
 
         # 외부 API 호출 및 데이터 가져오기
-        url = 'http://apis.data.go.kr/1360000/RadarImgInfoService/getCmpImg'
-        params = {
-            'serviceKey': 'uGp+7K3cQU1t20of+1jHMPuRCI+oPCicOKU5Kh9ler3b7ONl08gNKqsHLgUkEGq0YijO48/BO77YaChDwK9nKA==',
-            'pageNo': '1',
-            'numOfRows': '10',
-            'dataType': 'XML',
-            'data': 'CMP_WRC',
-            'time': '20151013'
-        }
+        url = 'https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf?cmp=HSR&qcd=MSK&authKey=duw75FWOQuqsO-RVjiLqdQ'
 
-        response = requests.get(url, params=params)
+
+        response = requests.get(url)
 
 
 
