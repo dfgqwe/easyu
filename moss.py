@@ -584,9 +584,7 @@ def manage_page():
             # IP 입력 받기
             st.session_state.ip_address = st.text_input("IP 주소를 입력하세요:", st.session_state.ip_address)
             if st.session_state.ip_address:
-                file_id = "rh1wk5UWRckQ9ZihoQx4GGmCnsF"  # 실제 파일 ID로 대체
-                folder_id = "1E49euLLfQxeH_-padydigX5a5CYNFq5z"  # 실제 폴더 ID로 대체
-        
+                
                 # Google Drive에서 데이터 로드
                 df = load_data_from_google_drive(file_id)
         
