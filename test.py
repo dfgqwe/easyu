@@ -8,8 +8,8 @@ import requests
 from github import Github
 import time
 import xml.etree.ElementTree as ET
-import json
 from urllib.request import urlopen
+from PIL import Image
 
 # 포맷 데이터 포멧
 formats = {
