@@ -11,6 +11,7 @@ import xml.etree.ElementTree as ET
 from urllib.request import urlopen
 from PIL import Image
 from io import BytesIO
+import traceback
 
 # 포맷 데이터 포멧
 formats = {
@@ -162,14 +163,14 @@ def load_radar_image():
             'qcd': 'MSK',
             'authKey': 'duw75FWOQuqsO-RVjiLqdQ'
         }
-        # URL 조합
+        # Construct the full URL with query parameters
         full_url = f'{url}?{"&".join(f"{key}={value}" for key, value in params.items())}'
         
-        # API 요청 및 데이터 읽기
+        # API request and read image data
         with urlopen(full_url) as response:
             image_data = response.read()
         
-        # 이미지 데이터를 PIL Image로 변환
+        # Convert image data to PIL Image
         image = Image.open(BytesIO(image_data))
         return image
     except Exception as e:
