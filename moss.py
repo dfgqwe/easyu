@@ -206,7 +206,7 @@ def authenticate_google_drive():
 # Google Drive 연동을 위한 함수
 def load_data_from_google_drive(file_id):
     credentials = service_account.Credentials.from_service_account_info(
-        st.secrets["gcp_service_account"]
+        st.secrets["client_id "]
     )
     service = build('drive', 'v3', credentials=credentials)
     request = service.files().get_media(fileId=file_id)
