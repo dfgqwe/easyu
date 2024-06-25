@@ -255,11 +255,13 @@ def home_page():
         st.markdown('기상 레이더')
 
         # 외부 API 호출 및 데이터 가져오기
-        
-        url = https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf?tm=201807091620&cmp=HSR&qcd=MSK&authKey=duw75FWOQuqsO-RVjiLqdQ
+        url = 'https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf?tm=201807091620&cmp=HSR&qcd=MSK&authKey=duw75FWOQuqsO-RVjiLqdQ'
 
-        with urlopen(url) as f:
-            html = f.read()
+        # API 요청 및 데이터 읽기
+        with urlopen(url) as response:
+            html = response.read().decode('utf-8')
+
+            # 데이터 출력
             st.write(html)
 
 
