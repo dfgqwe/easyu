@@ -610,11 +610,9 @@ def manage_page():
 
 
 
-            # 세션 상태 초기화
-            if "ip_address" not in st.session_state:
-                st.session_state.ip_address = ""
-            if "selected_indices" not in st.session_state:
-                st.session_state.selected_indices = []
+            # 장비 ID 입력 받기
+            if "device_id" not in st.session_state:
+                st.session_state.device_id = ""
                 
             # IP 주소 입력 받기
             st.session_state.device_id = st.text_input("장비 ID를 입력하세요:", st.session_state.device_id)
