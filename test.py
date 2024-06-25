@@ -255,11 +255,8 @@ def home_page():
         st.markdown('기상 레이더')
 
         # 외부 API 호출 및 데이터 가져오기
-        domain = 'https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf?'
-        cmp='HSR'
-        qcd='MSK'
-        authKey='duw75FWOQuqsO-RVjiLqdQ'
-        url = domain + cmp + qcd + authKey
+        
+        url = https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf?tm=201807091620&cmp=HSR&qcd=MSK&authKey=duw75FWOQuqsO-RVjiLqdQ
 
         with urlopen(url) as f:
             html = f.read()
