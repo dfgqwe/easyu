@@ -257,7 +257,7 @@ def home_page():
 
         # 외부 API 호출 및 데이터 가져오기
         url = 'https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf?tm=201807091620&cmp=HSR&qcd=MSK&authKey=duw75FWOQuqsO-RVjiLqdQ'
-
+        response = requests.get(url)
         # 데이터를 이미지로 변환
         image_data = Image.open(BytesIO(response.content))
     
