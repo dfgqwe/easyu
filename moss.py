@@ -556,10 +556,20 @@ def manage_page():
                 st.header("야간")
                 st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.get("night_content", ""), height=200)
 
+
+
+
+
+
+            # 세션 상태 초기화
+            if "ip_address" not in st.session_state:
+                st.session_state.ip_address = ""
+            if "selected_indices" not in st.session_state:
+                st.session_state.selected_indices = []
+
             # IP 입력 받기
-            ip_address = st.text_input("IP 주소를 입력하세요:")
-        
-            if ip_address:
+            st.session_state.ip_address = st.text_input("IP 주소를 입력하세요:", st.session_state.ip_address)
+            if st.session_state.ip_address:
                 file_id = "rh1wk5UWRckQ9ZihoQx4GGmCnsF"  # 실제 파일 ID로 대체
                 folder_id = "1E49euLLfQxeH_-padydigX5a5CYNFq5z"  # 실제 폴더 ID로 대체
         
@@ -567,14 +577,12 @@ def manage_page():
                 df = load_data_from_google_drive(file_id)
         
                 # 입력된 IP에 해당하는 데이터 필터링
-                same_address_work = df[df['IP주소'] == ip_address]
+                same_address_work = df[df['IP주소'] == st.session_state.ip_address]
         
                 if not same_address_work.empty:
-                    st.write(f"입력된 IP 주소: {ip_address}")
+                    st.write(f"입력된 IP 주소: {st.session_state.ip_address}")
                     st.write("관련된 업무 목록:")
 
-                    st.session_state.selected_indices = st.session_state.get("selected_indices", [])
-            
                     for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
                         checkbox_value = st.checkbox(f"{row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})", key=f"checkbox_{index}", value=index in st.session_state.selected_indices)
                         if checkbox_value and index not in st.session_state.selected_indices:
