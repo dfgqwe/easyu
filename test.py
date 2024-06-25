@@ -166,22 +166,17 @@ def load_radar_image():
     }
     
     try:
-        # API 요청
-        response = requests.get(url, params=params)
-        response.raise_for_status()  # HTTP 오류 체크
+        # API 요청 및 이미지 데이터 읽기
+        with urlopen(url, params=params) as response:
+            image_bytes = response.read()
         
-        # 이미지 데이터 읽기
-        image_bytes = BytesIO(response.content)
+        # PIL을 사용하여 이미지 열기
+        radar_image = Image.open(BytesIO(image_bytes))
         
-        # 이미지 파일인지 확인 (PIL로 읽어보기)
-        try:
-            radar_image = Image.open(image_bytes)
-            return radar_image
-        except Exception as e:
-            raise ValueError(f"Failed to open image: {str(e)}")
+        return radar_image
     
-    except requests.exceptions.RequestException as e:
-        raise ValueError(f"Failed to retrieve radar image: {str(e)}")
+    except Exception as e:
+        raise ValueError(f"Failed to process radar image: {str(e)}")
 
 
 
@@ -288,9 +283,7 @@ def home_page():
         # Streamlit 애플리케이션 제목 설정
         st.title('기상 레이더 데이터 시각화')
 
-        # 기상 레이더 이미지 가져오기
         radar_image = load_radar_image()
-
         st.image(radar_image, caption='기상 레이더 이미지', use_column_width=True)
 
 
