@@ -257,12 +257,21 @@ def home_page():
 
         # 외부 API 호출 및 데이터 가져오기
         url = 'https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-rdr_cmp_inf?tm=201807091620&cmp=HSR&qcd=MSK&authKey=duw75FWOQuqsO-RVjiLqdQ'
-        response = requests.get(url)
-        # 데이터를 이미지로 변환
-        image_data = Image.open(BytesIO(response.content))
-    
-        # 이미지 출력
-        st.image(image_data, caption='기상 레이더 이미지')
+        try:
+            # API 요청 및 데이터 읽기 (UTF-8)
+            with urlopen(url) as response:
+                html = response.read().decode('utf-8')
+        except UnicodeDecodeError:
+            try:
+                # API 요청 및 데이터 읽기 (ISO-8859-1)
+                with urlopen(url) as response:
+                    html = response.read().decode('ISO-8859-1')
+            except Exception as e:
+                st.error(f"Failed to decode response: {str(e)}")
+                st.stop()
+
+        # 데이터 출력
+        st.write(html)
 
 
 
