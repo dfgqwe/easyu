@@ -283,11 +283,30 @@ def home_page():
     with col2:
         # Column 2: Four clickable sections
         st.markdown("Navigation Links")
+
+
+        # 이미지 URL과 링크 URL 설정
+        section_images = {
+            "Section 1": "기상레이더센터.png",
+            "Section 2": "날씨누리.png",
+            "Section 3": "윈디.png",
+            "Section 4": "kbs.png"
+        }
+
+        section_links = {
+            "Section 1": "https://radar.kma.go.kr/lightning/area_lightning.do",
+            "Section 2": "https://www.weather.go.kr/w/image/radar.do",
+            "Section 3": "https://www.windy.com/?37.475,126.957,5",
+            "Section 4": "https://d.kbs.co.kr/special/cctv"
+        }
+
+        for section, image_url in section_images.items():
+            link_url = section_links[section]
+            st.markdown(
+                f'<a href="{link_url}" target="_blank"><img src="{image_url}" alt="{section}" style="width:100%;height:auto;"></a>',
+                unsafe_allow_html=True
+            )
         
-        st.markdown("[Section 1](https://radar.kma.go.kr/lightning/area_lightning.do)")
-        st.markdown("[Section 2](https://www.weather.go.kr/w/image/radar.do)")
-        st.markdown("[Section 3](https://www.windy.com/?37.475,126.957,5)")
-        st.markdown("[Section 4](https://d.kbs.co.kr/special/cctv)")
 
 
 
