@@ -247,10 +247,8 @@ def home_page():
     content_option = st.radio("인수 인계", ["주간", "야간"])
 
     if content_option == "주간":
-        st.header("주간")
         st.markdown(st.session_state.day_content.replace('\n', '<br>'), unsafe_allow_html=True)
     else:
-        st.header("야간")
         st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
 
 
