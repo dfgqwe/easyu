@@ -252,9 +252,9 @@ def home_page():
         st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
 
 
-     region_option = st.selectbox("지역 선택", ["충청", "호남", "부산", "대구"])
+    region_option = st.selectbox("지역 선택", ["충청", "호남", "부산", "대구"])
 
-     col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
     with col1:
         # Column 1: Department phone numbers
