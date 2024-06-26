@@ -290,35 +290,25 @@ def moss_page():
     def complaint_checkbox_callback():
         st.session_state.bs_checked = False
     
-    # B/S 및 민원처리 체크박스
     col1, col2 = st.columns(2)
 
     with col1:
         is_bs_checked = st.checkbox("B/S", key="bs_checked", on_change=bs_checkbox_callback)
     with col2:
         is_complaint_checked = st.checkbox("민원처리", key="complaint_checked", on_change=complaint_checkbox_callback)
-    selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
-    if selected_bs_format:
+
+    if is_bs_checked:
+        selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
+        if selected_bs_format:
             results.append(selected_bs_format)
 
             # Check if selected format is "[NOC_광레벨불]"
             if selected_bs_format == "[NOC_광레벨불]":
-                st.markdown(
-            """
-            <style>
-            .stRadio > div {
-                display: flex;
-                flex-direction: row;
-            }
-            </style>
-            """,
-            unsafe_allow_html=True
-        )
-                
                 selected_option = st.radio(
                     "항목을 선택하세요:",
                     ("CM팀 이관", "개선", "정비 안됨"),
-                    key="noc_options"
+                    key="noc_options",
+                    format_func=lambda x: f"<span style='display:inline-block; padding: 5px;'>{x}</span>"
                 )
 
                 if selected_option:
