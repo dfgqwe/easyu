@@ -297,7 +297,7 @@ def home_page():
 
     with col2:
         # Column 2: Four clickable sections
-        st.markdown("Navigation Links")
+        st.markdown("URL Navigation")
 
 
         st.markdown("[기상레이더센터_낙뢰](https://radar.kma.go.kr/lightning/area_lightning.do)")
