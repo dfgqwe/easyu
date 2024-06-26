@@ -304,7 +304,7 @@ def moss_page():
 
             # Check if selected format is "[NOC_광레벨불]"
             if selected_bs_format == "[NOC_광레벨불]":
-                 st.markdown(
+                st.markdown(
             """
             <style>
             .stRadio > div {
