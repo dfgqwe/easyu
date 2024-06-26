@@ -297,42 +297,42 @@ def moss_page():
         is_bs_checked = st.checkbox("B/S", key="bs_checked", on_change=bs_checkbox_callback)
     with col2:
         is_complaint_checked = st.checkbox("민원처리", key="complaint_checked", on_change=complaint_checkbox_callback)
-
-    if is_bs_checked:
         selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
         if selected_bs_format:
             results.append(selected_bs_format)
-
             # Check if selected format is "[NOC_광레벨불]"
             if selected_bs_format == "[NOC_광레벨불]":
                 st.markdown(
-            """
-            <style>
-            .stRadio > div {
-                display: flex;
-                flex-direction: row;
-            }
-            </style>
-            """,
-            unsafe_allow_html=True
+        """
+        <style>
+        .stRadio > div {
+            display: flex;
+            flex-direction: row;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
         )
-                
-                selected_option = st.radio(
-                    "항목을 선택하세요:",
-                    ("CM팀 이관", "개선", "정비 안됨"),
-                    key="noc_options"
-                )
 
+                selected_option = st.radio(
+            "항목을 선택하세요:",
+            ("CM팀 이관", "개선", "정비 안됨"),
+            key="noc_options"
+        )
                 if selected_option:
                     results.append(selected_option)
-
-                ddm_value = st.text_input("ddm 값을 입력하세요:")
-                rssi_value = st.text_input("RSSI 값을 입력하세요:")
-
-                if ddm_value:
-                    results.append(f"ddm: {ddm_value}")
-                if rssi_value:
-                    results.append(f"RSSI: {rssi_value}")
+                    
+                    ddm_value = st.text_input("ddm 값을 입력하세요:")
+                    rssi_value = st.text_input("RSSI 값을 입력하세요:")
+                    
+                    if ddm_value:
+                        results.append(f"ddm: {ddm_value}")
+                    if rssi_value:
+                        results.append(f"RSSI: {rssi_value}")
+                    
+                else:  # If selected format is not "[NOC_광레벨불]", hide 선조치_NOC and 현장 항목
+                    st.session_state.selected_actions = []  # Reset selected_actions
+                    st.session_state.selected_locations = []  # Reset selected_locations
                 
             
 
