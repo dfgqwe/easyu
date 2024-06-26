@@ -252,6 +252,43 @@ def home_page():
         st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
 
 
+     region_option = st.selectbox("지역 선택", ["충청", "호남", "부산", "대구"])
+
+     col1, col2 = st.columns(2)
+
+    with col1:
+        # Column 1: Department phone numbers
+        st.header("유관 부서 전화번호")
+
+        common_numbers = [
+            "123-456-7890", 
+            "234-567-8901", 
+            "345-678-9012", 
+            "456-789-0123", 
+            "567-890-1234"
+        ]
+
+        unique_numbers = {
+            "충청": "678-901-2345",
+            "호남": "789-012-3456",
+            "부산": "890-123-4567",
+            "대구": "901-234-5678"
+        }
+
+        phone_numbers = common_numbers + [unique_numbers[region_option]]
+        for number in phone_numbers:
+            st.markdown(f"- {number}")
+
+    with col2:
+        # Column 2: Four clickable sections
+        st.header("Navigation Links")
+        
+        st.markdown("[Section 1](https://radar.kma.go.kr/lightning/area_lightning.do/section1)")
+        st.markdown("[Section 2](https://www.weather.go.kr/w/image/radar.do/section2)")
+        st.markdown("[Section 3](https://www.windy.com/?37.475,126.957,5/section3)")
+        st.markdown("[Section 4](https://d.kbs.co.kr/special/cctv/section4)")
+
+
 
 def moss_page():
     st.title("MOSS 회복 문구")
