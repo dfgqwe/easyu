@@ -252,7 +252,39 @@ def home_page():
         st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
 
 
-    region_option = st.selectbox("지역 선택", ["충청", "호남", "부산", "대구", "야간"])
+     # CSS 스타일 적용
+    st.markdown(
+        """
+        <style>
+        .styled-select {
+            display: inline-block;
+            position: relative;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            padding: 5px 20px 5px 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+        }
+        .styled-select select {
+            display: none;
+        }
+        .styled-select:after {
+            content: '\25BC';
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # 지역 선택 selectbox
+    region_option = st.selectbox("지역 선택", ["충청", "호남", "부산", "대구", "야간"], format_func=lambda x: f'<div class="styled-select">{x}</div>')
 
     col1, col2 = st.columns(2)
 
