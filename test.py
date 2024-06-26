@@ -256,33 +256,17 @@ def home_page():
     st.markdown(
         """
         <style>
-        .styled-select {
-            display: inline-block;
-            position: relative;
-            background-color: #f5f5f5;
-            border-radius: 5px;
-            padding: 5px 20px 5px 10px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #333;
-            cursor: pointer;
-        }
-        .styled-select select {
-            display: none;
-        }
-        .styled-select:after {
-            content: '\25BC';
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            transform: translateY(-50%);
-            pointer-events: none;
+        .small-select {
+            width: 150px; /* 선택 상자의 너비를 조정합니다. */
+            padding: 5px; /* 내부 여백을 설정합니다. */
+            font-size: 14px; /* 폰트 크기를 설정합니다. */
+            border-radius: 5px; /* 테두리의 모서리를 둥글게 만듭니다. */
         }
         </style>
         """,
         unsafe_allow_html=True
     )
-
+    
     # 지역 선택 selectbox
     region_option = st.selectbox("지역 선택", ["충청", "호남", "부산", "대구", "야간"])
 
