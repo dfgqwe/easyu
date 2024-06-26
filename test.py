@@ -288,19 +288,19 @@ def home_page():
             # GitHub에서 이미지 데이터와 링크 설정
     section_images = {
         "Section 1": {
-            "image_url": "https://raw.githubusercontent.com/dfgqwe/easyu/main/images/기상레이더센터.png",
+            "image_url": "https://raw.githubusercontent.com/dfgqwe/easyu/blob/main/기상레이더센터.png",
             "link_url": "https://radar.kma.go.kr/lightning/area_lightning.do"
         },
         "Section 2": {
-            "image_url": "https://raw.githubusercontent.com/dfgqwe/easyu/main/images/날씨누리.png",
+            "image_url": "https://raw.githubusercontent.com/dfgqwe/easyu/blob/main/날씨누리.png",
             "link_url": "https://www.weather.go.kr/w/image/radar.do"
         },
         "Section 3": {
-            "image_url": "https://raw.githubusercontent.com/dfgqwe/easyu/main/images/윈디.png",
+            "image_url": "https://raw.githubusercontent.com/dfgqwe/easyu/blob/main/윈디.png",
             "link_url": "https://www.windy.com/?37.475,126.957,5"
         },
         "Section 4": {
-            "image_url": "https://raw.githubusercontent.com/dfgqwe/easyu/main/images/kbs.png",
+            "image_url": "https://raw.githubusercontent.com/dfgqwe/easyu/blob/main/kbs.png",
             "link_url": "https://d.kbs.co.kr/special/cctv"
         }
     }
