@@ -257,7 +257,7 @@ def home_page():
         """
         <style>
         .small-select {
-            width: 75px; /* 선택 상자의 너비를 조정합니다. */
+            width: 50px; /* 선택 상자의 너비를 조정합니다. */
             padding: 5px; /* 내부 여백을 설정합니다. */
             font-size: 14px; /* 폰트 크기를 설정합니다. */
             border-radius: 5px; /* 테두리의 모서리를 둥글게 만듭니다. */
@@ -266,7 +266,6 @@ def home_page():
         """,
         unsafe_allow_html=True
     )
-    
     # 지역 선택 selectbox
     region_option = st.selectbox("지역 선택", ["충청", "호남", "부산", "대구", "야간"])
 
