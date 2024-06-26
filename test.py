@@ -258,7 +258,7 @@ def home_page():
 
     with col1:
         # Column 1: Department phone numbers
-        st.header("유관 부서 전화번호")
+        st.markdown("유관 부서 전화번호")
 
         common_numbers = [
             "123-456-7890", 
@@ -281,7 +281,7 @@ def home_page():
 
     with col2:
         # Column 2: Four clickable sections
-        st.header("Navigation Links")
+        st.markdown("Navigation Links")
         
         st.markdown("[Section 1](https://radar.kma.go.kr/lightning/area_lightning.do/section1)")
         st.markdown("[Section 2](https://www.weather.go.kr/w/image/radar.do/section2)")
