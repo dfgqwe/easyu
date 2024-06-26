@@ -289,6 +289,8 @@ def home_page():
         st.markdown("[날씨누리_레이더](https://www.weather.go.kr/w/image/radar.do)")
         st.markdown("[windy.com](https://www.windy.com/?37.475,126.957,5)")
         st.markdown("[KBS 재난포털_CCTV](https://d.kbs.co.kr/special/cctv)")
+        st.markdown("[카카오맵](https://map.kakao.com/)")
+        st.markdown("[네이버지도](https://map.naver.com/)")
 
 
 
