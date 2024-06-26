@@ -284,7 +284,7 @@ def home_page():
     )
 
     # 지역 선택 selectbox
-    region_option = st.selectbox("지역 선택", ["충청", "호남", "부산", "대구", "야간"], format_func=lambda x: f'<div class="styled-select">{x}</div>')
+    region_option = st.selectbox("지역 선택", ["충청", "호남", "부산", "대구", "야간"])
 
     col1, col2 = st.columns(2)
 
