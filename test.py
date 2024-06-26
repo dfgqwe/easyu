@@ -283,10 +283,10 @@ def home_page():
         # Column 2: Four clickable sections
         st.markdown("Navigation Links")
         
-        st.markdown("[Section 1](https://radar.kma.go.kr/lightning/area_lightning.do/section1)")
-        st.markdown("[Section 2](https://www.weather.go.kr/w/image/radar.do/section2)")
-        st.markdown("[Section 3](https://www.windy.com/?37.475,126.957,5/section3)")
-        st.markdown("[Section 4](https://d.kbs.co.kr/special/cctv/section4)")
+        st.markdown("[Section 1](https://radar.kma.go.kr/lightning/area_lightning.do)")
+        st.markdown("[Section 2](https://www.weather.go.kr/w/image/radar.do)")
+        st.markdown("[Section 3](https://www.windy.com/?37.475,126.957,5)")
+        st.markdown("[Section 4](https://d.kbs.co.kr/special/cctv)")
 
 
 
