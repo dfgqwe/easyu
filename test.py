@@ -304,11 +304,22 @@ def moss_page():
 
             # Check if selected format is "[NOC_광레벨불]"
             if selected_bs_format == "[NOC_광레벨불]":
+                 st.markdown(
+            """
+            <style>
+            .stRadio > div {
+                display: flex;
+                flex-direction: row;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+                
                 selected_option = st.radio(
                     "항목을 선택하세요:",
                     ("CM팀 이관", "개선", "정비 안됨"),
-                    key="noc_options",
-                    format_func=lambda x: f"<span style='display:inline-block; padding: 5px;'>{x}</span>"
+                    key="noc_options"
                 )
 
                 if selected_option:
