@@ -230,210 +230,209 @@ def update_data_on_github(repo_name, file_path, github_token, df_no_duplicates):
 
 
 def home_page():
-   
-st.title("MOSS 회복 문구")
+    st.title("MOSS 회복 문구")
 
-df1 = pd.read_csv('bs_head.csv')
+    df1 = pd.read_csv('bs_head.csv')
 
-# Streamlit 애플리케이션
-with st.expander('MOSS BS 발행 HEAD'):
-    st.dataframe(df1)
+    # Streamlit 애플리케이션
+    with st.expander('MOSS BS 발행 HEAD'):
+        st.dataframe(df1)
 
-# 초기값 설정
-if "user_input" not in st.session_state:
-    st.session_state.user_input = ""
+    # 초기값 설정
+    if "user_input" not in st.session_state:
+        st.session_state.user_input = ""
 
-# 텍스트 입력 초기화 함수
-def clear_text():
-    for key in st.session_state.keys():
-        del st.session_state[key]  # 모든 상태를 초기화
+    # 텍스트 입력 초기화 함수
+    def clear_text():
+        for key in st.session_state.keys():
+            del st.session_state[key]  # 모든 상태를 초기화
     st.session_state.user_input = ""  # 다시 설정
     st.experimental_rerun()  # 상태를 초기화하고 재실행
 
-results = []
+    results = []
 
-if "bs_checked" not in st.session_state:
-    st.session_state.bs_checked = False
-if "complaint_checked" not in st.session_state:
-    st.session_state.complaint_checked = False
+    if "bs_checked" not in st.session_state:
+        st.session_state.bs_checked = False
+    if "complaint_checked" not in st.session_state:
+        st.session_state.complaint_checked = False
 
-def bs_checkbox_callback():
-    st.session_state.complaint_checked = False
+    def bs_checkbox_callback():
+        st.session_state.complaint_checked = False
 
-def complaint_checkbox_callback():
-    st.session_state.bs_checked = False
+    def complaint_checkbox_callback():
+        st.session_state.bs_checked = False
 
-col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
-with col1:
-    is_bs_checked = st.checkbox("B/S", key="bs_checked", on_change=bs_checkbox_callback)
-with col2:
-    is_complaint_checked = st.checkbox("민원처리", key="complaint_checked", on_change=complaint_checkbox_callback)
+    with col1:
+        is_bs_checked = st.checkbox("B/S", key="bs_checked", on_change=bs_checkbox_callback)
+    with col2:
+        is_complaint_checked = st.checkbox("민원처리", key="complaint_checked", on_change=complaint_checkbox_callback)
 
-if is_bs_checked:
-    selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
-    if selected_bs_format:
-        results.append(selected_bs_format)
+    if is_bs_checked:
+        selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
+        if selected_bs_format:
+            results.append(selected_bs_format)
 
-        # Check if selected format is "[NOC_광레벨불]"
-        if selected_bs_format == "[NOC_광레벨불]":
-            st.markdown(
-                """
-                <style>
-                .stRadio > div {
-                    display: flex;
-                    flex-direction: row;
-                }
-                </style>
-                """,
-                unsafe_allow_html=True
-            )
-            selected_option = st.radio(
-                "항목을 선택하세요:",
-                ("CM팀 이관", "개선", "정비 안됨"),
-                key="noc_options"
-            )
-            if selected_option:
-                results.append(selected_option)
+            # Check if selected format is "[NOC_광레벨불]"
+            if selected_bs_format == "[NOC_광레벨불]":
+                st.markdown(
+                    """
+                    <style>
+                    .stRadio > div {
+                        display: flex;
+                        flex-direction: row;
+                    }
+                    </style>
+                    """,
+                    unsafe_allow_html=True
+                )
+                selected_option = st.radio(
+                    "항목을 선택하세요:",
+                    ("CM팀 이관", "개선", "정비 안됨"),
+                    key="noc_options"
+                )
+                if selected_option:
+                    results.append(selected_option)
 
-            ddm_value = st.text_input("ddm 값을 입력하세요:")
-            rssi_value = st.text_input("RSSI 값을 입력하세요:")
+                ddm_value = st.text_input("ddm 값을 입력하세요:")
+                rssi_value = st.text_input("RSSI 값을 입력하세요:")
 
-            if ddm_value:
-                results.append(f"ddm: {ddm_value}")
-            if rssi_value:
-                results.append(f"RSSI: {rssi_value}")
+                if ddm_value:
+                    results.append(f"ddm: {ddm_value}")
+                if rssi_value:
+                    results.append(f"RSSI: {rssi_value}")
 
-if is_complaint_checked:
-    selected_complaint_format = st.selectbox("민원처리 head_format을 선택하세요:", list(B_S_head_formats.values()), key="complaint_format")
-    if selected_complaint_format:
-        results.append(selected_complaint_format)
+    if is_complaint_checked:
+        selected_complaint_format = st.selectbox("민원처리 head_format을 선택하세요:", list(B_S_head_formats.values()), key="complaint_format")
+        if selected_complaint_format:
+            results.append(selected_complaint_format)
 
-user_input = st.text_input("입력란", key="user_input")
+    user_input = st.text_input("입력란", key="user_input")
 
-if not is_bs_checked and not is_complaint_checked:
-    head_format = get_format(user_input)
-    if head_format:
-        results.append(head_format)
+    if not is_bs_checked and not is_complaint_checked:
+        head_format = get_format(user_input)
+        if head_format:
+            results.append(head_format)
 
-results.append(user_input)
+    results.append(user_input)
 
-출동예방_actions = []
-기타_results = []
+    출동예방_actions = []
+    기타_results = []
 
-# Show these sections only if selected_bs_format is not "[NOC_광레벨불]"
-if selected_bs_format != "[NOC_광레벨불]":
-    selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
+    # Show these sections only if selected_bs_format is not "[NOC_광레벨불]"
+    if selected_bs_format != "[NOC_광레벨불]":
+        selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
 
-    if "DB 삭제 여부" in selected_actions:
-        if "기타_고객DB_neoss_불가" not in st.session_state:
-            st.session_state.기타_고객DB_neoss_불가 = False
-        if "기타_neoss_완료" not in st.session_state:
-            st.session_state.기타_neoss_완료 = False
+        if "DB 삭제 여부" in selected_actions:
+            if "기타_고객DB_neoss_불가" not in st.session_state:
+                st.session_state.기타_고객DB_neoss_불가 = False
+            if "기타_neoss_완료" not in st.session_state:
+                st.session_state.기타_neoss_완료 = False
 
-        def 기타_고객DB_neoss_불가_callback():
-            st.session_state.기타_neoss_완료 = False
+            def 기타_고객DB_neoss_불가_callback():
+                st.session_state.기타_neoss_완료 = False
 
-        def 기타_neoss_완료_callback():
-            st.session_state.기타_고객DB_neoss_불가 = False
+            def 기타_neoss_완료_callback():
+                st.session_state.기타_고객DB_neoss_불가 = False
 
-        기타_고객DB_neoss_불가 = st.checkbox("고객DB 존재 NeOSS 삭제 불가", key="기타_고객DB_neoss_불가", on_change=기타_고객DB_neoss_불가_callback)
-        기타_neoss_완료 = st.checkbox("NeOSS 삭제 완료", key="기타_neoss_완료", on_change=기타_neoss_완료_callback)
+            기타_고객DB_neoss_불가 = st.checkbox("고객DB 존재 NeOSS 삭제 불가", key="기타_고객DB_neoss_불가", on_change=기타_고객DB_neoss_불가_callback)
+            기타_neoss_완료 = st.checkbox("NeOSS 삭제 완료", key="기타_neoss_완료", on_change=기타_neoss_완료_callback)
 
-        if 기타_고객DB_neoss_불가:
-            기타_results.append("고객DB 존재/NeOSS 삭제 불가")
-        if 기타_neoss_완료:
-            기타_results.append("NeOSS 삭제 완료")
+            if 기타_고객DB_neoss_불가:
+                기타_results.append("고객DB 존재/NeOSS 삭제 불가")
+            if 기타_neoss_완료:
+                기타_results.append("NeOSS 삭제 완료")
 
-    results.extend(기타_results)
+        results.extend(기타_results)
 
-    filtered_actions = [action for action in selected_actions if action != "DB 삭제 여부"]
-    if filtered_actions:
-        formatted_actions = ", ".join(filtered_actions)
-        results.append(f"<선조치_NOC> {formatted_actions}")
-        if "전기작업 확인(전화)" in selected_actions:
-            출동예방_actions.append("[NOC]전기작업 확인(전화)")
-        if "출동보류" in selected_actions:
-            출동예방_actions.append("[NOC]출동보류")
+        filtered_actions = [action for action in selected_actions if action != "DB 삭제 여부"]
+        if filtered_actions:
+            formatted_actions = ", ".join(filtered_actions)
+            results.append(f"<선조치_NOC> {formatted_actions}")
+            if "전기작업 확인(전화)" in selected_actions:
+                출동예방_actions.append("[NOC]전기작업 확인(전화)")
+            if "출동보류" in selected_actions:
+                출동예방_actions.append("[NOC]출동보류")
 
-    현장_options = [
-        "[현장TM]",
-        "주소",
-        "연락처",
-        "장비위치",
-        "차단기위치",
-        "출입방법",
-        "기타(간단히 내용입력)"
-    ]
-    selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
+        현장_options = [
+            "[현장TM]",
+            "주소",
+            "연락처",
+            "장비위치",
+            "차단기위치",
+            "출입방법",
+            "기타(간단히 내용입력)"
+        ]
+        selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
 
-    현장TM_내용 = ""
-    if "[현장TM]" in selected_locations:
-        현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
-        현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
-        cleaned_TM_내용 = clear_tm_content(현장TM_내용)
-        formatted_TM = f"[현장TM] {cleaned_TM_내용}" if cleaned_TM_내용 else "[현장TM]"
+        현장TM_내용 = ""
+        if "[현장TM]" in selected_locations:
+            현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+            현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
+            cleaned_TM_내용 = clear_tm_content(현장TM_내용)
+            formatted_TM = f"[현장TM] {cleaned_TM_내용}" if cleaned_TM_내용 else "[현장TM]"
 
-        if len(selected_locations) > 1:  # selected_locations에 [현장TM] 이외의 항목이 포함된 경우에만 수정요청 추가
-            formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations if location != "[현장TM]"]) + " 수정요청"
+            if len(selected_locations) > 1:  # selected_locations에 [현장TM] 이외의 항목이 포함된 경우에만 수정요청 추가
+                formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations if location != "[현장TM]"]) + " 수정요청"
+            else:
+                formatted_locations = f"{formatted_TM}"
         else:
-            formatted_locations = f"{formatted_TM}"
-    else:
-        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
-        if selected_locations:
-            formatted_locations += " 수정요청"
+            formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+            if selected_locations:
+                formatted_locations += " 수정요청"
 
-    if selected_locations or 현장TM_내용:
-        results.append(f"<현장> {formatted_locations}")
+        if selected_locations or 현장TM_내용:
+            results.append(f"<현장> {formatted_locations}")
 
-    if 현장TM_내용 and 현장TM_출동예방:
-        출동예방_actions.append(formatted_TM)
+        if 현장TM_내용 and 현장TM_출동예방:
+            출동예방_actions.append(formatted_TM)
 
-    if 출동예방_actions:
-        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
+        if 출동예방_actions:
+            results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
-results.append("수고하셨습니다")
+    results.append("수고하셨습니다")
 
-copy_activated = False
+    copy_activated = False
 
-col1, col2 , col3= st.columns([2.8, 0.5, 0.7])
+    col1, col2 , col3= st.columns([2.8, 0.5, 0.7])
 
-with col1:
-    if st.button("출력"):
-        output_text = "\n".join(results)  # Join results with new lines for the desired format
-        st.text(output_text)  # Print output_text when the "출력" button is pressed
-        if copy_activated:
-            pyperclip.copy(output_text)
+    with col1:
+        if st.button("출력"):
+            output_text = "\n".join(results)  # Join results with new lines for the desired format
+            st.text(output_text)  # Print output_text when the "출력" button is pressed
+            if copy_activated:
+                pyperclip.copy(output_text)
 
-with col2:
-    if st.button("입력란 초기화"):
-        clear_text()
+    with col2:
+        if st.button("입력란 초기화"):
+            clear_text()
 
-with col3:
-    if 'button_clicked' not in st.session_state:
-        st.session_state['button_clicked'] = False
+    with col3:
+        if 'button_clicked' not in st.session_state:
+            st.session_state['button_clicked'] = False
 
-    if st.button('MOSS 회복 항목 표준'):
-        st.session_state['button_clicked'] = not st.session_state['button_clicked']
+        if st.button('MOSS 회복 항목 표준'):
+            st.session_state['button_clicked'] = not st.session_state['button_clicked']
 
-    if st.session_state['button_clicked']:
-        placeholder = st.empty()
-        with placeholder.container():
-            st.markdown(
-                """
-                <style>
-                /* 데이터프레임이 최대한 화면에 가깝게 보이도록 스타일 조정 */
-                .css-1l02zno {
-                    width: 100%;
-                    max-width: 100%;
-                    height: calc(100vh - 200px); /* 높이를 화면 높이의 일부분으로 설정 */
-                    overflow: auto; /* 스크롤이 필요한 경우 스크롤 허용 */
-                }
-                </style>
-                """,
-                unsafe_allow_html=True
-            )
-            st.dataframe(df1)
+        if st.session_state['button_clicked']:
+            placeholder = st.empty()
+            with placeholder.container():
+                st.markdown(
+                    """
+                    <style>
+                    /* 데이터프레임이 최대한 화면에 가깝게 보이도록 스타일 조정 */
+                    .css-1l02zno {
+                        width: 100%;
+                        max-width: 100%;
+                        height: calc(100vh - 200px); /* 높이를 화면 높이의 일부분으로 설정 */
+                        overflow: auto; /* 스크롤이 필요한 경우 스크롤 허용 */
+                    }
+                    </style>
+                    """,
+                    unsafe_allow_html=True
+                )
+                st.dataframe(df1)
 
 
 
