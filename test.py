@@ -331,8 +331,8 @@ def moss_page():
                     results.append(f"ddm: {ddm_value}")
                 if rssi_value:
                     results.append(f"RSSI: {rssi_value}")
-
-     else:
+                
+            else:
                 # 선조치_NOC
                 선조치_NOC_options = ["옵션1", "옵션2", "옵션3"]  # 실제 옵션을 여기에 넣으세요.
                 selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
