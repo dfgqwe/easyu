@@ -322,10 +322,6 @@ def moss_page():
                 if rssi_value:
                     results.append(f"RSSI: {rssi_value}")
             else:
-                selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
-                if selected_bs_format:
-                    results.append(selected_bs_format)
-
                 selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
                 기타_results = []
 
@@ -350,16 +346,19 @@ def moss_page():
                         기타_results.append("NeOSS 삭제 완료")
 
                 results.extend(기타_results)
-                results.append("수고하셨습니다")
 
                 filtered_actions = [action for action in selected_actions if action != "DB 삭제 여부"]
                 if filtered_actions:
                     formatted_actions = ", ".join(filtered_actions)
                     results.append(f"<선조치_NOC> {formatted_actions}")
+                    출동예방_actions = []
                     if "전기작업 확인(전화)" in selected_actions:
                         출동예방_actions.append("[NOC]전기작업 확인(전화)")
                     if "출동보류" in selected_actions:
                         출동예방_actions.append("[NOC]출동보류")
+
+                    if 출동예방_actions:
+                        results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
                 현장_options = [
                     "[현장TM]",
@@ -393,9 +392,6 @@ def moss_page():
 
                 if 현장TM_내용 and 현장TM_출동예방:
                     출동예방_actions.append(formatted_TM)
-
-                if 출동예방_actions:
-                    results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
     if is_complaint_checked:
         selected_complaint_format = st.selectbox("민원처리 head_format을 선택하세요:", list(민원처리_head_formats.values()), key="complaint_format")
@@ -452,6 +448,7 @@ def moss_page():
                     unsafe_allow_html=True
                 )
                 st.dataframe(df1_reset)
+
 
 
 
