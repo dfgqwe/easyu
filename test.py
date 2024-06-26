@@ -373,6 +373,7 @@ def moss_page():
                 기타_results.append("NeOSS 삭제 완료")
 
         results.extend(기타_results)
+        results.append("수고하셨습니다")
 
         filtered_actions = [action for action in selected_actions if action != "DB 삭제 여부"]
         if filtered_actions:
@@ -419,7 +420,7 @@ def moss_page():
         if 출동예방_actions:
             results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
-    results.append("수고하셨습니다")
+    
 
     copy_activated = False
 
