@@ -257,7 +257,7 @@ def home_page():
         """
         <style>
         .small-select {
-            width: 150px; /* 선택 상자의 너비를 조정합니다. */
+            width: 75px; /* 선택 상자의 너비를 조정합니다. */
             padding: 5px; /* 내부 여백을 설정합니다. */
             font-size: 14px; /* 폰트 크기를 설정합니다. */
             border-radius: 5px; /* 테두리의 모서리를 둥글게 만듭니다. */
