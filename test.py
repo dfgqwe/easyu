@@ -295,6 +295,8 @@ def moss_page():
     with col2:
         is_complaint_checked = st.checkbox("민원처리", key="complaint_checked", on_change=complaint_checkbox_callback)
 
+    selected_bs_format = None
+
     if is_bs_checked:
         selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
         if selected_bs_format:
