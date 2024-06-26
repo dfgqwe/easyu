@@ -322,6 +322,8 @@ def moss_page():
                 if rssi_value:
                     results.append(f"RSSI: {rssi_value}")
             else:
+                # 선조치_NOC
+                선조치_NOC_options = ["옵션1", "옵션2", "옵션3"]  # 실제 옵션을 여기에 넣으세요.
                 selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
                 기타_results = []
 
@@ -360,6 +362,7 @@ def moss_page():
                     if 출동예방_actions:
                         results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
+                # 현장 옵션
                 현장_options = [
                     "[현장TM]",
                     "주소",
@@ -375,7 +378,7 @@ def moss_page():
                 if "[현장TM]" in selected_locations:
                     현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
                     현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
-                    cleaned_TM_내용 = clear_tm_content(현장TM_내용)
+                    cleaned_TM_내용 = 현장TM_내용  # 여기에 클리닝 로직 추가 가능
                     formatted_TM = f"[현장TM] {cleaned_TM_내용}" if cleaned_TM_내용 else "[현장TM]"
 
                     if len(selected_locations) > 1:  # selected_locations에 [현장TM] 이외의 항목이 포함된 경우에만 수정요청 추가
