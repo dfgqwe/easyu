@@ -315,13 +315,11 @@ def moss_page():
             """,
             unsafe_allow_html=True
         )
-                
                 selected_option = st.radio(
                     "항목을 선택하세요:",
                     ("CM팀 이관", "개선", "정비 안됨"),
                     key="noc_options"
                 )
-
                 if selected_option:
                     results.append(selected_option)
 
