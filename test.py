@@ -331,7 +331,7 @@ def moss_page():
         head_format = get_format(user_input)
         if head_format:
             results.append(head_format)
-
+            
     results.append(user_input)
 
     출동예방_actions = []
