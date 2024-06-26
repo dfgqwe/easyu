@@ -306,7 +306,8 @@ def moss_page():
                 selected_option = st.radio(
                     "항목을 선택하세요:",
                     ("CM팀 이관", "개선", "정비 안됨"),
-                    key="noc_options"
+                    key="noc_options",
+                    format_func=lambda x: f"<span style='display:inline-block; padding: 5px;'>{x}</span>"
                 )
 
                 if selected_option:
