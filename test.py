@@ -252,7 +252,7 @@ def home_page():
         st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
 
 
-    region_option = st.selectbox("지역 선택", ["충청", "호남", "부산", "대구"])
+    region_option = st.selectbox("지역 선택", ["충청", "호남", "부산", "대구", "야간"])
 
     col1, col2 = st.columns(2)
 
@@ -272,7 +272,8 @@ def home_page():
             "충청": "678-901-2345",
             "호남": "789-012-3456",
             "부산": "890-123-4567",
-            "대구": "901-234-5678"
+            "대구": "901-234-5678",
+            "야간": "890-123-4567"
         }
 
         phone_numbers = common_numbers + [unique_numbers[region_option]]
