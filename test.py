@@ -285,34 +285,10 @@ def home_page():
         st.markdown("Navigation Links")
 
 
-            # GitHub에서 이미지 데이터와 링크 설정
-    section_images = {
-        "Section 1": {
-            "image_url": "https://raw.githubusercontent.com/dfgqwe/easyu/blob/main/기상레이더센터.png",
-            "link_url": "https://radar.kma.go.kr/lightning/area_lightning.do"
-        },
-        "Section 2": {
-            "image_url": "https://raw.githubusercontent.com/dfgqwe/easyu/blob/main/날씨누리.png",
-            "link_url": "https://www.weather.go.kr/w/image/radar.do"
-        },
-        "Section 3": {
-            "image_url": "https://raw.githubusercontent.com/dfgqwe/easyu/blob/main/윈디.png",
-            "link_url": "https://www.windy.com/?37.475,126.957,5"
-        },
-        "Section 4": {
-            "image_url": "https://raw.githubusercontent.com/dfgqwe/easyu/blob/main/kbs.png",
-            "link_url": "https://d.kbs.co.kr/special/cctv"
-        }
-    }
-
-    # 각 섹션에 대해 이미지와 링크를 표시
-    for section, data in section_images.items():
-        image_url = data["image_url"]
-        link_url = data["link_url"]
-        st.markdown(
-            f'<a href="{link_url}" target="_blank"><img src="{image_url}" alt="{section}" style="width:100%;height:auto;"></a>',
-            unsafe_allow_html=True
-        )
+        st.markdown("[기상레이더센터_낙뢰](https://radar.kma.go.kr/lightning/area_lightning.do)")
+        st.markdown("[날씨누리_레이더](https://www.weather.go.kr/w/image/radar.do)")
+        st.markdown("[windy.com](https://www.windy.com/?37.475,126.957,5)")
+        st.markdown("[KBS 재난포털_CCTV](https://d.kbs.co.kr/special/cctv)")
 
 
 
