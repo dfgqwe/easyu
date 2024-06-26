@@ -305,20 +305,14 @@ def moss_page():
 
             # Check if selected format is "[NOC_광레벨불]"
             if selected_bs_format == "[NOC_광레벨불]":
-                col1, col2, col3 = st.columns(3)
-                with col1:
-                    cm_transfer = st.checkbox("CM팀 이관")
-                with col2:
-                    improvement = st.checkbox("개선")
-                with col3:
-                    not_fixed = st.checkbox("정비 안됨")
+                selected_option = st.radio(
+                    "항목을 선택하세요:",
+                    ("CM팀 이관", "개선", "정비 안됨"),
+                    key="noc_options"
+                )
 
-                if cm_transfer:
-                    results.append("CM팀 이관")
-                if improvement:
-                    results.append("개선")
-                if not_fixed:
-                    results.append("정비 안됨")
+                if selected_option:
+                    results.append(selected_option)
 
                 ddm_value = st.text_input("ddm 값을 입력하세요:")
                 rssi_value = st.text_input("RSSI 값을 입력하세요:")
@@ -327,6 +321,81 @@ def moss_page():
                     results.append(f"ddm: {ddm_value}")
                 if rssi_value:
                     results.append(f"RSSI: {rssi_value}")
+            else:
+                selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
+                if selected_bs_format:
+                    results.append(selected_bs_format)
+
+                selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
+                기타_results = []
+
+                if "DB 삭제 여부" in selected_actions:
+                    if "기타_고객DB_neoss_불가" not in st.session_state:
+                        st.session_state.기타_고객DB_neoss_불가 = False
+                    if "기타_neoss_완료" not in st.session_state:
+                        st.session_state.기타_neoss_완료 = False
+
+                    def 기타_고객DB_neoss_불가_callback():
+                        st.session_state.기타_neoss_완료 = False
+
+                    def 기타_neoss_완료_callback():
+                        st.session_state.기타_고객DB_neoss_불가 = False
+
+                    기타_고객DB_neoss_불가 = st.checkbox("고객DB 존재 NeOSS 삭제 불가", key="기타_고객DB_neoss_불가", on_change=기타_고객DB_neoss_불가_callback)
+                    기타_neoss_완료 = st.checkbox("NeOSS 삭제 완료", key="기타_neoss_완료", on_change=기타_neoss_완료_callback)
+
+                    if 기타_고객DB_neoss_불가:
+                        기타_results.append("고객DB 존재/NeOSS 삭제 불가")
+                    if 기타_neoss_완료:
+                        기타_results.append("NeOSS 삭제 완료")
+
+                results.extend(기타_results)
+                results.append("수고하셨습니다")
+
+                filtered_actions = [action for action in selected_actions if action != "DB 삭제 여부"]
+                if filtered_actions:
+                    formatted_actions = ", ".join(filtered_actions)
+                    results.append(f"<선조치_NOC> {formatted_actions}")
+                    if "전기작업 확인(전화)" in selected_actions:
+                        출동예방_actions.append("[NOC]전기작업 확인(전화)")
+                    if "출동보류" in selected_actions:
+                        출동예방_actions.append("[NOC]출동보류")
+
+                현장_options = [
+                    "[현장TM]",
+                    "주소",
+                    "연락처",
+                    "장비위치",
+                    "차단기위치",
+                    "출입방법",
+                    "기타(간단히 내용입력)"
+                ]
+                selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
+
+                현장TM_내용 = ""
+                if "[현장TM]" in selected_locations:
+                    현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+                    현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
+                    cleaned_TM_내용 = clear_tm_content(현장TM_내용)
+                    formatted_TM = f"[현장TM] {cleaned_TM_내용}" if cleaned_TM_내용 else "[현장TM]"
+
+                    if len(selected_locations) > 1:  # selected_locations에 [현장TM] 이외의 항목이 포함된 경우에만 수정요청 추가
+                        formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations if location != "[현장TM]"]) + " 수정요청"
+                    else:
+                        formatted_locations = f"{formatted_TM}"
+                else:
+                    formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+                    if selected_locations:
+                        formatted_locations += " 수정요청"
+
+                if selected_locations or 현장TM_내용:
+                    results.append(f"<현장> {formatted_locations}")
+
+                if 현장TM_내용 and 현장TM_출동예방:
+                    출동예방_actions.append(formatted_TM)
+
+                if 출동예방_actions:
+                    results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
     if is_complaint_checked:
         selected_complaint_format = st.selectbox("민원처리 head_format을 선택하세요:", list(민원처리_head_formats.values()), key="complaint_format")
