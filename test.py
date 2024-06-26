@@ -303,24 +303,22 @@ def moss_page():
 
             # Check if selected format is "[NOC_광레벨불]"
             if selected_bs_format == "[NOC_광레벨불]":
-                st.markdown("""
-                <style>
-                .radio-container {
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                }
-                .radio-item {
-                    margin-right: 20px; /* 각 라디오 버튼 간의 간격을 조정할 수 있습니다. */
-                }
-                </style>
-                """, unsafe_allow_html=True)
+                st.markdown(
+            """
+            <style>
+            .stRadio > div {
+                display: flex;
+                flex-direction: row;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
                 
                 selected_option = st.radio(
                     "항목을 선택하세요:",
                     ("CM팀 이관", "개선", "정비 안됨"),
-                    key="noc_options",
-                    format_func=lambda x: f"<span class='radio-item'>{x}</span>"
+                    key="noc_options"
                 )
 
                 if selected_option:
