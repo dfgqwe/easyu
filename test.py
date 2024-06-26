@@ -259,11 +259,7 @@ def moss_page():
 
     st.title("MOSS 회복 문구")
 
-    # 임시 데이터프레임 생성
-    df1 = pd.DataFrame({
-        '항목': ['B/S', '민원처리'],
-        'head_format': ['[NOC_광레벨불]', '[민원처리_다른포맷]']
-    })
+    df1 = pd.read_csv('bs_head.csv')
 
     # Streamlit 애플리케이션
     with st.expander('MOSS BS 발행 HEAD'):
@@ -332,7 +328,7 @@ def moss_page():
     user_input = st.text_input("입력란", key="user_input")
 
     if not is_bs_checked and not is_complaint_checked:
-        head_format = user_input.strip()
+        head_format = get_format(user_input)
         if head_format:
             results.append(head_format)
 
