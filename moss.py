@@ -247,13 +247,19 @@ def update_data_on_google_drive(file_id, data, folder_id):
         credentials = service_account.Credentials.from_service_account_info(service_account_info)
         service = build('drive', 'v3', credentials=credentials)
 
-        media = MediaFileUpload(temp_file_path, mimetype='text/csv')
+        media = MediaIoBaseUpload(temp_file_path, mimetype='text/csv')
 
-        service.files().update(
+        request = service.files().update(
             fileId=file_id,
             media_body=media,
             fields='id'
-        ).execute()
+        )
+
+        response = None
+        while response is None:
+            status, response = request.next_chunk()
+            if status:
+                st.write(f"Uploaded {int(status.progress() * 100)}%.")
 
         st.success("데이터가 성공적으로 업데이트 되었습니다.")
         os.remove(temp_file_path)
