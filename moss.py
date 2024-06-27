@@ -261,8 +261,8 @@ def update_data_on_google_drive(file_id, data, folder_id):
     except Exception as e:
         st.error(f"데이터 업데이트 중 오류 발생: {e}")
 
-file_id = '1vx-OkPaIElM28UCFu0sj-0pyBpZEq5pm'
-folder_id = '1NdTleLh_UnC7b-wAYEXC0RtOIfKQninGz'
+file_id = '14JtRk0F1aaJIat9xsMvKz6WOHUib0NCq'
+folder_id = '1NdTleLh_UnC7b-wAYEXC0RtOIfKQninG'
 dest_path = 'ws_data.csv'  # 로컬 파일 경로
 if not os.path.exists(dest_path):
     download_file_from_google_drive(file_id, dest_path)
