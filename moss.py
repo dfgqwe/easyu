@@ -201,7 +201,6 @@ def authenticate_google_drive():
     return drive
 
 def load_data_from_google_drive(file_id):
-    # 서비스 계정 정보 로드
     service_account_info = {
         "type": st.secrets["service_account"]["type"],
         "project_id": st.secrets["service_account"]["project_id"],
@@ -215,32 +214,22 @@ def load_data_from_google_drive(file_id):
         "client_x509_cert_url": st.secrets["service_account"]["client_x509_cert_url"]
     }
 
-    # 자격 증명 생성
     credentials = service_account.Credentials.from_service_account_info(service_account_info)
-
-    # Google Drive API 클라이언트 생성
     service = build('drive', 'v3', credentials=credentials)
 
     try:
-        # 파일 로드
         request = service.files().get_media(fileId=file_id)
         file_bytes = request.execute()
-
-        # BytesIO를 사용하여 바이트 스트림을 데이터프레임으로 변환
         df = pd.read_csv(io.BytesIO(file_bytes))
-
         return df
-
     except Exception as e:
         st.error(f"파일을 로드하는 중 오류 발생: {str(e)}")
         return None
 
 def update_data_on_google_drive(file_id, data, folder_id):
     try:
-        # 데이터프레임을 CSV 파일로 변환
-        csv_data = data.to_csv(index=False)
-
-        # 서비스 계정 정보 로드
+        csv_data = data.to_csv(index=False).encode('utf-8')
+        
         service_account_info = {
             "type": st.secrets["service_account"]["type"],
             "project_id": st.secrets["service_account"]["project_id"],
@@ -254,23 +243,20 @@ def update_data_on_google_drive(file_id, data, folder_id):
             "client_x509_cert_url": st.secrets["service_account"]["client_x509_cert_url"]
         }
 
-        # 자격 증명 생성
         credentials = service_account.Credentials.from_service_account_info(service_account_info)
-
-        # Google Drive API 클라이언트 생성
         service = build('drive', 'v3', credentials=credentials)
 
-        # 파일 메타데이터 설정
+        media_body = io.BytesIO(csv_data)
+        media_body.name = 'updated_data.csv'
+
         file_metadata = {
             'name': 'updated_data.csv',
             'parents': [folder_id]
         }
 
-        # 파일 업로드
-        media = service.files().update(
+        service.files().update(
             fileId=file_id,
-            body=file_metadata,
-            media_body=csv_data,
+            media_body=media_body,
             fields='id'
         ).execute()
 
@@ -278,12 +264,8 @@ def update_data_on_google_drive(file_id, data, folder_id):
     except Exception as e:
         st.error(f"데이터 업데이트 중 오류 발생: {e}")
 
-
-
-
-# Google Drive에서 데이터 파일 다운로드
-file_id = '1vx-OkPaIElM28UCFu0sj-0pyBpZEq5pm'  # Google Drive 파일 ID
-folder_id = '1NdTleLh_UnC7b-wAYEXC0RtOIfKQninGz'  # Google Drive 폴더 ID
+file_id = '1vx-OkPaIElM28UCFu0sj-0pyBpZEq5pm'
+folder_id = '1NdTleLh_UnC7b-wAYEXC0RtOIfKQninGz'
 dest_path = 'ws_data.csv'  # 로컬 파일 경로
 if not os.path.exists(dest_path):
     download_file_from_google_drive(file_id, dest_path)
@@ -560,28 +542,25 @@ manage_password = '1234'
 def manage_page():
     st.title("Manage")
 
-    # Set session_state variables
     if 'manage_logged_in' not in st.session_state:
         st.session_state.manage_logged_in = False
     if 'last_activity_time' not in st.session_state:
         st.session_state.last_activity_time = time.time()
 
-    # Check if timeout (5 minutes) has passed since the last activity
     if time.time() - st.session_state.last_activity_time > 300:
         st.session_state.manage_logged_in = False
 
     if not st.session_state.manage_logged_in:
-         password = st.text_input("Manage 페이지 비밀번호 입력", type="password")
+        password = st.text_input("Manage 페이지 비밀번호 입력", type="password")
 
-    
-         if password == manage_password:
+        if password == st.secrets["manage_password"]:
             st.session_state.manage_logged_in = True
-         elif password:
+        elif password:
             st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
             return
-    
-         if st.session_state.manage_logged_in:
-            st.markdown(
+
+    if st.session_state.manage_logged_in:
+        st.markdown(
             """
             <style>
             .stRadio > div {
@@ -591,72 +570,59 @@ def manage_page():
             </style>
             """,
             unsafe_allow_html=True
-            )
-            # 비밀번호 입력 후에만 Radio 버튼을 표시
-            content_option = st.radio("인수 인계", ["주간", "야간"])
+        )
 
-            if content_option == "주간":
-                st.header("주간")
-                st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.get("day_content", ""), height=200)
-            else:
-                st.header("야간")
-                st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.get("night_content", ""), height=200)
+        content_option = st.radio("인수 인계", ["주간", "야간"])
 
+        if content_option == "주간":
+            st.header("주간")
+            st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.get("day_content", ""), height=200)
+        else:
+            st.header("야간")
+            st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.get("night_content", ""), height=200)
 
+        if 'selected_indices' not in st.session_state:
+            st.session_state.selected_indices = []
 
-            if 'selected_indices' not in st.session_state:
-                st.session_state.selected_indices = []
+        if "device_id" not in st.session_state:
+            st.session_state.device_id = ""
 
+        st.session_state.device_id = st.text_input("장비 ID를 입력하세요:", st.session_state.device_id)
 
-            # 장비 ID 입력 받기
-            if "device_id" not in st.session_state:
-                st.session_state.device_id = ""
-                
-            # IP 주소 입력 받기
-            st.session_state.device_id = st.text_input("장비 ID를 입력하세요:", st.session_state.device_id)
+        if st.session_state.device_id:
+            df = load_data_from_google_drive(file_id)
 
-            if st.session_state.device_id:
-                # Google Drive에서 데이터 로드
-                df = load_data_from_google_drive(file_id)
-                
-                if df is not None:
-                    # 장비 ID에 해당하는 데이터 필터링
-                    try:
-                        same_device_work = df[df['장비ID'] == st.session_state.device_id]
+            if df is not None:
+                try:
+                    same_device_work = df[df['장비ID'] == st.session_state.device_id]
 
-                        if not same_device_work.empty:
-                            st.write(f"입력된 장비 ID: {st.session_state.device_id}")
-                            st.write("관련된 업무 목록:")
+                    if not same_device_work.empty:
+                        st.write(f"입력된 장비 ID: {st.session_state.device_id}")
+                        st.write("관련된 업무 목록:")
 
-                            for idx, (index, row) in enumerate(same_device_work.iterrows(), start=1):
-                                checkbox_value = st.checkbox(f"{row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})", key=f"checkbox_{index}", value=index in st.session_state.selected_indices)
-                                if checkbox_value and index not in st.session_state.selected_indices:
-                                    st.session_state.selected_indices.append(index)  # 선택된 체크박스의 인덱스를 리스트에 추가
-                                elif not checkbox_value and index in st.session_state.selected_indices:
-                                    st.session_state.selected_indices.remove(index)  # 선택 해제된 체크박스를 리스트에서 제거
+                        for idx, (index, row) in enumerate(same_device_work.iterrows(), start=1):
+                            checkbox_value = st.checkbox(f"{row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})", key=f"checkbox_{index}", value=index in st.session_state.selected_indices)
+                            if checkbox_value and index not in st.session_state.selected_indices:
+                                st.session_state.selected_indices.append(index)
+                            elif not checkbox_value and index in st.session_state.selected_indices:
+                                st.session_state.selected_indices.remove(index)
 
-                            if st.button("선택된 업무 삭제"):
-                                if st.session_state.selected_indices:
-                                    st.write(f"삭제 전: {df.shape[0]} 행")
-                                    df = df.drop(st.session_state.selected_indices)
-                                    st.write(f"삭제 후: {df.shape[0]} 행")
+                        if st.button("선택된 업무 삭제"):
+                            if st.session_state.selected_indices:
+                                st.write(f"삭제 전: {df.shape[0]} 행")
+                                df.drop(index=st.session_state.selected_indices, inplace=True)
+                                st.write(f"삭제 후: {df.shape[0]} 행")
 
-                                    # 수정된 데이터를 Google Drive에 업데이트
-                                    update_data_on_google_drive(file_id, df, folder_id)
-                                    st.success("데이터가 성공적으로 업데이트 되었습니다.")
-                                    st.session_state.selected_indices = []  # 삭제 후 선택된 인덱스 초기화
-                                else:
-                                    st.warning("삭제할 업무를 선택하세요.")
+                                update_data_on_google_drive(file_id, df, folder_id)
+                                st.session_state.selected_indices = []
                             else:
-                                st.warning("해당 장비 ID에 대한 업무가 없습니다.")
-
-                        else:
-                            st.warning(f"장비 ID '{st.session_state.device_id}'에 대한 업무가 없습니다.")
-
-                    except KeyError:
-                        st.error("데이터프레임에 '장비ID' 열이 존재하지 않습니다.")
-                else:
-                    st.error("데이터를 로드하는 데 문제가 발생하였습니다. 로그를 확인하세요.")
+                                st.warning("삭제할 업무를 선택하세요.")
+                    else:
+                        st.warning(f"장비 ID '{st.session_state.device_id}'에 대한 업무가 없습니다.")
+                except KeyError:
+                    st.error("데이터프레임에 '장비ID' 열이 존재하지 않습니다.")
+            else:
+                st.error("데이터를 로드하는 데 문제가 발생하였습니다. 로그를 확인하세요.")
   
   
 # 옵션 메뉴 생성
