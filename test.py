@@ -519,7 +519,7 @@ def moss_page():
                     """,
                     unsafe_allow_html=True
                 )
-                st.dataframe(df1)
+                st.dataframe(df)
 
 
 
