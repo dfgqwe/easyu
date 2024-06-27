@@ -708,8 +708,8 @@ def manage_page():
                                 st.session_state.selected_indices = []
                             else:
                                 st.warning("삭제할 업무를 선택하세요.")
-                    else:
-                        st.warning(f"장비 ID '{st.session_state.device_id}'에 대한 업무가 없습니다.")
+                        else:
+                            st.warning(f"장비 ID '{st.session_state.device_id}'에 대한 업무가 없습니다.")
                 except KeyError:
                     
             else:
