@@ -618,7 +618,7 @@ def manage_page():
             if st.session_state.device_id:
                 # Google Drive에서 데이터 로드
                 df = load_data_from_google_drive(file_id)
-
+                
                 if df is not None:
                     # 장비 ID에 해당하는 데이터 필터링
                     try:
@@ -645,19 +645,7 @@ def manage_page():
                                     update_data_on_google_drive(file_id, df, folder_id)
                                     st.success("데이터가 성공적으로 업데이트 되었습니다.")
                                     st.session_state.selected_indices = []  # 삭제 후 선택된 인덱스 초기화
-                                else:
-                                    st.warning("삭제할 업무를 선택하세요.")
-                            else:
-                                st.warning("해당 장비 ID에 대한 업무가 없습니다.")
-                            
 
-                        else:
-                            st.warning(f"장비 ID '{st.session_state.device_id}'에 대한 업무가 없습니다.")
-
-                    except KeyError:
-                        st.error("데이터프레임에 '장비ID' 열이 존재하지 않습니다.")
-                else:
-                    st.error("데이터를 로드하는 데 문제가 발생하였습니다. 로그를 확인하세요.")
   
   
 # 옵션 메뉴 생성
