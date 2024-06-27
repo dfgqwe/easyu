@@ -228,7 +228,9 @@ def load_data_from_google_drive(file_id):
 
 def update_data_on_google_drive(file_id, data, folder_id):
     try:
-        csv_data = data.to_csv(index=False).encode('utf-8')
+        # 데이터프레임을 CSV 파일로 변환하여 임시 파일로 저장
+        temp_file_path = "temp_data.csv"
+        data.to_csv(temp_file_path, index=False)
 
         service_account_info = {
             "type": st.secrets["service_account"]["type"],
@@ -246,21 +248,24 @@ def update_data_on_google_drive(file_id, data, folder_id):
         credentials = service_account.Credentials.from_service_account_info(service_account_info)
         service = build('drive', 'v3', credentials=credentials)
 
-        media_body = io.BytesIO(csv_data)
-        media_body.name = 'updated_data.csv'
-
         file_metadata = {
             'name': 'updated_data.csv',
             'parents': [folder_id]
         }
 
+        media = MediaFileUpload(temp_file_path, mimetype='text/csv')
+
         service.files().update(
             fileId=file_id,
-            media_body=media_body,
+            media_body=media,
             fields='id'
         ).execute()
 
         st.success("데이터가 성공적으로 업데이트 되었습니다.")
+        
+        # 임시 파일 삭제
+        os.remove(temp_file_path)
+
     except Exception as e:
         st.error(f"데이터 업데이트 중 오류 발생: {e}")
 
