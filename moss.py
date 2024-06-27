@@ -229,7 +229,7 @@ def load_data_from_google_drive(file_id):
 def update_data_on_google_drive(file_id, data, folder_id):
     try:
         csv_data = data.to_csv(index=False).encode('utf-8')
-        
+
         service_account_info = {
             "type": st.secrets["service_account"]["type"],
             "project_id": st.secrets["service_account"]["project_id"],
@@ -536,7 +536,7 @@ def worksync_page():
             st.text("Work-Sync 없습니다.")
 
 
-manage_password = '1234'
+
 
 # 관리 페이지
 def manage_page():
@@ -553,7 +553,7 @@ def manage_page():
     if not st.session_state.manage_logged_in:
         password = st.text_input("Manage 페이지 비밀번호 입력", type="password")
 
-        if password == st.secrets["manage_password"]:
+        if password == st.secrets["manage"]["password"]:
             st.session_state.manage_logged_in = True
         elif password:
             st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
