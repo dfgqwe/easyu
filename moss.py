@@ -604,7 +604,8 @@ def manage_page():
 
 
 
-
+            if 'selected_indices' not in st.session_state:
+                st.session_state.selected_indices = []
 
 
             # 장비 ID 입력 받기
