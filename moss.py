@@ -292,6 +292,7 @@ def load_data(file_id, dest_path):
 
 
 def home_page():
+    st.title("Home")
     if "day_content" in st.session_state:
         st.write("주간 인수인계 내용")
         st.markdown(st.session_state.day_content.replace('\n', '<br>'), unsafe_allow_html=True)
