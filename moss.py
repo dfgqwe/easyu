@@ -679,13 +679,19 @@ def manage_page():
 
             if df is not None:
                 try:
+                    # 입력된 장비 ID에 해당하는 데이터 필터링
                     same_device_work = df[df['장비ID'] == st.session_state.device_id]
 
                     if not same_device_work.empty:
                         st.write(f"입력된 장비 ID: {st.session_state.device_id}")
-                        st.write("관련된 업무 목록:")
 
-                        for idx, (index, row) in enumerate(same_device_work.iterrows(), start=1):
+                        # 장비 ID에 해당하는 사업장 찾기
+                        address = same_device_work['사업장'].iloc[0]
+
+                        # 해당 사업장에 있는 모든 업무 목록 표시
+                        same_address_work = df[df['사업장'] == address]
+
+                        for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
                             checkbox_value = st.checkbox(f"{row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})", key=f"checkbox_{index}", value=index in st.session_state.selected_indices)
                             if checkbox_value and index not in st.session_state.selected_indices:
                                 st.session_state.selected_indices.append(index)
@@ -705,7 +711,7 @@ def manage_page():
                     else:
                         st.warning(f"장비 ID '{st.session_state.device_id}'에 대한 업무가 없습니다.")
                 except KeyError:
-                    st.error("데이터프레임에 '장비ID' 열이 존재하지 않습니다.")
+                    
             else:
                 st.error("데이터를 로드하는 데 문제가 발생하였습니다. 로그를 확인하세요.")
   
