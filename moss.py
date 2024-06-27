@@ -661,10 +661,16 @@ def manage_page():
 
         if content_option == "주간":
             st.header("주간")
-            st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.get("day_content", ""), height=200)
+            day_content_key = "day_content"
+            if day_content_key not in st.session_state:
+                st.session_state[day_content_key] = ""
+            st.session_state[day_content_key] = st.text_area("주간->야간 인수인계", st.session_state[day_content_key], height=200)
         else:
             st.header("야간")
-            st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.get("night_content", ""), height=200)
+            night_content_key = "night_content"
+            if night_content_key not in st.session_state:
+                st.session_state[night_content_key] = ""
+            st.session_state[night_content_key] = st.text_area("야간->주간 인수인계", st.session_state[night_content_key], height=200)
 
         if 'selected_indices' not in st.session_state:
             st.session_state.selected_indices = []
