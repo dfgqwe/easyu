@@ -228,9 +228,11 @@ def load_data_from_google_drive(file_id):
 
 def update_data_on_google_drive(file_id, data, folder_id):
     try:
+        # 데이터프레임을 CSV 파일로 변환
         temp_file_path = "temp_data.csv"
         data.to_csv(temp_file_path, index=False)
 
+        # 서비스 계정 정보 로드
         service_account_info = {
             "type": st.secrets["service_account"]["type"],
             "project_id": st.secrets["service_account"]["project_id"],
@@ -244,24 +246,31 @@ def update_data_on_google_drive(file_id, data, folder_id):
             "client_x509_cert_url": st.secrets["service_account"]["client_x509_cert_url"]
         }
 
+        # 자격 증명 생성
         credentials = service_account.Credentials.from_service_account_info(service_account_info)
+
+        # Google Drive API 클라이언트 생성
         service = build('drive', 'v3', credentials=credentials)
 
+        # 파일 메타데이터 설정
+        file_metadata = {
+            'name': 'updated_data.csv',
+            'parents': [folder_id]
+        }
+
+        # 파일 업로드를 위한 파일 객체 생성
         media = MediaIoBaseUpload(temp_file_path, mimetype='text/csv')
 
-        request = service.files().update(
+        # 파일 업로드 요청
+        media_response = service.files().update(
             fileId=file_id,
-            media_body=media,
-            fields='id'
-        )
-
-        response = None
-        while response is None:
-            status, response = request.next_chunk()
-            if status:
-                st.write(f"Uploaded {int(status.progress() * 100)}%.")
+            body=file_metadata,
+            media_body=media
+        ).execute()
 
         st.success("데이터가 성공적으로 업데이트 되었습니다.")
+
+        # 업로드 완료 후 임시 파일 삭제
         os.remove(temp_file_path)
 
     except Exception as e:
