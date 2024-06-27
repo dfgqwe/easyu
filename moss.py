@@ -292,35 +292,18 @@ def load_data(file_id, dest_path):
 
 
 def home_page():
-    st.markdown(
-        """
-        <style>
-        .stRadio > div {
-            display: flex;
-            flex-direction: row;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-
-    # Radio button for choosing between Day Content and Night Content
-    content_option = st.radio("인수 인계", ["주간", "야간"])
-
-    if content_option == "주간":
-        st.header("주간")
-        day_content_key = "day_content"
-        if day_content_key not in st.session_state:
-            st.session_state[day_content_key] = ""
-        st.session_state[day_content_key] = st.text_area("주간->야간 인수인계", st.session_state[day_content_key], height=200)
-        st.markdown(st.session_state[day_content_key].replace('\n', '<br>'), unsafe_allow_html=True)
+    if "day_content" in st.session_state:
+        st.write("주간 인수인계 내용")
+        st.markdown(st.session_state.day_content.replace('\n', '<br>'), unsafe_allow_html=True)
     else:
-        st.header("야간")
-        night_content_key = "night_content"
-        if night_content_key not in st.session_state:
-            st.session_state[night_content_key] = ""
-        st.session_state[night_content_key] = st.text_area("야간->주간 인수인계", st.session_state[night_content_key], height=200)
-        st.markdown(st.session_state[night_content_key].replace('\n', '<br>'), unsafe_allow_html=True)
+        st.info("아직 주간 인수인계 내용이 입력되지 않았습니다.")
+    
+    # 야간 인수인계 내용 보여주기
+    if "night_content" in st.session_state:
+        st.write("야간 인수인계 내용")
+        st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
+    else:
+        st.info("아직 야간 인수인계 내용이 입력되지 않았습니다.")
 
 
      # CSS 스타일 적용
@@ -669,20 +652,19 @@ def manage_page():
         content_option = st.radio("인수 인계", ["주간", "야간"])
 
         if content_option == "주간":
-            st.header("주간")
+            st.write("주간")
             day_content_key = "day_content"
             if day_content_key not in st.session_state:
                 st.session_state[day_content_key] = ""
             st.session_state[day_content_key] = st.text_area("주간->야간 인수인계", st.session_state[day_content_key], height=200)
         else:
-            st.header("야간")
+            st.write("야간")
             night_content_key = "night_content"
             if night_content_key not in st.session_state:
                 st.session_state[night_content_key] = ""
             st.session_state[night_content_key] = st.text_area("야간->주간 인수인계", st.session_state[night_content_key], height=200)
-
-        if 'selected_indices' not in st.session_state:
-            st.session_state.selected_indices = []
+            if 'selected_indices' not in st.session_state:
+                st.session_state.selected_indices = []
 
         if "device_id" not in st.session_state:
             st.session_state.device_id = ""
