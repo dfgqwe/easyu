@@ -293,6 +293,17 @@ def load_data(file_id, dest_path):
 
 def home_page():
     st.title("Home")
+    st.markdown(
+        """
+        <style>
+        .stRadio > div {
+            display: flex;
+            flex-direction: row;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
     content_option = st.radio("인수 인계", ["주간", "야간"])
     if content_option == "주간":
@@ -304,7 +315,7 @@ def home_page():
 
     
     # 야간 인수인계 내용 보여주기
-    if content_option == "주간":
+    if content_option == "야간":
         if "night_content" in st.session_state:
             st.write("야간 인수인계 내용")
             st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
