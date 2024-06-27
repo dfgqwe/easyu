@@ -292,7 +292,6 @@ def load_data(file_id, dest_path):
 
 
 def home_page():
-    st.title("Home")
     st.markdown(
         """
         <style>
@@ -309,9 +308,19 @@ def home_page():
     content_option = st.radio("인수 인계", ["주간", "야간"])
 
     if content_option == "주간":
-        st.markdown(st.session_state.day_content.replace('\n', '<br>'), unsafe_allow_html=True)
+        st.header("주간")
+        day_content_key = "day_content"
+        if day_content_key not in st.session_state:
+            st.session_state[day_content_key] = ""
+        st.session_state[day_content_key] = st.text_area("주간->야간 인수인계", st.session_state[day_content_key], height=200)
+        st.markdown(st.session_state[day_content_key].replace('\n', '<br>'), unsafe_allow_html=True)
     else:
-        st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
+        st.header("야간")
+        night_content_key = "night_content"
+        if night_content_key not in st.session_state:
+            st.session_state[night_content_key] = ""
+        st.session_state[night_content_key] = st.text_area("야간->주간 인수인계", st.session_state[night_content_key], height=200)
+        st.markdown(st.session_state[night_content_key].replace('\n', '<br>'), unsafe_allow_html=True)
 
 
      # CSS 스타일 적용
