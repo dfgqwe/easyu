@@ -293,18 +293,23 @@ def load_data(file_id, dest_path):
 
 def home_page():
     st.title("Home")
-    if "day_content" in st.session_state:
-        st.write("주간 인수인계 내용")
-        st.markdown(st.session_state.day_content.replace('\n', '<br>'), unsafe_allow_html=True)
-    else:
-        st.info("아직 주간 인수인계 내용이 입력되지 않았습니다.")
+
+    content_option = st.radio("인수 인계", ["주간", "야간"])
+    if content_option == "주간":
+        if "day_content" in st.session_state:
+            st.write("주간 인수인계 내용")
+            st.markdown(st.session_state.day_content.replace('\n', '<br>'), unsafe_allow_html=True)
+        else:
+            st.info("아직 주간 인수인계 내용이 입력되지 않았습니다.")
+
     
     # 야간 인수인계 내용 보여주기
-    if "night_content" in st.session_state:
-        st.write("야간 인수인계 내용")
-        st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
-    else:
-        st.info("아직 야간 인수인계 내용이 입력되지 않았습니다.")
+    if content_option == "주간":
+        if "night_content" in st.session_state:
+            st.write("야간 인수인계 내용")
+            st.markdown(st.session_state.night_content.replace('\n', '<br>'), unsafe_allow_html=True)
+        else:
+            st.info("아직 야간 인수인계 내용이 입력되지 않았습니다.")
 
 
      # CSS 스타일 적용
