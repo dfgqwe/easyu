@@ -363,6 +363,9 @@ def home_page():
         phone_numbers = list(common_numbers.values()) + [unique_numbers[region_option]["number"]]
         phone_names = list(common_numbers.keys()) + [unique_numbers[region_option]["name"]]
 
+        for name, number in zip(phone_names, phone_numbers):
+            st.markdown(f"- {name}: {number}")
+
     with col2:
         # Column 2: Four clickable sections
         st.markdown("URL Navigation")
