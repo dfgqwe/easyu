@@ -346,25 +346,22 @@ def home_page():
         # Column 1: Department phone numbers
         st.markdown("유관 부서 전화번호")
 
-        common_numbers = [
-            "123-456-7890", 
-            "234-567-8901", 
-            "345-678-9012", 
-            "456-789-0123", 
-            "567-890-1234"
-        ]
+        common_numbers = {
+        "OSP 관제센터": "02-500-6150", 
+        "IP망 관제센터": "042-478-1600", 
+        "전원관제": "042-478-1800"
+    }
 
         unique_numbers = {
-            "충청": "678-901-2345",
-            "호남": "789-012-3456",
-            "부산": "890-123-4567",
-            "대구": "901-234-5678",
-            "야간": "890-123-4567"
-        }
+        "충청": {"name": "교환기술부(충청)", "number": "042-255-2470"},
+        "호남": {"name": "교환기술부(호남)", "number": "062-513-1200"},
+        "부산": {"name": "교환기술부(부산)", "number": "051-464-4699"},
+        "대구": {"name": "교환기술부(대구)", "number": "053-477-3010"},
+        "야간": {"name": "Judy", "number": "890-123-4567"}
+    }
 
-        phone_numbers = common_numbers + [unique_numbers[region_option]]
-        for number in phone_numbers:
-            st.markdown(f"- {number}")
+        phone_numbers = list(common_numbers.values()) + [unique_numbers[region_option]["number"]]
+        phone_names = list(common_numbers.keys()) + [unique_numbers[region_option]["name"]]
 
     with col2:
         # Column 2: Four clickable sections
