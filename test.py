@@ -116,6 +116,7 @@ B_S_head_formats = {
     "NOC_자산관리": "[NOC_자산관리]",
     "NOC_중복장애": "[NOC_중복장애]",
     "NOC_kernel정비": "[NOC_kernel정비]",
+    "NOC_철거검토": "[NOC_철거검토]",
     "기타": "[기타]"
 }
 
