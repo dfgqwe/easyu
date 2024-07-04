@@ -500,8 +500,6 @@ def moss_page():
 
 
 
-        if 출동예방_actions:
-            results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
     
 
