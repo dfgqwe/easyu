@@ -385,7 +385,7 @@ def moss_page():
                     unsafe_allow_html=True
                 )
                 selected_option = st.radio(
-                    "항목을 선택하세요:",
+                    "출동 결과:",
                     ("CM팀 이관", "개선", "정비 안됨"),
                     key="noc_options"
                 )
@@ -412,13 +412,13 @@ def moss_page():
                     """,
                     unsafe_allow_html=True
                 )
-                selected_option1 = st.radio(
-                    "항목을 선택하세요:",
+                selected_option = st.radio(
+                    "DB 삭제 여부:",
                     ("고객DB 존재/NeOSS 삭제 불가", "NeOSS 삭제 완료"),
                     key="noc_options"
                 )
-                if selected_option1:
-                    results.insert(3,selected_option1)
+                if selected_option:
+                    results.append(selected_option)
 
     
 
