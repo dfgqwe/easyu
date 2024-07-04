@@ -440,7 +440,7 @@ def moss_page():
     기타_results = []
 
     # Show these sections only if selected_bs_format is not "[NOC_광레벨불]"
-    if selected_bs_format != "[NOC_광레벨불]":
+    if selected_bs_format != "[NOC_광레벨불]" and selected_bs_format != "[NOC_장비철거]":
         selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
 
         if "DB 삭제 여부" in selected_actions:
