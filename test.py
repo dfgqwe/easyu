@@ -392,13 +392,15 @@ def moss_page():
                 if selected_option:
                     results.append(selected_option)
 
-                ddm_value = st.text_input("ddm 값을 입력하세요:")
                 rssi_value = st.text_input("RSSI 값을 입력하세요:")
+                ddm_value = st.text_input("ddm 값을 입력하세요:")
+                
 
-                if ddm_value:
-                    results.append(f"ddm: {ddm_value}")
                 if rssi_value:
                     results.append(f"RSSI: {rssi_value}")
+                if ddm_value:
+                    results.append(f"ddm: {ddm_value}")
+                
 
             if selected_bs_format == "[NOC_장비철거]":
                 st.markdown(
