@@ -418,7 +418,7 @@ def moss_page():
                     key="noc_options"
                 )
                 if selected_option1:
-                    results.insert(2,selected_option1)
+                    results.insert(3,selected_option1)
 
     
 
