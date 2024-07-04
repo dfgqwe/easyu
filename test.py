@@ -400,6 +400,28 @@ def moss_page():
                 if rssi_value:
                     results.append(f"RSSI: {rssi_value}")
 
+            if selected_bs_format == "[NOC_장비철거]":
+                st.markdown(
+                    """
+                    <style>
+                    .stRadio > div {
+                        display: flex;
+                        flex-direction: row;
+                    }
+                    </style>
+                    """,
+                    unsafe_allow_html=True
+                )
+                selected_option1 = st.radio(
+                    "항목을 선택하세요:",
+                    ("고객DB 존재/NeOSS 삭제 불가", "NeOSS 삭제 완료"),
+                    key="noc_options"
+                )
+                if selected_option1:
+                    results.append(selected_option1)
+
+    
+
     if is_complaint_checked:
         selected_complaint_format = st.selectbox("민원처리 head_format을 선택하세요:", list(B_S_head_formats.values()), key="complaint_format")
         if selected_complaint_format:
