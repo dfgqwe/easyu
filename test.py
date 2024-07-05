@@ -650,6 +650,7 @@ def manage_page():
         if content_option == "주간":
             st.header("주간")
             st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.get("day_content", ""), height=200)
+            st.write("재난 상황 : 7월 2일 ~ 7월 8일 ")
         else:
             st.header("야간")
             st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.get("night_content", ""), height=200)
