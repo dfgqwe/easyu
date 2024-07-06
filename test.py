@@ -370,7 +370,7 @@ def moss_page():
 
     selected_bs_format = None
 
-     if is_bs_checked:
+    if is_bs_checked:
         selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
         if selected_bs_format:
             results.append(selected_bs_format)
