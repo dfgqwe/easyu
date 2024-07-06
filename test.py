@@ -487,7 +487,7 @@ def moss_page():
                 기타_results.append(f"ddm: {ddm_value}")
 
         results.extend(기타_results)
-        results.append("수고하셨습니다")
+        
 
         filtered_actions = [action for action in selected_actions if action != "DB 삭제 여부"]
         if filtered_actions:
