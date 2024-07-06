@@ -375,10 +375,6 @@ def moss_page():
         if selected_bs_format:
             results.append(selected_bs_format)
 
-            user_input = st.text_input("입력란 (BS)", key="user_input_bs")
-            if user_input:
-                results.append(user_input)  # 입력란 내용을 선택한 포맷 다음에 추가
-
             # Check if selected format is "[NOC_광레벨불]"
             if selected_bs_format == "[NOC_광레벨불]":
                 st.markdown(
@@ -400,15 +396,17 @@ def moss_page():
                 if selected_option:
                     results.append(selected_option)
 
-                rssi_value = st.text_input("RSSI 값을 입력하세요:", key="rssi_value")
-                ddm_value = st.text_input("ddm 값을 입력하세요:", key="ddm_value")
+                rssi_value = st.text_input("RSSI 값을 입력하세요:")
+                ddm_value = st.text_input("ddm 값을 입력하세요:")
                 
+
                 if rssi_value:
                     results.append(f"RSSI: {rssi_value}")
                 if ddm_value:
                     results.append(f"ddm: {ddm_value}")
                 
-            elif selected_bs_format == "[NOC_장비철거]":
+
+            if selected_bs_format == "[NOC_장비철거]":
                 st.markdown(
                     """
                     <style>
@@ -423,7 +421,7 @@ def moss_page():
                 selected_option = st.radio(
                     "DB 삭제 여부:",
                     ("고객DB 존재/NeOSS 삭제 불가", "NeOSS 삭제 완료"),
-                    key="noc_options_remove"
+                    key="noc_options"
                 )
                 if selected_option:
                     results.append(selected_option)
