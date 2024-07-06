@@ -404,6 +404,7 @@ def moss_page():
                     results.append(f"RSSI: {rssi_value}")
                 if ddm_value:
                     results.append(f"ddm: {ddm_value}")
+                    
                 
 
             if selected_bs_format == "[NOC_장비철거]":
@@ -441,6 +442,7 @@ def moss_page():
             results.append(head_format)
 
     results.append(user_input)
+    results.append("수고하셨습니다")
 
     출동예방_actions = []
     기타_results = []
