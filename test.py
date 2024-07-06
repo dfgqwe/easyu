@@ -370,10 +370,14 @@ def moss_page():
 
     selected_bs_format = None
 
-    if is_bs_checked:
+     if is_bs_checked:
         selected_bs_format = st.selectbox("B/S head_format을 선택하세요:", list(B_S_head_formats.values()), key="bs_format")
         if selected_bs_format:
             results.append(selected_bs_format)
+
+            user_input = st.text_input("입력란", key="user_input")
+            if user_input:
+                results.append(user_input)  # 입력란 내용을 선택한 포맷 다음에 추가
 
             # Check if selected format is "[NOC_광레벨불]"
             if selected_bs_format == "[NOC_광레벨불]":
@@ -399,14 +403,12 @@ def moss_page():
                 rssi_value = st.text_input("RSSI 값을 입력하세요:")
                 ddm_value = st.text_input("ddm 값을 입력하세요:")
                 
-
                 if rssi_value:
                     results.append(f"RSSI: {rssi_value}")
                 if ddm_value:
                     results.append(f"ddm: {ddm_value}")
                 
-
-            if selected_bs_format == "[NOC_장비철거]":
+            elif selected_bs_format == "[NOC_장비철거]":
                 st.markdown(
                     """
                     <style>
