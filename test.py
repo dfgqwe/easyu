@@ -155,6 +155,7 @@ B_S_head_formats = {
     "정전알림이 등록",
     "DB현행화",
     "DB 삭제 여부",
+    "광레벨 확인"
     "원격조치(리부팅)",
     "원격조치(포트리셋)",
     "원격조치(포트BLK)",
@@ -470,6 +471,14 @@ def moss_page():
                 기타_results.append("고객DB 존재/NeOSS 삭제 불가")
             if 기타_neoss_완료:
                 기타_results.append("NeOSS 삭제 완료")
+
+        if "광레벨 확인" in selected_actions:
+            rssi_value = st.text_input("RSSI 값을 입력하세요:")
+            ddm_value = st.text_input("ddm 값을 입력하세요:")
+            if rssi_value:
+                기타_results.append(f"RSSI: {rssi_value}")
+            if ddm_value:
+                기타_results.append(f"ddm: {ddm_value}")
 
         results.extend(기타_results)
         results.append("수고하셨습니다")
