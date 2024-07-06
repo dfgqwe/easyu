@@ -473,8 +473,14 @@ def moss_page():
                 기타_results.append("NeOSS 삭제 완료")
 
         if "광레벨 확인" in selected_actions:
-            rssi_value = st.text_input("RSSI 값을 입력하세요:")
-            ddm_value = st.text_input("ddm 값을 입력하세요:")
+            col1, col2 = st.columns(2)
+            with col1:
+                rssi_value = st.text_input("RSSI 값을 입력하세요:")
+       
+            with col2:
+                ddm_value = st.text_input("ddm 값을 입력하세요:")
+            
+            
             if rssi_value:
                 기타_results.append(f"RSSI: {rssi_value}")
             if ddm_value:
