@@ -12,6 +12,7 @@ from urllib.request import urlopen
 from PIL import Image
 from io import BytesIO
 import traceback
+from datetime import datetime
 
 # 포맷 데이터 포멧
 formats = {
@@ -538,6 +539,8 @@ def moss_page():
             results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
     col1, col2 = st.columns(2)
+    now = datetime.now()
+    current_date = now.strftime("%Y-%m-%d")
     with col1:
        namecard_count = st.number_input("명함형 갯수:", min_value=0, step=1, key="namecard_count")
        
@@ -545,7 +548,7 @@ def moss_page():
         sticker_count = st.number_input("스티커형 갯수:", min_value=0, step=1, key="sticker_count")
 
     if namecard_count > 0 or sticker_count > 0:
-        results.append(f"[스티커]명함형 {namecard_count}개, 스티커형 {sticker_count}개")
+        results.append(f"[{current_date}][스티커]명함형 {namecard_count}개, 스티커형 {sticker_count}개")
 
 
 
