@@ -627,7 +627,7 @@ def worksync_page():
             for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
                 st.text(f"{idx}.{row['장비명/국사명']} - {row['장비ID']}({row['업무명']})")
         else:
-            st.text("Work-Sync 없습니다.")
+            st.text("Work-Sync 점검 대상 없습니다.(BS업무)")
 
 manage_password = "1234"
 def manage_page():
