@@ -383,7 +383,7 @@ def moss_page():
         col4, col5, col6 = st.columns(3)
 
         with col4:
-            selected_option = st.radio("정전 유형 선택:", ["L2 정전", "L2 선로 장애", "아파트 공용 정전"], key="power_outage_selection", index=default_value)
+            selected_option = st.radio("정전 유형 선택:", ["L2 정전", "L2 선로 장애", "아파트 공용 정전"], key="power_outage_selection")
             
             if selected_option == "L2 정전":
                 st.write("L2 정전 정보 입력:")
