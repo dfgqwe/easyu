@@ -379,9 +379,15 @@ def moss_page():
 
     if is_power_outage_checked:
         st.write("선택할 항목:")
-        is_l2_outage_checked = st.checkbox("L2 정전", key="l2_outage_checked")
-        is_line_fault_checked = st.checkbox("L2 선로 장애", key="line_fault_checked")
-        is_apartment_power_outage_checked = st.checkbox("아파트 공용 정전", key="apartment_power_outage_checked")
+
+        col4, col5, col6 = st.columns(3)
+
+        with col4:
+            is_l2_outage_checked = st.checkbox("L2 정전", key="l2_outage_checked")
+        with col5:
+            is_line_fault_checked = st.checkbox("L2 선로 장애", key="line_fault_checked")
+        with col6:
+            is_apartment_power_outage_checked = st.checkbox("아파트 공용 정전", key="apartment_power_outage_checked")
 
         if is_l2_outage_checked:
             st.write("L2 정전 정보 입력:")
