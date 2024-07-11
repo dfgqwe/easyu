@@ -383,7 +383,7 @@ def moss_page():
     with col2:
         is_complaint_checked = st.checkbox("민원처리", key="complaint_checked", on_change=complaint_checkbox_callback)
     with col3:
-        is_power_outage_checked = st.checkbox("일정 지역의 한전정전 추정", key="power_outage_checked", on_change=power_checkbox_callback)
+        is_power_outage_checked = st.checkbox("다량 장애", key="power_outage_checked", on_change=power_checkbox_callback)
 
     if is_power_outage_checked:
         st.write("선택할 항목:")
@@ -413,7 +413,7 @@ def moss_page():
         with col5:
             is_line_fault_checked = st.checkbox("L2 선로 장애", key="line_fault_checked", on_change=liner_checkbox_callback)
         with col6:
-            is_apartment_power_outage_checked = st.checkbox("아파트 공용 정전", key="apartment_power_outage_checked", on_change=apartment_checkbox_callback)
+            is_apartment_power_outage_checked = st.checkbox("아파트 정전", key="apartment_power_outage_checked", on_change=apartment_checkbox_callback)
 
         if is_l2_outage_checked:
             st.write("L2 정전 정보 입력:")
@@ -431,7 +431,7 @@ def moss_page():
             customers_line = st.text_input("고객 수 (예: 120)", key="customers_line")
             RN_line = st.text_input("RN 수 (예: 4)", key="RN_line")
             if honam_station and l2_systems_line and customers_line and RN_line:
-                st.write(f"[L2_선로] {honam_station} 선로장애 (추정) L2**{l2_systems_line}sys({customers_line}고객)/1차RN**{RN_line}")
+                st.write(f"[L2_선로] {honam_station} 선로장애 (추정) L2*{l2_systems_line}sys({customers_line}고객)"/"1차RN*{RN_line}")
 
         if is_apartment_power_outage_checked:
             st.write("아파트 공용 정전 정보 입력:")
