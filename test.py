@@ -631,17 +631,8 @@ def worksync_page():
             st.write("★동일국소 점검 대상★")
             
             same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
-            idx = 1
-            for index, row in same_address_work.iterrows():
-                st.text(f"{idx}.{row['장비명/국사명']} - {row['업무명']}({row['장비ID']})")
-                
-                # 업무명이 L2 자산정비(위치정보/상태불일치)일 경우 자산현행화(세부항목)도 출력
-                if row['업무명'] == 'L2 자산정비(위치정보/상태불일치':
-                    asset_details = df_no_duplicates[(df_no_duplicates['장비ID'] == row['장비ID']) & (df_no_duplicates['업무명'] == '자산현행화(세부항목)')]
-                    for _, detail_row in asset_details.iterrows():
-                        idx += 1
-                        st.text(f"{idx}.{detail_row['장비명/국사명']} - {detail_row['업무명']}({detail_row['장비ID']})")
-                idx += 1
+            for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
+                st.text(f"{idx}.{row['장비명/국사명']} - {row['업무명'](row['자산현행화(세부항목)'])}({row['장비ID']})")
         else:
             st.text("Work-Sync(BS업무) 점검 대상 없습니다.")
 
