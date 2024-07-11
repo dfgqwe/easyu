@@ -632,7 +632,7 @@ def worksync_page():
             
             same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
             for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
-                st.text(f"{idx}.{row['장비명/국사명']} - {row['장비ID']}({row['업무명']})")
+                st.text(f"{idx}.{row['장비명/국사명']} - {row['업무명']}({row['장비ID']})")
         else:
             st.text("Work-Sync(BS업무) 점검 대상 없습니다.")
 
