@@ -368,6 +368,9 @@ def moss_page():
     def complaint_checkbox_callback():
         st.session_state.bs_checked = False
 
+    def power_checkbox_callback():
+        st.session_state.bs_checked = False
+
     col1, col2, col3 = st.columns(3)
 
     with col1:
@@ -375,19 +378,26 @@ def moss_page():
     with col2:
         is_complaint_checked = st.checkbox("민원처리", key="complaint_checked", on_change=complaint_checkbox_callback)
     with col3:
-        is_power_outage_checked = st.checkbox("일정 지역의 한전정전 추정", key="power_outage_checked")
+        is_power_outage_checked = st.checkbox("일정 지역의 한전정전 추정", key="power_outage_checked", on_change=power_checkbox_callback)
 
     if is_power_outage_checked:
         st.write("선택할 항목:")
 
         col4, col5, col6 = st.columns(3)
+        def l2_checkbox_callback():
+            st.session_state.bs_checked = False
+        def liner_checkbox_callback():
+            st.session_state.bs_checked = False
+        def apartment_checkbox_callback():
+            st.session_state.bs_checked = False
+        
 
         with col4:
-            is_l2_outage_checked = st.checkbox("L2 정전", key="l2_outage_checked")
+            is_l2_outage_checked = st.checkbox("L2 정전", key="l2_outage_checked", on_change=l2_checkbox_callback)
         with col5:
-            is_line_fault_checked = st.checkbox("L2 선로 장애", key="line_fault_checked")
+            is_line_fault_checked = st.checkbox("L2 선로 장애", key="line_fault_checked", on_change=liner_checkbox_callback)
         with col6:
-            is_apartment_power_outage_checked = st.checkbox("아파트 공용 정전", key="apartment_power_outage_checked")
+            is_apartment_power_outage_checked = st.checkbox("아파트 공용 정전", key="apartment_power_outage_checked", on_change=apartment_checkbox_callback)
 
         if is_l2_outage_checked:
             st.write("L2 정전 정보 입력:")
