@@ -389,12 +389,23 @@ def moss_page():
         st.write("선택할 항목:")
 
         col4, col5, col6 = st.columns(3)
+        
+        if "line_fault_checked" not in st.session_state:
+            st.session_state.line_fault_checked = False
+        if "l2_outage_checked" not in st.session_state:
+            st.session_state.l2_outage_checked = False
+        if "apartment_power_outage_checked" not in st.session_state:
+            st.session_state.apartment_power_outage_checked = False
+            
         def l2_checkbox_callback():
-            st.session_state.bs_checked = False
+            st.session_state.line_fault_checked = False
+            st.session_state.apartment_power_outage_checked = False
         def liner_checkbox_callback():
-            st.session_state.bs_checked = False
+            st.session_state.l2_outage_checked = False
+            st.session_state.apartment_power_outage_checked = False
         def apartment_checkbox_callback():
-            st.session_state.bs_checked = False
+            st.session_state.l2_outage_checked = False
+            st.session_state.line_fault_checked = False
         
 
         with col4:
