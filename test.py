@@ -431,7 +431,7 @@ def moss_page():
             customers_line = st.text_input("고객 수 (예: 120)", key="customers_line")
             RN_line = st.text_input("RN 수 (예: 4)", key="RN_line")
             if honam_station and l2_systems_line and customers_line and RN_line:
-                st.write(f"[L2_선로] {honam_station} 선로장애 (추정) L2*{l2_systems_line}sys({customers_line}고객)/(1차RN*{RN_line})")
+                st.write(f"[L2_선로] {honam_station} 선로장애 (추정) L2*{l2_systems_line}sys({customers_line}고객)"/f"1차RN*{RN_line}")
 
         if is_apartment_power_outage_checked:
             st.write("아파트 공용 정전 정보 입력:")
