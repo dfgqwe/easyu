@@ -427,16 +427,17 @@ def moss_page():
         if is_line_fault_checked:
             st.write("L2 선로 장애 정보 입력:")
             honam_station = st.text_input("국사 (예: 호남/xx국사)", key="honam_station")
-            l2_systems_line = st.text_input("시스템 수 (예: 13)", key="l2_systems_line")
+            l2_systems_line = st.text_input("L2 수 (예: 13)", key="l2_systems_line")
             customers_line = st.text_input("고객 수 (예: 120)", key="customers_line")
+            rn = st.text_input("RN 수 (예: 4)", key="RN_line")
             if honam_station and l2_systems_line and customers_line:
-                st.write(f"[L2_선로] {honam_station} 선로장애 추정 L2*{l2_systems_line}sys({customers_line}고객)/1차RN*4")
+                st.write(f"[L2_선로] {honam_station} 선로장애 추정 L2*{l2_systems_line}sys({customers_line}고객)/1차RN*{RN_line}")
 
         if is_apartment_power_outage_checked:
             st.write("아파트 공용 정전 정보 입력:")
             busan_station = st.text_input("국사 (예: 부산/xx국사)", key="busan_station")
             apartment_name = st.text_input("아파트 이름 (예: AAA아파트)", key="apartment_name")
-            l2_systems_apartment = st.text_input("시스템 수 (예: 13)", key="l2_systems_apartment")
+            l2_systems_apartment = st.text_input("L2 수 (예: 13)", key="l2_systems_apartment")
             customers_apartment = st.text_input("고객 수 (예: 120)", key="customers_apartment")
             if busan_station and apartment_name and l2_systems_apartment and customers_apartment:
                 st.write(f"[아파트_정전] {busan_station} {apartment_name} 공용정전 추정 L2*{l2_systems_apartment}sys({customers_apartment}고객)")
