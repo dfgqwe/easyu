@@ -381,8 +381,6 @@ def moss_page():
         st.write("선택할 항목:")
 
         col4, col5, col6 = st.columns(3)
-        # Default value
-        default_value = "none_selected"
 
         with col4:
             selected_option = st.radio("정전 유형 선택:", ["L2 정전", "L2 선로 장애", "아파트 공용 정전"], key="power_outage_selection", index=default_value)
