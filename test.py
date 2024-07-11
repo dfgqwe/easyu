@@ -366,12 +366,15 @@ def moss_page():
 
     def bs_checkbox_callback():
         st.session_state.complaint_checked = False
+        st.session_state.power_outage_checked = False
 
     def complaint_checkbox_callback():
         st.session_state.bs_checked = False
+        st.session_state.power_outage_checked = False
 
     def power_checkbox_callback():
         st.session_state.bs_checked = False
+        st.session_state.complaint_checked = False
 
     col1, col2, col3 = st.columns(3)
 
