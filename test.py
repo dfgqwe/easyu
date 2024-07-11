@@ -644,6 +644,7 @@ def worksync_page():
         else:
             st.text("Work-Sync(BS업무) 점검 대상 없습니다.")
 
+
 manage_password = "1234"
 def manage_page():
     st.title("Manage")
