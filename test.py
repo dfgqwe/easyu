@@ -368,13 +368,49 @@ def moss_page():
     def complaint_checkbox_callback():
         st.session_state.bs_checked = False
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
 
     with col1:
         is_bs_checked = st.checkbox("B/S", key="bs_checked", on_change=bs_checkbox_callback)
     with col2:
         is_complaint_checked = st.checkbox("민원처리", key="complaint_checked", on_change=complaint_checkbox_callback)
+    with col3:
+        is_power_outage_checked = st.checkbox("일정 지역의 한전정전 추정", key="power_outage_checked")
 
+        if is_power_outage_checked:
+            st.write("선택할 항목:")
+            is_l2_outage_checked = st.checkbox("L2 정전", key="l2_outage_checked")
+            is_line_fault_checked = st.checkbox("L2 선로 장애", key="line_fault_checked")
+            is_apartment_power_outage_checked = st.checkbox("아파트 공용 정전", key="apartment_power_outage_checked")
+
+            if is_l2_outage_checked:
+                st.write("L2 정전 정보 입력:")
+                daegu_station = st.text_input("국사 (예: 대구/xx국사)")
+                district = st.text_input("동 (예: yy동)")
+                l2_systems = st.text_input("시스템 수 (예: 13)")
+                customers = st.text_input("고객 수 (예: 120)")
+                if daegu_station and district and l2_systems and customers:
+                    st.write(f"[L2_정전] {daegu_station} L2 다량장애 {district}일대 한전정전 추정 L2*{l2_systems}sys({customers}고객)")
+
+            if is_line_fault_checked:
+                st.write("L2 선로 장애 정보 입력:")
+                honam_station = st.text_input("국사 (예: 호남/xx국사)")
+                l2_systems_line = st.text_input("시스템 수 (예: 13)")
+                customers_line = st.text_input("고객 수 (예: 120)")
+                if honam_station and l2_systems_line and customers_line:
+                    st.write(f"[L2_선로] {honam_station} 선로장애 추정 L2*{l2_systems_line}sys({customers_line}고객)/1차RN*4")
+
+            if is_apartment_power_outage_checked:
+                st.write("아파트 공용 정전 정보 입력:")
+                busan_station = st.text_input("국사 (예: 부산/xx국사)")
+                apartment_name = st.text_input("아파트 이름 (예: AAA아파트)")
+                l2_systems_apartment = st.text_input("시스템 수 (예: 13)")
+                customers_apartment = st.text_input("고객 수 (예: 120)")
+                if busan_station and apartment_name and l2_systems_apartment and customers_apartment:
+                    st.write(f"[아파트_정전] {busan_station} {apartment_name} 공용정전 추정 L2*{l2_systems_apartment}sys({customers_apartment}고객)")
+
+
+    
     selected_bs_format = None
 
     if is_bs_checked:
