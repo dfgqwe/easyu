@@ -110,6 +110,7 @@ formats = {
     "폐문": "[폐문]"
 }
 
+
 # B/S 및 민원처리 head_format 데이터
 B_S_head_formats = {
     "NOC_광레벨불": "[NOC_광레벨불]",
@@ -122,6 +123,10 @@ B_S_head_formats = {
     "NOC_점검정비": "[NOC_점검정비]",
     "NOC_자산관리": "[NOC_자산관리]",
     "NOC_중복장애": "[NOC_중복장애]",
+    "NOC_BAT(24)": "[NOC_BAT(24)]",
+    "NOC_전원OFF": "[NOC_전원OFF]",
+    "NOC_10G(용량확대)": "[NOC_10G(용량확대)]",
+    "NOC_통합멀티룸": "[NOC_통합멀티룸]",
     "NOC_kernel정비": "[NOC_kernel정비]",
     "NOC_철거검토": "[NOC_철거검토]",
     "기타": "[기타]"
