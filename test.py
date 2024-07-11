@@ -635,7 +635,7 @@ def worksync_page():
             for index, row in same_address_work.iterrows():
                 st.text(f"{idx}.{row['장비명/국사명']} - {row['업무명']}({row['장비ID']})")
                 # 업무명이 L2 자산정비(위치정보/상태불일치)일 경우 자산현행화(세부항목)도 출력
-                if row['업무명'] == 'L2 자산정비(위치정보/상태불일치)':
+                if row['업무명'] == 'L2 자산정비(위치정보/상태불일치':
                     details = df_no_duplicates[(df_no_duplicates['장비ID'] == row['장비ID']) & (df_no_duplicates['업무명'] == '자산현행화(세부항목)')]
                     for _, detail_row in details.iterrows():
                         idx += 1
