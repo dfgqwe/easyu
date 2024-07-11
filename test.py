@@ -361,6 +361,8 @@ def moss_page():
         st.session_state.bs_checked = False
     if "complaint_checked" not in st.session_state:
         st.session_state.complaint_checked = False
+    if "power_outage_checked" not in st.session_state:
+        st.session_state.power_outage_checked = False
 
     def bs_checkbox_callback():
         st.session_state.complaint_checked = False
