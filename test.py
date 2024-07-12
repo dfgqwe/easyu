@@ -458,7 +458,7 @@ def moss_page():
             customers_apartment = st.text_input("고객 수 (예: 120)", key="customers_apartment")
             outage_type = st.radio(
                 "정전 종류 선택:",
-                ("공용전기(추정)", "세대전체정전(추정)"),
+                ("공용전기(추정)", "전체정전(추정)"),
                 key="outage_type"
             )
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
