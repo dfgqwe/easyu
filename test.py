@@ -456,8 +456,13 @@ def moss_page():
             apartment_name = st.text_input("아파트 이름 (예: AAA아파트)", key="apartment_name")
             l2_systems_apartment = st.text_input("L2 수 (예: 13)", key="l2_systems_apartment")
             customers_apartment = st.text_input("고객 수 (예: 120)", key="customers_apartment")
+
             if busan_station and apartment_name and l2_systems_apartment and customers_apartment:
-                st.write(f"[아파트_정전] {busan_station} {apartment_name}아파트 공용정전 (추정) L2*{l2_systems_apartment}sys({customers_apartment}고객)")
+                if not busan_station.endswith("국사"):
+                    busan_station += "국사"
+                if not apartment_name.endswith("아파트"):
+                    apartment_name += "아파트"
+                st.write(f"[아파트_정전] {busan_station} {apartment_name} 공용정전 (추정) L2*{l2_systems_apartment}sys({customers_apartment}고객)")
 
     else:
         selected_bs_format = None
