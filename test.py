@@ -456,13 +456,12 @@ def moss_page():
             apartment_name = st.text_input("아파트 이름 (예: AAA아파트)", key="apartment_name")
             l2_systems_apartment = st.text_input("L2 수 (예: 13)", key="l2_systems_apartment")
             customers_apartment = st.text_input("고객 수 (예: 120)", key="customers_apartment")
-            st.write("정전 종류 선택:")
-            outage_type = st.selectbox(
-                "",
+            outage_type = st.radio(
+                "정전 종류 선택:",
                 ("공용전기(추정)", "세대전체정전(추정)"),
                 key="outage_type"
             )
-
+            st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
             if busan_station and apartment_name and l2_systems_apartment and customers_apartment:
                 if not busan_station.endswith("국사"):
                     busan_station += "국사"
