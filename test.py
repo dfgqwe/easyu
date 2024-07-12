@@ -294,7 +294,7 @@ def home_page():
         unsafe_allow_html=True
     )
     # 지역 선택 selectbox
-    region_option = st.selectbox("지역 선택", ["충청", "호남", "부산", "대구", "야간"])
+    region_option = st.selectbox("지역 선택", ["충청", "호남", "부산", "대구"])
 
     col1, col2 = st.columns(2)
 
@@ -305,7 +305,8 @@ def home_page():
         common_numbers = {
         "OSP 관제센터": "02-500-6150", 
         "IP망 관제센터": "042-478-1600", 
-        "전원관제": "042-478-1800"
+        "전원관제": "042-478-1800",
+        "과천 제1관제센터(교환)": "02-500-6080",
     }
 
         unique_numbers = {
@@ -313,7 +314,6 @@ def home_page():
         "호남": {"name": "교환기술부(호남)", "number": "062-513-1200"},
         "부산": {"name": "교환기술부(부산)", "number": "051-464-4699"},
         "대구": {"name": "교환기술부(대구)", "number": "053-477-3010"},
-        "야간": {"name": "Judy", "number": "890-123-4567"}
     }
 
         phone_numbers = list(common_numbers.values()) + [unique_numbers[region_option]["number"]]
