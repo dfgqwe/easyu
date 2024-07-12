@@ -698,7 +698,7 @@ def worksync_page():
     df_no_duplicates = df_no_duplicates.sort_values(by='장비ID')
 
     # IP 입력 받기
-    ip_input = st.text_input("IP 입력", "")
+    ip_input = st.text_input("IP 입력", "").replace(" ", "")
     
     # IP 입력이 있을 경우
     if ip_input:
