@@ -434,6 +434,8 @@ def moss_page():
             customers = st.text_input("고객 수 (예: 120)", key="customers")
 
             if daegu_station and district and l2_systems and customers:
+                if not daegu_station.endswith("국사"):
+                    daegu_station += "국사"
                 if not district.endswith("동"):
                     district += "동"
                 st.write(f"[L2_정전] {daegu_station} L2 다량장애 {district}일대 한전정전 (추정) L2*{l2_systems}sys({customers}고객)")
