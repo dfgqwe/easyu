@@ -446,6 +446,8 @@ def moss_page():
             l2_systems_line = st.text_input("L2 수 (예: 13)", key="l2_systems_line")
             customers_line = st.text_input("고객 수 (예: 120)", key="customers_line")
             if honam_station and l2_systems_line and customers_line:
+                if not honam_station.endswith("국사"):
+                    honam_station += "국사"
                 st.write(f"[L2_선로] {honam_station} 선로장애 (추정) L2*{l2_systems_line}sys({customers_line}고객)")
 
         if is_apartment_power_outage_checked:
