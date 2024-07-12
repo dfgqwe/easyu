@@ -315,9 +315,15 @@ def home_page():
         "부산": {"name": "교환기술부(부산)", "number": "051-464-4699"},
         "대구": {"name": "교환기술부(대구)", "number": "053-477-3010"},
     }
+        enter_numbers = {
+        "충청": {"name": "분기국사출입(충청)", "number": "042-478-7550, 7540"},
+        "호남": {"name": "분기국사출입(호남)", "number": "062-230-3355~7"},
+        "부산": {"name": "분기국사출입(부산)", "number": "051-464-2300"},
+        "대구": {"name": "분기국사출입(대구)", "number": "053-477-1984~5"},
+    }
 
-        phone_numbers = list(common_numbers.values()) + [unique_numbers[region_option]["number"]]
-        phone_names = list(common_numbers.keys()) + [unique_numbers[region_option]["name"]]
+        phone_numbers = list(common_numbers.values()) + [unique_numbers[region_option]["number"]] + [enter_numbers[region_option]["number"]]
+        phone_names = list(common_numbers.keys()) + [unique_numbers[region_option]["name"]] + [enter_numbers[region_option]["name"]]
 
         for name, number in zip(phone_names, phone_numbers):
             st.markdown(f"- {name}: {number}")
