@@ -447,6 +447,28 @@ def moss_page():
             for branch_station in unique_branch_stations:
                 acceptance_station = matching_stations[matching_stations['분기국사'] == branch_station]['수용국사'].iloc[0]
                 nsc = matching_stations[matching_stations['분기국사'] == branch_station]['NSC'].iloc[0]
+        
+                # NSC 값을 변환
+                if "충북액세스운용센터" in nsc:
+                    nsc = "충청"
+                elif "충남액세스운용센터" in nsc:
+                    nsc = "충청"
+
+                if "전남액세스운용센터" in nsc:
+                    nsc = "호남"
+                elif "전북액세스운용센터" in nsc:
+                    nsc = "호남"
+                    
+                if "부산액세스운용센터" in nsc:
+                    nsc = "부산"
+                elif "경남액세스운용센터" in nsc:
+                    nsc = "부산"
+
+                if "대구액세스운용센터" in nsc:
+                    nsc = "부산"
+                elif "경북액세스운용센터" in nsc:
+                    nsc = "부산"                
+                
                 if "국사" in original_input:
                     result_stations.append(f"{nsc}/{acceptance_station}-{branch_station}")
                 else:
