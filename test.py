@@ -429,6 +429,21 @@ def moss_page():
         with col6:
             is_apartment_power_outage_checked = st.checkbox("아파트 정전", key="apartment_power_outage_checked", on_change=apartment_checkbox_callback)
 
+        # CSV 파일 읽기
+        df = pd.read_csv('국사.CSV')
+        branch_to_acceptance = {row['분기국사']: row['수용국사'] for _, row in df.iterrows()}
+
+        # Function to get correct station name
+        def get_station_name(input_station):
+            if input_station.endswith("국사"):
+                input_station = input_station[:-2]
+            if input_station in branch_to_acceptance:
+                acceptance_station = branch_to_acceptance[input_station]
+                if acceptance_station != input_station:
+                    return f"{acceptance_station}-{input_station}국사"
+                return f"{input_station}국사"
+            return f"{input_station}국사"
+
         if is_l2_outage_checked:
             st.write("L2 정전 정보 입력:")
             daegu_station = st.text_input("국사 (예: 대구/xx국사)", key="daegu_station")
@@ -437,8 +452,7 @@ def moss_page():
             customers = st.text_input("고객 수 (예: 120)", key="customers")
 
             if daegu_station and district and l2_systems and customers:
-                if not daegu_station.endswith("국사"):
-                    daegu_station += "국사"
+                daegu_station = get_station_name(daegu_station)
                 if not district.endswith("동"):
                     district += "동"
                 st.write(f"[L2_정전] {daegu_station} L2 다량장애 {district}일대 한전정전 (추정) L2*{l2_systems}sys({customers}고객)")
@@ -448,9 +462,9 @@ def moss_page():
             honam_station = st.text_input("국사 (예: 호남/xx국사)", key="honam_station")
             l2_systems_line = st.text_input("L2 수 (예: 13)", key="l2_systems_line")
             customers_line = st.text_input("고객 수 (예: 120)", key="customers_line")
+    
             if honam_station and l2_systems_line and customers_line:
-                if not honam_station.endswith("국사"):
-                    honam_station += "국사"
+                honam_station = get_station_name(honam_station)
                 st.write(f"[L2_선로] {honam_station} 선로장애 (추정) L2*{l2_systems_line}sys({customers_line}고객)")
 
         if is_apartment_power_outage_checked:
@@ -465,9 +479,9 @@ def moss_page():
                 key="outage_type"
             )
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+    
             if busan_station and apartment_name and l2_systems_apartment and customers_apartment:
-                if not busan_station.endswith("국사"):
-                    busan_station += "국사"
+                busan_station = get_station_name(busan_station)
                 if not apartment_name.endswith("아파트"):
                     apartment_name += "아파트"
                 st.write(f"[아파트_정전] {busan_station} {apartment_name} {outage_type} L2*{l2_systems_apartment}sys({customers_apartment}고객)")
