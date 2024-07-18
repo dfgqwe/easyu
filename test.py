@@ -434,20 +434,14 @@ def moss_page():
 
         # CSV 파일 읽기
         df = pd.read_csv('국사.csv')
-        branch_to_acceptance = {row['분기국사']: row['수용국사'] for _, row in df.iterrows()}
 
-        def get_station_names(input_station):
-            original_input = input_station
-            if input_station.endswith("국사"):
-                input_station = input_station[:-2]
-    
-            matching_stations = df[df['분기국사'].str.contains(input_station)]
-            unique_branch_stations = matching_stations['분기국사'].unique()
-            result_stations = []
-            for branch_station in unique_branch_stations:
-                acceptance_station = matching_stations[matching_stations['분기국사'] == branch_station]['수용국사'].iloc[0]
-                nsc = matching_stations[matching_stations['분기국사'] == branch_station]['NSC'].iloc[0]
-        
+
+        def get_nsc(station_name, df):
+            # 수용국사에서 '국사'를 제외한 이름을 비교
+            station_name_core = station_name.replace("국사", "")
+            row = df[df['수용국사'].str.contains(station_name_core)]
+            if not row.empty:
+                return row.iloc[0]['NSC']
                 # NSC 값을 변환
                 if "충북액세스운용센터" in nsc:
                     nsc = "충청"
@@ -467,13 +461,10 @@ def moss_page():
                 if "대구액세스운용센터" in nsc:
                     nsc = "부산"
                 elif "경북액세스운용센터" in nsc:
-                    nsc = "부산"                
-                
-                if "국사" in original_input:
-                    result_stations.append(f"{nsc}/{acceptance_station}-{branch_station}")
-            return result_stations
-
-
+                    nsc = "부산"       
+            return None
+          
+  
         if is_l2_outage_checked:
             st.write("L2 정전 정보 입력:")
             daegu_station = st.text_input("국사 (예: 대구/xx국사)", key="daegu_station")
@@ -482,22 +473,30 @@ def moss_page():
             customers = st.text_input("고객 수 (예: 120)", key="customers")
 
             if daegu_station and district and l2_systems and customers:
-                stations = get_station_names(daegu_station)
+                if not daegu_station.endswith("국사"):
+                    daegu_station += "국사"
                 if not district.endswith("동"):
                     district += "동"
-                for station in stations:
-                    st.write(f"[L2_정전] {station} L2 다량장애 {district}일대 한전정전 (추정) L2*{l2_systems}sys({customers}고객)")
+                nsc = get_nsc(daegu_station, station_data)
+                if nsc:
+                    st.write(f"[L2_정전] {nsc}/{daegu_station} L2 다량장애 {district}일대 한전정전 (추정) L2*{l2_systems}sys({customers}고객)")
+                else:
+                    st.write("해당 국사에 대한 NSC 정보를 찾을 수 없습니다.")
 
         if is_line_fault_checked:
             st.write("L2 선로 장애 정보 입력:")
             honam_station = st.text_input("국사 (예: 호남/xx국사)", key="honam_station")
             l2_systems_line = st.text_input("L2 수 (예: 13)", key="l2_systems_line")
             customers_line = st.text_input("고객 수 (예: 120)", key="customers_line")
-    
+        
             if honam_station and l2_systems_line and customers_line:
-                stations = get_station_names(honam_station)
-                for station in stations:
-                    st.write(f"[L2_선로] {station} 선로장애 (추정) L2*{l2_systems_line}sys({customers_line}고객)")
+                if not honam_station.endswith("국사"):
+                    honam_station += "국사"
+                nsc = get_nsc(honam_station, station_data)
+                if nsc:
+                    st.write(f"[L2_선로] {nsc}/{honam_station} 선로장애 (추정) L2*{l2_systems_line}sys({customers_line}고객)")
+                else:
+                    st.write("해당 국사에 대한 NSC 정보를 찾을 수 없습니다.")
 
         if is_apartment_power_outage_checked:
             st.write("아파트 공용 정전 정보 입력:")
@@ -513,11 +512,15 @@ def moss_page():
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
     
             if busan_station and apartment_name and l2_systems_apartment and customers_apartment:
-                stations = get_station_names(busan_station)
+                if not busan_station.endswith("국사"):
+                    busan_station += "국사"
                 if not apartment_name.endswith("아파트"):
                     apartment_name += "아파트"
-                for station in stations:
-                    st.write(f"[아파트_정전] {station} {apartment_name} {outage_type} L2*{l2_systems_apartment}sys({customers_apartment}고객)")
+                nsc = get_nsc(busan_station, station_data)
+                if nsc:
+                    st.write(f"[아파트_정전] {nsc}/{busan_station} {apartment_name} {outage_type} L2*{l2_systems_apartment}sys({customers_apartment}고객)")
+                else:
+                    st.write("해당 국사에 대한 NSC 정보를 찾을 수 없습니다.")
 
     else:
         selected_bs_format = None
