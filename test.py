@@ -435,12 +435,16 @@ def moss_page():
 
         # Function to get correct station name
         def get_station_name(input_station):
+            original_input = input_station
             if input_station.endswith("국사"):
                 input_station = input_station[:-2]
             if input_station in branch_to_acceptance:
                 acceptance_station = branch_to_acceptance[input_station]
                 if acceptance_station != input_station:
-                    return f"{acceptance_station}-{input_station}국사"
+                    if "국사" in original_input:
+                        return f"{acceptance_station}-{input_station}"
+                    else:
+                        return f"{acceptance_station}-{input_station}국사"
                 return f"{input_station}국사"
             return f"{input_station}국사"
 
