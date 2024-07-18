@@ -433,7 +433,7 @@ def moss_page():
             is_apartment_power_outage_checked = st.checkbox("아파트 정전", key="apartment_power_outage_checked", on_change=apartment_checkbox_callback)
 
         def load_station_data():
-            df = pd.read_csv('국사.CSV')
+            df = pd.read_csv('국사.csv')
             return df
 
 
