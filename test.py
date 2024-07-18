@@ -432,8 +432,9 @@ def moss_page():
         with col6:
             is_apartment_power_outage_checked = st.checkbox("아파트 정전", key="apartment_power_outage_checked", on_change=apartment_checkbox_callback)
 
-        # CSV 파일 읽기
-        df = pd.read_csv('국사.csv')
+        def load_station_data():
+            df = pd.read_csv('국사.CSV')
+            return df
 
 
         def get_nsc(station_name, df):
@@ -464,7 +465,7 @@ def moss_page():
                     nsc = "부산"       
             return None
           
-  
+        station_data = load_station_data()
         if is_l2_outage_checked:
             st.write("L2 정전 정보 입력:")
             daegu_station = st.text_input("국사 (예: 대구/xx국사)", key="daegu_station")
