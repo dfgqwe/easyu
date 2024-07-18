@@ -695,7 +695,7 @@ def moss_page():
             sticker_count = st.number_input("스티커형 갯수:", min_value=0, step=1, key="sticker_count")
 
         if namecard_count > 0 or sticker_count > 0:
-            results.append(f"[{current_date}][스티커]명함형 {namecard_count}장, 스티커형 {sticker_count}장")
+            results.append(f"[{current_date}][스티커] 명함형 {namecard_count}장, 스티커형 {sticker_count}장")
 
 
 
