@@ -442,15 +442,16 @@ def moss_page():
                 input_station = input_station[:-2]
     
             matching_stations = df[df['분기국사'].str.contains(input_station)]
+            unique_branch_stations = matching_stations['분기국사'].unique()
             result_stations = []
-            for _, row in matching_stations.iterrows():
-                acceptance_station = row['수용국사']
-                branch_station = row['분기국사']
+            for branch_station in unique_branch_stations:
+                acceptance_station = matching_stations[matching_stations['분기국사'] == branch_station]['수용국사'].iloc[0]
                 if "국사" in original_input:
                     result_stations.append(f"{acceptance_station}-{branch_station}")
                 else:
                     result_stations.append(f"{acceptance_station}-{branch_station}국사")
             return result_stations
+
 
         if is_l2_outage_checked:
             st.write("L2 정전 정보 입력:")
