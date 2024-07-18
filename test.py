@@ -443,27 +443,19 @@ def moss_page():
             row = df[df['수용국사'].str.contains(station_name_core)]
             if not row.empty:
                 return row.iloc[0]['NSC']
-                # NSC 값을 변환
-                if "충북액세스운용센터" in nsc:
-                    nsc = "충청"
-                elif "충남액세스운용센터" in nsc:
-                    nsc = "충청"
-
-                if "전남액세스운용센터" in nsc:
-                    nsc = "호남"
-                elif "전북액세스운용센터" in nsc:
-                    nsc = "호남"
-                    
-                if "부산액세스운용센터" in nsc:
-                    nsc = "부산"
-                elif "경남액세스운용센터" in nsc:
-                    nsc = "부산"
-
-                if "대구액세스운용센터" in nsc:
-                    nsc = "부산"
-                elif "경북액세스운용센터" in nsc:
-                    nsc = "부산"       
             return None
+
+        # NSC 값을 변환하는 함수
+        def transform_nsc(nsc):
+            if "충북액세스운용센터" in nsc or "충남액세스운용센터" in nsc:
+                return "충청"
+            elif "전남액세스운용센터" in nsc or "전북액세스운용센터" in nsc:
+                return "호남"
+            elif "부산액세스운용센터" in nsc or "경남액세스운용센터" in nsc:
+                return "부산"
+            elif "대구액세스운용센터" in nsc or "경북액세스운용센터" in nsc:
+                return "부산"
+            return nsc
           
         station_data = load_station_data()
         if is_l2_outage_checked:
@@ -480,6 +472,7 @@ def moss_page():
                     district += "동"
                 nsc = get_nsc(daegu_station, station_data)
                 if nsc:
+                    nsc = transform_nsc(nsc)
                     st.write(f"[L2_정전] {nsc}/{daegu_station} L2 다량장애 {district}일대 한전정전 (추정) L2*{l2_systems}sys({customers}고객)")
                 else:
                     st.write("해당 국사에 대한 NSC 정보를 찾을 수 없습니다.")
@@ -489,12 +482,13 @@ def moss_page():
             honam_station = st.text_input("국사 (예: 호남/xx국사)", key="honam_station")
             l2_systems_line = st.text_input("L2 수 (예: 13)", key="l2_systems_line")
             customers_line = st.text_input("고객 수 (예: 120)", key="customers_line")
-        
+
             if honam_station and l2_systems_line and customers_line:
                 if not honam_station.endswith("국사"):
                     honam_station += "국사"
                 nsc = get_nsc(honam_station, station_data)
                 if nsc:
+                    nsc = transform_nsc(nsc)
                     st.write(f"[L2_선로] {nsc}/{honam_station} 선로장애 (추정) L2*{l2_systems_line}sys({customers_line}고객)")
                 else:
                     st.write("해당 국사에 대한 NSC 정보를 찾을 수 없습니다.")
@@ -519,9 +513,11 @@ def moss_page():
                     apartment_name += "아파트"
                 nsc = get_nsc(busan_station, station_data)
                 if nsc:
+                    nsc = transform_nsc(nsc)
                     st.write(f"[아파트_정전] {nsc}/{busan_station} {apartment_name} {outage_type} L2*{l2_systems_apartment}sys({customers_apartment}고객)")
                 else:
                     st.write("해당 국사에 대한 NSC 정보를 찾을 수 없습니다.")
+
 
     else:
         selected_bs_format = None
