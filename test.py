@@ -474,8 +474,7 @@ def moss_page():
                 if nsc:
                     nsc = transform_nsc(nsc)
                     st.write(f"[L2_정전] {nsc}/{daegu_station} L2 다량장애 {district}일대 한전정전 (추정) L2*{l2_systems}sys({customers}고객)")
-                else:
-                    st.write("해당 국사에 대한 NSC 정보를 찾을 수 없습니다.")
+
 
         if is_line_fault_checked:
             st.write("L2 선로 장애 정보 입력:")
@@ -490,8 +489,7 @@ def moss_page():
                 if nsc:
                     nsc = transform_nsc(nsc)
                     st.write(f"[L2_선로] {nsc}/{honam_station} 선로장애 (추정) L2*{l2_systems_line}sys({customers_line}고객)")
-                else:
-                    st.write("해당 국사에 대한 NSC 정보를 찾을 수 없습니다.")
+
 
         if is_apartment_power_outage_checked:
             st.write("아파트 공용 정전 정보 입력:")
@@ -515,8 +513,7 @@ def moss_page():
                 if nsc:
                     nsc = transform_nsc(nsc)
                     st.write(f"[아파트_정전] {nsc}/{busan_station} {apartment_name} {outage_type} L2*{l2_systems_apartment}sys({customers_apartment}고객)")
-                else:
-                    st.write("해당 국사에 대한 NSC 정보를 찾을 수 없습니다.")
+
 
 
     else:
