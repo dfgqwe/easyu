@@ -436,7 +436,7 @@ def moss_page():
         df = pd.read_csv('국사.csv')
         branch_to_acceptance = {row['분기국사']: row['수용국사'] for _, row in df.iterrows()}
 
-        def get_station_names(input_station):
+        def get_station_names_with_nsc(input_station):
             original_input = input_station
             if input_station.endswith("국사"):
                 input_station = input_station[:-2]
@@ -446,10 +446,11 @@ def moss_page():
             result_stations = []
             for branch_station in unique_branch_stations:
                 acceptance_station = matching_stations[matching_stations['분기국사'] == branch_station]['수용국사'].iloc[0]
+                nsc = matching_stations[matching_stations['분기국사'] == branch_station]['NSC'].iloc[0]
                 if "국사" in original_input:
-                    result_stations.append(f"{acceptance_station}-{branch_station}")
+                    result_stations.append(f"{nsc}/{acceptance_station}-{branch_station}")
                 else:
-                    result_stations.append(f"{acceptance_station}-{branch_station}국사")
+                    result_stations.append(f"{nsc}/{acceptance_station}-{branch_station}국사")
             return result_stations
 
 
