@@ -441,11 +441,12 @@ def moss_page():
             if input_station.endswith("국사"):
                 input_station = input_station[:-2]
     
-            matching_stations = df[df['수용국사'].str.contains(input_station)]
-            result_nsc = set()
-            for index, row in matching_stations.iterrows():
-                acceptance_station = row['수용국사']
-                nsc = row['NSC']
+            matching_stations = df[df['분기국사'].str.contains(input_station)]
+            unique_branch_stations = matching_stations['분기국사'].unique()
+            result_stations = []
+            for branch_station in unique_branch_stations:
+                acceptance_station = matching_stations[matching_stations['분기국사'] == branch_station]['수용국사'].iloc[0]
+                nsc = matching_stations[matching_stations['분기국사'] == branch_station]['NSC'].iloc[0]
         
                 # NSC 값을 변환
                 if "충북액세스운용센터" in nsc:
@@ -470,8 +471,6 @@ def moss_page():
                 
                 if "국사" in original_input:
                     result_stations.append(f"{nsc}/{acceptance_station}-{branch_station}")
-                else:
-                    result_stations
             return result_stations
 
 
