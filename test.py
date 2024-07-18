@@ -194,7 +194,7 @@ def get_format(text):
         return matched_formats[-1]
     else:
         selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
-        return selected_formats[-1] if selected_formats else None
+        return selected_formats[-1] if selected_formats else "[기타]"
 
 
 # Load the CSV file
