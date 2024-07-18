@@ -430,7 +430,7 @@ def moss_page():
             is_apartment_power_outage_checked = st.checkbox("아파트 정전", key="apartment_power_outage_checked", on_change=apartment_checkbox_callback)
 
         # CSV 파일 읽기
-        df = pd.read_csv('국사.CSV')
+        df = pd.read_csv('국사.csv')
         branch_to_acceptance = {row['분기국사']: row['수용국사'] for _, row in df.iterrows()}
 
         # Function to get correct station name
