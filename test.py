@@ -249,6 +249,23 @@ def update_data_on_github(repo_name, file_path, github_token, df_no_duplicates):
         st.error(f"Error updating data on GitHub: {e}")
 
 
+def get_station_names(input_station):
+    original_input = input_station
+    if input_station.endswith("국사"):
+        input_station = input_station[:-2]
+    
+    matching_stations = df[df['분기국사'].str.startswith(input_station)]
+    result_stations = []
+    for _, row in matching_stations.iterrows():
+        acceptance_station = row['수용국사']
+        branch_station = row['분기국사']
+        if "국사" in original_input:
+            result_stations.append(f"{acceptance_station}-{branch_station}")
+        else:
+            result_stations.append(f"{acceptance_station}-{branch_station}국사")
+    return result_stations
+
+
 def home_page():
     st.title("Home")
     st.markdown(
@@ -433,20 +450,6 @@ def moss_page():
         df = pd.read_csv('국사.csv')
         branch_to_acceptance = {row['분기국사']: row['수용국사'] for _, row in df.iterrows()}
 
-        # Function to get correct station name
-        def get_station_name(input_station):
-            original_input = input_station
-            if input_station.endswith("국사"):
-                input_station = input_station[:-2]
-            if input_station in branch_to_acceptance:
-                acceptance_station = branch_to_acceptance[input_station]
-                if acceptance_station != input_station:
-                    if "국사" in original_input:
-                        return f"{acceptance_station}-{input_station}"
-                    else:
-                        return f"{acceptance_station}-{input_station}국사"
-                return f"{input_station}국사"
-            return f"{input_station}국사"
 
         if is_l2_outage_checked:
             st.write("L2 정전 정보 입력:")
