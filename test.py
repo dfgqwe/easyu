@@ -465,7 +465,7 @@ def moss_page():
             elif "부산액세스운용센터" in nsc or "경남액세스운용센터" in nsc:
                 return "부산"
             elif "대구액세스운용센터" in nsc or "경북액세스운용센터" in nsc:
-                return "부산"
+                return "대구"
             return nsc
           
         station_data = load_station_data()
