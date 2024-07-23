@@ -283,11 +283,11 @@ def home_page():
             st.markdown(st.session_state.day_content.replace('\n', '<br>'), unsafe_allow_html=True)
             st.header("★★재해 : 7월 2일 ~ 7월 29일★★")
             st.header("전원분야 고장성 경보 범위")
-            st.markdown("<span style='color:red;'>[한전정전]</span> 한전정전으로 발전기 가동 또는 축전기 방전 중", unsafe_allow_html=True)
-            st.markdown("<span style='color:red;'>[차단기OFF]</span> VCB / ACB / MG / MC OFF로 축전지 방전, 발전기 가동 중", unsafe_allow_html=True)
-            st.markdown("<span style='color:red;'>[변압기 고장]</span> 축전기 방전 또는 발전기 가동 중", unsafe_allow_html=True)
-            st.markdown("<span style='color:red;'>[국사 화재]</span> 화재감지기 작동 현장 출동중", unsafe_allow_html=True)
-            st.markdown("<span style='color:red;'>[국사 침수]</span> 침수 알람 발생 현장 출동중", unsafe_allow_html=True)
+            st.markdown("<span style='color:red; font-weight:bold;'>[한전정전]</span> 한전정전으로 발전기 가동 또는 축전기 방전 중", unsafe_allow_html=True)
+            st.markdown("<span style='color:red; font-weight:bold;'>[차단기OFF]</span> VCB / ACB / MG / MC OFF로 축전지 방전, 발전기 가동 중", unsafe_allow_html=True)
+            st.markdown("<span style='color:red; font-weight:bold;'>[변압기 고장]</span> 축전기 방전 또는 발전기 가동 중", unsafe_allow_html=True)
+            st.markdown("<span style='color:red; font-weight:bold;'>[국사 화재]</span> 화재감지기 작동 현장 출동중", unsafe_allow_html=True)
+            st.markdown("<span style='color:red; font-weight:bold;'>[국사 침수]</span> 침수 알람 발생 현장 출동중", unsafe_allow_html=True)
         else:
             st.info("아직 주간 인수인계 내용이 입력되지 않았습니다.")
 
