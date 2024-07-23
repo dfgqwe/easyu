@@ -282,7 +282,7 @@ def home_page():
         if "day_content" in st.session_state:
             st.markdown(st.session_state.day_content.replace('\n', '<br>'), unsafe_allow_html=True)
             st.header("★★재해 : 7월 2일 ~ 7월 29일★★")
-            st.markdown("전원분야 고장성 경보 범위")
+            st.header("전원분야 고장성 경보 범위")
             st.markdown("[한전정전] 한전정전으로 발전기 가동 또는 축전기 방전 중")
             st.markdown("[차단기OFF] VCB / ACB / MG / MC OFF로 축전지 방전, 발전기 가동 중")
             st.markdown("[변압기 고장] 축전기 방전 또는 발전기 가동 중")
