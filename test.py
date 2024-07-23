@@ -288,7 +288,7 @@ def home_page():
             st.markdown("[차단기OFF] VCB / ACB / MG / MC OFF로 축전지 방전, 발전기 가동 중")
             st.markdown("[변압기 고장] 축전기 방전 또는 발전기 가동 중")
             st.markdown("[국사 화재] 화재감지기 직동 현장 출동중")
-        st.markdown("[국사 침수] 침수 알람 발생 현장 출동중")
+            st.markdown("[국사 침수] 침수 알람 발생 현장 출동중")
         else:
             st.info("아직 주간 인수인계 내용이 입력되지 않았습니다.")
 
