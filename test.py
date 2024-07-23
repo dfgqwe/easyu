@@ -282,7 +282,7 @@ def home_page():
         if "day_content" in st.session_state:
             st.write("주간 인수인계 내용")
             st.markdown(st.session_state.day_content.replace('\n', '<br>'), unsafe_allow_html=True)
-            st.header("★★재해 : 7월 2일 ~ 7월 22일★★")
+            st.header("★★재해 : 7월 2일 ~ 7월 29일★★")
         else:
             st.info("아직 주간 인수인계 내용이 입력되지 않았습니다.")
 
