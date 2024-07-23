@@ -283,6 +283,12 @@ def home_page():
             st.write("주간 인수인계 내용")
             st.markdown(st.session_state.day_content.replace('\n', '<br>'), unsafe_allow_html=True)
             st.header("★★재해 : 7월 2일 ~ 7월 29일★★")
+            st.markdown("전원분야 고장성 경보 범위")
+            st.markdown("[한전정전] 한전정전으로 발전기 가동 또는 축전기 방전 중")
+            st.markdown("[차단기OFF] VCB / ACB / MG / MC OFF로 축전지 방전, 발전기 가동 중")
+            st.markdown("[변압기 고장] 축전기 방전 또는 발전기 가동 중")
+            st.markdown("[국사 화재] 화재감지기 직동 현장 출동중")
+        st.markdown("[국사 침수] 침수 알람 발생 현장 출동중")
         else:
             st.info("아직 주간 인수인계 내용이 입력되지 않았습니다.")
 
