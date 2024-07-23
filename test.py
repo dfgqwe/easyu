@@ -261,7 +261,12 @@ def update_data_on_github(repo_name, file_path, github_token, df_no_duplicates):
 
 
 
-page_bg_style = """
+
+
+
+
+def home_page():
+    page_bg_style = """
 <style>
     body {
         background-color: #87CEEB;
@@ -270,11 +275,7 @@ page_bg_style = """
 """
 
 
-st.markdown(page_bg_style, unsafe_allow_html=True)
-
-
-
-def home_page():
+    st.markdown(page_bg_style, unsafe_allow_html=True)
     st.title("Home")
     st.header("★★재해 : 7월 2일 ~ 7월 29일★★")
     st.header("전원분야 고장성 경보 범위")
@@ -352,6 +353,16 @@ def home_page():
 
 
 def moss_page():
+    page_bg_style = """
+<style>
+    body {
+        background-color: #87CEEB;
+    }
+</style>
+"""
+
+
+    st.markdown(page_bg_style, unsafe_allow_html=True)
     st.title("MOSS 회복 문구")
 
     df1 = pd.read_csv('bs_head.csv')
