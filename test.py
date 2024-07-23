@@ -280,7 +280,6 @@ def home_page():
     content_option = st.radio("인수 인계", ["주간", "야간"])
     if content_option == "주간":
         if "day_content" in st.session_state:
-            st.write("주간 인수인계 내용")
             st.markdown(st.session_state.day_content.replace('\n', '<br>'), unsafe_allow_html=True)
             st.header("★★재해 : 7월 2일 ~ 7월 29일★★")
             st.markdown("전원분야 고장성 경보 범위")
