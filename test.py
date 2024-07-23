@@ -261,6 +261,17 @@ def update_data_on_github(repo_name, file_path, github_token, df_no_duplicates):
 
 
 
+page_bg_style = """
+<style>
+    body {
+        background-color: #87CEEB;
+    }
+</style>
+"""
+
+
+st.markdown(page_bg_style, unsafe_allow_html=True)
+
 
 
 def home_page():
