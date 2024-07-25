@@ -12,3 +12,4 @@ PyGithub==1.55
 requests
 Pillow
 datetime
+pytz
