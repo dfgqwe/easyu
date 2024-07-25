@@ -694,7 +694,8 @@ def moss_page():
                 results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
         col1, col2 = st.columns(2)
-        now = datetime.now()
+        timezone = pytz.timezone('Asia/Seoul')  # 한국 시간대로 설정
+        now = datetime.now(timezone)
         current_date = now.strftime("%Y-%m-%d")
         with col1:
            namecard_count = st.number_input("명함형 갯수:", min_value=0, step=1, key="namecard_count")
