@@ -278,7 +278,6 @@ def home_page():
         unsafe_allow_html=True
     )
     st.title("Home")
-    st.header("★★재해 : 7월 2일 ~ 7월 29일★★")
     st.header("전원분야 고장성 경보 범위")
     st.markdown("<span style='color:red; font-weight:bold;'>[한전정전]</span> 한전정전으로 발전기 가동 또는 축전기 방전 중", unsafe_allow_html=True)
     st.markdown("<span style='color:red; font-weight:bold;'>[차단기OFF]</span> VCB / ACB / MG / MC OFF로 축전지 방전, 발전기 가동 중", unsafe_allow_html=True)
