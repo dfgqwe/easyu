@@ -647,8 +647,7 @@ def moss_page():
             results.extend(기타_results)
         
 
-            filtered_actions = [action for action in selected_actions if action !="DB 삭제 여부"]
-            filtered_actions = [action for action in selected_actions if action !="광레벨 확인"]
+            filtered_actions = [action for action in selected_actions if action not in ["DB 삭제 여부", "광레벨 확인"]]
             if filtered_actions:
                 formatted_actions = ", ".join(filtered_actions)
                 results.append(f"<선조치_NOC> {formatted_actions}")
@@ -730,7 +729,7 @@ def moss_page():
             if 'button_clicked' not in st.session_state:
                 st.session_state['button_clicked'] = False
 
-            if st.button('MOSS 회복 항목 표준'):
+            if st.button('MOSS 회복 코 표준'):
                 st.session_state['button_clicked'] = not st.session_state['button_clicked']
 
             if st.session_state['button_clicked']:
