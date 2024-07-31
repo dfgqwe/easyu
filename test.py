@@ -145,6 +145,7 @@ B_S_head_formats = {
     "NOC_통합멀티룸": "[NOC_통합멀티룸]",
     "NOC_kernel정비": "[NOC_kernel정비]",
     "NOC_철거검토": "[NOC_철거검토]",
+    "NOC_민원처리": "[NOC_민원처리]",
     "기타": "[기타]"
 }
 
