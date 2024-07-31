@@ -729,7 +729,7 @@ def moss_page():
             if 'button_clicked' not in st.session_state:
                 st.session_state['button_clicked'] = False
 
-            if st.button('MOSS 회복 코 표준'):
+            if st.button('MOSS 회복 코드 표준'):
                 st.session_state['button_clicked'] = not st.session_state['button_clicked']
 
             if st.session_state['button_clicked']:
