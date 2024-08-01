@@ -703,10 +703,10 @@ def moss_page():
             if st.button('MOSS 회복 코드 표준'):
                 st.session_state['button_clicked'] = not st.session_state['button_clicked']
 
-            if st.session_state['button_clicked']:
-                placeholder = st.empty()
-                with placeholder.container():
-                    st.markdown(
+        if st.session_state['button_clicked']:
+            placeholder = st.empty()
+            with placeholder.container():
+                st.markdown(
                         """
                         <style>
                         /* 데이터프레임이 최대한 화면에 가깝게 보이도록 스타일 조정 */
@@ -720,7 +720,7 @@ def moss_page():
                         """,
                         unsafe_allow_html=True
                     )
-                    st.dataframe(df)
+                st.dataframe(df)
 
 
 
