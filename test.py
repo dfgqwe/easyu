@@ -153,27 +153,6 @@ B_S_head_formats = {
     "기타": "[기타]"
 }
 
-민원처리_head_formats = {
-    "NOC_장비교체": "[NOC_장비교체]",
-    "NOC_PON모듈교체": "[NOC_PON모듈교체]",
-    "NOC_보드교체": "[NOC_보드교체]",
-    "NOC_BAT교체": "[NOC_BAT교체]",
-    "NOC_어댑터교체": "[NOC_어댑터교체]",
-    "NOC_FAN교체": "[NOC_FAN교체]",
-    "NOC_관련부서이관": "[NOC_관련부서이관]",
-    "NOC_장비철거": "[NOC_장비철거]",
-    "NOC_광커넥터재접속": "[NOC_광커넥터재접속]",
-    "NOC_전원가복구": "[NOC_전원가복구]",
-    "NOC_모자분리": "[NOC_모자분리]",
-    "NOC_전기요금": "[NOC_전기요금]",
-    "NOC_장비재설치": "[NOC_장비재설치]",
-    "NOC_PSU교체": "[NOC_PSU교체]",
-    "NOC_감쇄기실장": "[NOC_감쇄기실장]",
-    "NOC_상태변경": "[NOC_상태변경]",
-    "NOC_장비리셋": "[NOC_장비리셋]",
-    "NOC_자연회복": "[NOC_자연회복]",
-    "NOC_기타": "[NOC_기타]"
-}
 
 # 선조치_NOC에 대한 내용
 선조치_NOC_options = [
@@ -392,30 +371,21 @@ def moss_page():
 
     if "bs_checked" not in st.session_state:
         st.session_state.bs_checked = False
-    if "complaint_checked" not in st.session_state:
-        st.session_state.complaint_checked = False
     if "power_outage_checked" not in st.session_state:
         st.session_state.power_outage_checked = False
 
     def bs_checkbox_callback():
-        st.session_state.complaint_checked = False
-        st.session_state.power_outage_checked = False
-
-    def complaint_checkbox_callback():
-        st.session_state.bs_checked = False
         st.session_state.power_outage_checked = False
 
     def power_checkbox_callback():
         st.session_state.bs_checked = False
-        st.session_state.complaint_checked = False
 
-    col1, col2, col3 = st.columns(3)
+
+    col1, col2 = st.columns(2)
 
     with col1:
         is_bs_checked = st.checkbox("B/S", key="bs_checked", on_change=bs_checkbox_callback)
     with col2:
-        is_complaint_checked = st.checkbox("민원처리", key="complaint_checked", on_change=complaint_checkbox_callback)
-    with col3:
         is_power_outage_checked = st.checkbox("다량 장애", key="power_outage_checked", on_change=power_checkbox_callback)
 
     if is_power_outage_checked:
@@ -592,16 +562,11 @@ def moss_page():
                     if selected_option:
                         results.append(selected_option)
 
-    
 
-        if is_complaint_checked:
-            selected_complaint_format = st.selectbox("민원처리 head_format을 선택하세요:", list(B_S_head_formats.values()), key="complaint_format")
-            if selected_complaint_format:
-                results.append(selected_complaint_format)
 
         user_input = st.text_input("입력란", key="user_input")
 
-        if not is_bs_checked and not is_complaint_checked:
+        if not is_bs_checked:
             head_format = get_format(user_input)
             if head_format:
                 results.append(head_format)
