@@ -697,31 +697,31 @@ def moss_page():
                 clear_text()
 
         with col3:
-            if 'button_clicked' not in st.session_state:
-                st.session_state['button_clicked'] = False
-
             if st.button('MOSS 회복 코드 표준'):
-                st.session_state['button_clicked'] = not st.session_state['button_clicked']
+            # 버튼 클릭 시 세션 상태 토글
+            st.session_state['button_clicked'] = not st.session_state['button_clicked']
 
             if st.session_state['button_clicked']:
+                # 전체 화면으로 표시할 컨테이너 생성
                 placeholder = st.empty()
                 with placeholder.container():
                     st.markdown(
                         """
                         <style>
-                        /* 데이터프레임이 최대한 화면에 가깝게 보이도록 스타일 조정 */
+                        /* 데이터프레임을 전체 화면으로 보이도록 스타일 조정 */
                         .css-1l02zno {
                             width: 100%;
                             max-width: 100%;
-                            height: calc(100vh - 200px); /* 높이를 화면 높이의 일부분으로 설정 */
+                            height: calc(100vh - 200px); /* 화면 높이에서 200px을 뺀 높이 설정 */
                             overflow: auto; /* 스크롤이 필요한 경우 스크롤 허용 */
                         }
                         </style>
                         """,
                         unsafe_allow_html=True
                     )
-                    st.dataframe(df)
-
+                    st.dataframe(df)  # 데이터프레임을 표시
+            else:
+                st.empty()  # 버튼 클릭 상태가 아닐 때는 빈 컨테이너로 설정
 
 
 
