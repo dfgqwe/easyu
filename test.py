@@ -698,8 +698,7 @@ def moss_page():
                 st.session_state['reset_active'] = False
                 output_text = "\n".join(results)  # Join results with new lines for the desired format
                 st.text(output_text)  # Print output_text when the "출력" button is pressed
-                if st.session_state['copy_activated']:
-                    pyperclip.copy(output_text)
+
 
         with col2:
             if st.button("입력란 초기화"):
