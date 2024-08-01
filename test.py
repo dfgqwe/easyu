@@ -681,47 +681,66 @@ def moss_page():
 
     
 
-        copy_activated = False
+       # 버튼 클릭 상태를 저장하는 세션 상태 확인 및 초기화
+        if 'button_clicked' not in st.session_state:
+            st.session_state['button_clicked'] = False
+        if 'output_active' not in st.session_state:
+            st.session_state['output_active'] = False
+        if 'reset_active' not in st.session_state:
+            st.session_state['reset_active'] = False
 
-        col1, col2 , col3= st.columns([2.8, 0.5, 0.7])
+        col1, col2, col3 = st.columns([2.8, 0.5, 0.7])
 
         with col1:
             if st.button("출력"):
+                st.session_state['output_active'] = True
+                st.session_state['button_clicked'] = False
+                st.session_state['reset_active'] = False
                 output_text = "\n".join(results)  # Join results with new lines for the desired format
                 st.text(output_text)  # Print output_text when the "출력" button is pressed
-                if copy_activated:
+                if st.session_state['copy_activated']:
                     pyperclip.copy(output_text)
 
         with col2:
             if st.button("입력란 초기화"):
+                st.session_state['output_active'] = False
+                st.session_state['button_clicked'] = False
+                st.session_state['reset_active'] = True
                 clear_text()
 
         with col3:
-            if 'button_clicked' not in st.session_state:
-                st.session_state['button_clicked'] = False
-
             if st.button('MOSS 회복 코드 표준'):
+                st.session_state['output_active'] = False
                 st.session_state['button_clicked'] = not st.session_state['button_clicked']
+                st.session_state['reset_active'] = False
 
         if st.session_state['button_clicked']:
             placeholder = st.empty()
             with placeholder.container():
                 st.markdown(
-                        """
-                        <style>
-                        /* 데이터프레임이 최대한 화면에 가깝게 보이도록 스타일 조정 */
-                        .css-1l02zno {
-                            width: 200%;
-                            max-width: 100%;
-                            height: calc(100vh - 200px); /* 높이를 화면 높이의 일부분으로 설정 */
-                            overflow: auto; /* 스크롤이 필요한 경우 스크롤 허용 */
-                        }
-                        </style>
-                        """,
-                        unsafe_allow_html=True
-                    )
-                st.dataframe(df)
+                """
+                <style>
+                /* 데이터프레임을 전체 화면으로 보이도록 스타일 조정 */
+                .css-1l02zno {
+                    width: 200%;
+                    max-width: 100%;
+                    height: calc(100vh - 200px); /* 화면 높이에서 200px을 뺀 높이 설정 */
+                    overflow: auto; /* 스크롤이 필요한 경우 스크롤 허용 */
+                }
+                </style>
+                """,
+                unsafe_allow_html=True
+            )
+            st.dataframe(df)
 
+        # 이 버튼이 클릭되면 다른 버튼이 비활성화 되도록 보장합니다.
+        if st.session_state['output_active']:
+            # 표시 내용 설정이 끝난 후 초기화된 버튼의 경우
+            st.session_state['button_clicked'] = False
+            st.session_state['reset_active'] = False
+        elif st.session_state['reset_active']:
+            st.session_state['button_clicked'] = False
+            st.session_state['output_active'] = False
 
 
 
