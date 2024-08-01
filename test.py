@@ -289,8 +289,7 @@ def home_page():
     st.header("-네트워트 현황보고-")
     st.markdown("<span style='color:red;'>[MOSS 항목]</span> 전원,교환,액세스", unsafe_allow_html=True)
     st.markdown("<span style='color:red;'>[PING경보]</span> ACCESS_XDSL,엔토피아", unsafe_allow_html=True)
-    st.markdown("<span style='color:red;'>[공사정보]</span> 작업통제_대쉬보드 총건수_1000/page설정_ 작업현황 전체복사 후 A2 주변서식에 맟추기
-", unsafe_allow_html=True)
+    st.markdown("<span style='color:red;'>[공사정보]</span> 작업통제_대쉬보드 총건수_1000/page설정_ 작업현황 전체복사 후 A2 주변서식에 맟추기", unsafe_allow_html=True)
     
      # CSS 스타일 적용
     st.markdown(
