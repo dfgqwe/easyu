@@ -699,7 +699,7 @@ def moss_page():
         with col3:
             if st.button('MOSS 회복 코드 표준'):
             # 버튼 클릭 시 세션 상태 토글
-            st.session_state['button_clicked'] = not st.session_state['button_clicked']
+                st.session_state['button_clicked'] = not st.session_state['button_clicked']
 
             if st.session_state['button_clicked']:
                 # 전체 화면으로 표시할 컨테이너 생성
