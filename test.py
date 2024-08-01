@@ -268,6 +268,22 @@ def update_data_on_github(repo_name, file_path, github_token, df_no_duplicates):
 
 
 def render_sidebar():
+        # 사이드바 스타일을 정의합니다.
+    st.markdown(
+        """
+        <style>
+        /* 사이드바 너비를 설정합니다. */
+        .css-1d391kg {
+            width: 300px;
+        }
+        /* 사이드바 내의 헤더와 콘텐츠 스타일을 정의합니다. */
+        .css-1h1w2f8 {
+            font-size: 14px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
     st.sidebar.header("지역 선택 및 유관 부서 전화번호")
     
     # 지역 선택 selectbox
