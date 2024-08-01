@@ -146,6 +146,7 @@ B_S_head_formats = {
     "NOC_kernel정비": "[NOC_kernel정비]",
     "NOC_철거검토": "[NOC_철거검토]",
     "NOC_민원처리": "[NOC_민원처리]",
+    "NOC_어댑터교체": "[NOC_어댑터교체]",
     "기타": "[기타]"
 }
 
