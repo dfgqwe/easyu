@@ -711,7 +711,7 @@ def moss_page():
                         <style>
                         /* 데이터프레임이 최대한 화면에 가깝게 보이도록 스타일 조정 */
                         .css-1l02zno {
-                            width: 100%;
+                            width: 200%;
                             max-width: 100%;
                             height: calc(100vh - 200px); /* 높이를 화면 높이의 일부분으로 설정 */
                             overflow: auto; /* 스크롤이 필요한 경우 스크롤 허용 */
