@@ -267,7 +267,47 @@ def update_data_on_github(repo_name, file_path, github_token, df_no_duplicates):
 
 
 
+def render_sidebar():
+    st.sidebar.header("지역 선택 및 유관 부서 전화번호")
+    
+    # 지역 선택 selectbox
+    region_option = st.sidebar.selectbox("지역 선택", ["충청", "호남", "부산", "대구"])
+    
+    st.sidebar.markdown("유관 부서 전화번호")
 
+    common_numbers = {
+        "OSP 관제센터": "02-500-6150",
+        "IP망 관제센터": "042-478-1600",
+        "전원관제": "042-478-1800",
+        "과천 제1관제센터(교환)": "02-500-6080",
+    }
+
+    unique_numbers = {
+        "충청": {"name": "교환기술부(충청)", "number": "042-255-2470"},
+        "호남": {"name": "교환기술부(호남)", "number": "062-513-1200"},
+        "부산": {"name": "교환기술부(부산)", "number": "051-464-4699"},
+        "대구": {"name": "교환기술부(대구)", "number": "053-477-3010"},
+    }
+    enter_numbers = {
+        "충청": {"name": "분기국사출입(충청)", "number": "042-478-7550, 7540"},
+        "호남": {"name": "분기국사출입(호남)", "number": "062-230-3355~7"},
+        "부산": {"name": "분기국사출입(부산)", "number": "051-464-2300"},
+        "대구": {"name": "분기국사출입(대구)", "number": "053-477-1984~5"},
+    }
+
+    phone_numbers = list(common_numbers.values()) + [unique_numbers[region_option]["number"]] + [enter_numbers[region_option]["number"]]
+    phone_names = list(common_numbers.keys()) + [unique_numbers[region_option]["name"]] + [enter_numbers[region_option]["name"]]
+
+    for name, number in zip(phone_names, phone_numbers):
+        st.sidebar.markdown(f"- {name}: {number}")
+
+    st.sidebar.header("URL Navigation")
+    st.sidebar.markdown("[기상레이더센터_낙뢰](https://radar.kma.go.kr/lightning/area_lightning.do)")
+    st.sidebar.markdown("[날씨누리_레이더](https://www.weather.go.kr/w/image/radar.do)")
+    st.sidebar.markdown("[windy.com](https://www.windy.com/?37.475,126.957,5)")
+    st.sidebar.markdown("[KBS 재난포털_CCTV](https://d.kbs.co.kr/special/cctv)")
+    st.sidebar.markdown("[카카오맵](https://map.kakao.com/)")
+    st.sidebar.markdown("[네이버지도](https://map.naver.com/)")
 
 
 
@@ -282,7 +322,7 @@ def home_page():
         """,
         unsafe_allow_html=True
     )
-    st.title("Home")
+    st.title("공지사항")
     st.header("-전원분야 고장성 경보 범위-")
     st.markdown("<span style='color:red; font-weight:bold;'>[한전정전]</span> 한전정전으로 발전기 가동 또는 축전기 방전 중", unsafe_allow_html=True)
     st.markdown("<span style='color:red; font-weight:bold;'>[차단기OFF]</span> VCB / ACB / MG / MC OFF로 축전지 방전, 발전기 가동 중", unsafe_allow_html=True)
@@ -295,67 +335,7 @@ def home_page():
     st.markdown("<span style='color:red;'>[PING경보]</span> ACCESS_XDSL,엔토피아", unsafe_allow_html=True)
     st.markdown("<span style='color:red;'>[공사정보]</span> 작업통제_대쉬보드 총건수_1000/page설정_ 작업현황 전체복사 후 A2 주변서식에 맟추기", unsafe_allow_html=True)
     
-     # CSS 스타일 적용
-    st.markdown(
-        """
-        <style>
-        .small-select {
-            width: 50px; /* 선택 상자의 너비를 조정합니다. */
-            padding: 5px; /* 내부 여백을 설정합니다. */
-            font-size: 14px; /* 폰트 크기를 설정합니다. */
-            border-radius: 5px; /* 테두리의 모서리를 둥글게 만듭니다. */
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-    # 지역 선택 selectbox
-    region_option = st.selectbox("지역 선택", ["충청", "호남", "부산", "대구"])
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        # Column 1: Department phone numbers
-        st.markdown("유관 부서 전화번호")
-
-        common_numbers = {
-        "OSP 관제센터": "02-500-6150", 
-        "IP망 관제센터": "042-478-1600", 
-        "전원관제": "042-478-1800",
-        "과천 제1관제센터(교환)": "02-500-6080",
-    }
-
-        unique_numbers = {
-        "충청": {"name": "교환기술부(충청)", "number": "042-255-2470"},
-        "호남": {"name": "교환기술부(호남)", "number": "062-513-1200"},
-        "부산": {"name": "교환기술부(부산)", "number": "051-464-4699"},
-        "대구": {"name": "교환기술부(대구)", "number": "053-477-3010"},
-    }
-        enter_numbers = {
-        "충청": {"name": "분기국사출입(충청)", "number": "042-478-7550, 7540"},
-        "호남": {"name": "분기국사출입(호남)", "number": "062-230-3355~7"},
-        "부산": {"name": "분기국사출입(부산)", "number": "051-464-2300"},
-        "대구": {"name": "분기국사출입(대구)", "number": "053-477-1984~5"},
-    }
-
-        phone_numbers = list(common_numbers.values()) + [unique_numbers[region_option]["number"]] + [enter_numbers[region_option]["number"]]
-        phone_names = list(common_numbers.keys()) + [unique_numbers[region_option]["name"]] + [enter_numbers[region_option]["name"]]
-
-        for name, number in zip(phone_names, phone_numbers):
-            st.markdown(f"- {name}: {number}")
-
-    with col2:
-        # Column 2: Four clickable sections
-        st.markdown("URL Navigation")
-
-
-        st.markdown("[기상레이더센터_낙뢰](https://radar.kma.go.kr/lightning/area_lightning.do)")
-        st.markdown("[날씨누리_레이더](https://www.weather.go.kr/w/image/radar.do)")
-        st.markdown("[windy.com](https://www.windy.com/?37.475,126.957,5)")
-        st.markdown("[KBS 재난포털_CCTV](https://d.kbs.co.kr/special/cctv)")
-        st.markdown("[카카오맵](https://map.kakao.com/)")
-        st.markdown("[네이버지도](https://map.naver.com/)")
-
+ 
 
 
 
@@ -896,22 +876,24 @@ def manage_page():
 
 
   
-# 옵션 메뉴 생성
-selected = option_menu(
-    menu_title=None,  # 메뉴 제목 (원하지 않으면 None)
-    options=["Home","MOSS", "Worksync","Manage"],  # 옵션 이름들
-    icons=["house", "box-arrow-down","calendar2-check","gear"],  # 각 옵션에 해당하는 아이콘
-    menu_icon="cast",  # 메뉴 아이콘
-    default_index=0,  # 기본 선택 옵션
-    orientation="horizontal"  # 메뉴 방향 (수평)
-)
+# Streamlit 애플리케이션 실행
+if __name__ == "__main__":
+    selected = option_menu(
+        menu_title=None,  # 메뉴 제목 (원하지 않으면 None)
+        options=["Home", "MOSS", "Worksync", "Manage"],  # 옵션 이름들
+        icons=["house", "box-arrow-down", "calendar2-check", "gear"],  # 각 옵션에 해당하는 아이콘
+        menu_icon="cast",  # 메뉴 아이콘
+        default_index=0,  # 기본 선택 옵션
+        orientation="horizontal"  # 메뉴 방향 (수평)
+    )
 
-# 탭 내용 생성
-if selected == "Home":
-    home_page()
-elif selected == "MOSS":
-    moss_page()
-elif selected == "Worksync":
-    worksync_page()
-elif selected == "Manage":
-    manage_page()
+    render_sidebar()
+
+    if selected == "Home":
+        home_page()
+    elif selected == "MOSS":
+        moss_page()
+    elif selected == "Worksync":
+        worksync_page()
+    elif selected == "Manage":
+        manage_page()
