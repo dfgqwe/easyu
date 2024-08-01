@@ -284,7 +284,7 @@ def render_sidebar():
         """,
         unsafe_allow_html=True
     )
-    st.sidebar.header("지역 선택 및 유관 부서 전화번호")
+    st.sidebar.header("유관 부서 전화번호")
     
     # 지역 선택 selectbox
     region_option = st.sidebar.selectbox("지역 선택", ["충청", "호남", "부산", "대구"])
