@@ -612,16 +612,22 @@ def moss_page():
                 col1, col2 = st.columns(2)
                 with col1:
                     rssi_value = st.text_input("RSSI 값을 입력하세요:")
-       
+   
                 with col2:
                     ddm_value = st.text_input("ddm 값을 입력하세요:")
-            
-            
-                if rssi_value:
-                    기타_results.append(f"RSSI: {rssi_value}")
-                if ddm_value:
-                    기타_results.append(f"ddm: {ddm_value}")
-
+    
+                # Combine RSSI and ddm values with a "/" separator if both values are provided
+                if rssi_value or ddm_value:
+                    combined_values = ""
+                    if rssi_value:
+                        combined_values += f"RSSI: {rssi_value}"
+                    if ddm_value:
+                        if combined_values:
+                            combined_values += " / "
+                        combined_values += f"ddm: {ddm_value}"
+        
+                    기타_results.append(combined_values)
+                    
             if "어댑터 전/후 작성" in selected_actions:
                 col1, col2 = st.columns(2)
                 with col1:
