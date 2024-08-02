@@ -650,7 +650,7 @@ def moss_page():
         results.append("수고하셨습니다")
 
 
-       # 출동예방_actions 처리
+        # 출동예방_actions 처리
         출동예방_actions = []
         if "전기작업 확인(전화)" in selected_actions:
             출동예방_actions.append("[NOC]전기작업 확인(전화)")
@@ -658,16 +658,21 @@ def moss_page():
             출동예방_actions.append("[NOC]출동보류")
 
         # 현장TM 관련 처리
-        selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", ["[현장TM]", "주소", "연락처", "장비위치", "차단기위치", "출입방법", "기타(간단히 내용입력)"], key="selected_locations_multiselect")
+        selected_locations = st.multiselect(
+            "현장에 대한 내용을 선택하세요:",
+            ["[현장TM]", "주소", "연락처", "장비위치", "차단기위치", "출입방법", "기타(간단히 내용입력)"],
+            key="selected_locations_multiselect"
+        )
 
-        현장TM_내용 = ""
-        현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함", key="현장TM_출동예방")
+        # 현장TM이 선택된 경우에만 [현장TM] 체크박스와 내용 입력 필드를 표시
         if "[현장TM]" in selected_locations:
             현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+            현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함", key="현장TM_출동예방")
+    
+            if 현장TM_출동예방 and 현장TM_내용:
+                출동예방_actions.append(f"[현장TM] {clear_tm_content(현장TM_내용)}")
 
-        if 현장TM_출동예방 and 현장TM_내용:
-            출동예방_actions.append(f"[현장TM] {clear_tm_content(현장TM_내용)}")
-
+        # 출동예방_actions를 results에 추가
         if 출동예방_actions:
             results.append(f"<출동예방>{', '.join(출동예방_actions)}")
 
@@ -678,13 +683,18 @@ def moss_page():
             results.append(f"<선조치_NOC> {formatted_actions}")
 
         # 현장 관련 처리
-        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations if location != "[현장TM]"])
+        formatted_locations = " / ".join([
+            f"{location}" if location != "기타(간단히 내용입력)"
+            else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})"
+            for location in selected_locations
+            if location != "[현장TM]"
+        ])
 
         if not 현장TM_출동예방 and 현장TM_내용:
             formatted_locations = f"[현장TM] {clear_tm_content(현장TM_내용)} , {formatted_locations.strip()} 수정요청"
         elif formatted_locations:
             formatted_locations = f"{formatted_locations.strip()} 수정요청"
-    
+
         if formatted_locations:
             results.append(f"<현장> {formatted_locations}")
 
