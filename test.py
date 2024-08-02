@@ -307,10 +307,12 @@ def render_sidebar():
         st.sidebar.markdown("[카카오맵](https://map.kakao.com/)")
         st.sidebar.markdown("[네이버지도](https://map.naver.com/)")
     with tab2:
+        # Initialize session state if not already set
+        if 'button_clicked' not in st.session_state:
+            st.session_state['button_clicked'] = False
+
         if st.button('MOSS 회복 코드 표준'):
-            st.session_state['output_active'] = False
             st.session_state['button_clicked'] = not st.session_state['button_clicked']
-            st.session_state['reset_active'] = False
 
         if st.session_state['button_clicked']:
             placeholder = st.empty()
@@ -329,7 +331,7 @@ def render_sidebar():
                 """,
                 unsafe_allow_html=True
             )
-            st.dataframe(df)
+                st.dataframe(df)
 
 
 
