@@ -594,8 +594,14 @@ def moss_page():
                 def 기타_neoss_완료_callback():
                     st.session_state.기타_고객DB_neoss_불가 = False
 
-                기타_고객DB_neoss_불가 = st.checkbox("고객DB 존재 NeOSS 삭제 불가", key="기타_고객DB_neoss_불가", on_change=기타_고객DB_neoss_불가_callback)
-                기타_neoss_완료 = st.checkbox("NeOSS 삭제 완료", key="기타_neoss_완료", on_change=기타_neoss_완료_callback)
+                # Create two columns for horizontal layout
+                col1, col2 = st.columns(2)
+    
+                with col1:
+                    기타_고객DB_neoss_불가 = st.checkbox("고객DB 존재 NeOSS 삭제 불가", key="기타_고객DB_neoss_불가", on_change=기타_고객DB_neoss_불가_callback)
+    
+                with col2:
+                    기타_neoss_완료 = st.checkbox("NeOSS 삭제 완료", key="기타_neoss_완료", on_change=기타_neoss_완료_callback)
 
                 if 기타_고객DB_neoss_불가:
                     db_results.append("고객DB 존재/NeOSS 삭제 불가")
