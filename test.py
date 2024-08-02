@@ -685,8 +685,6 @@ def moss_page():
         if 현장TM_내용 and 현장TM_출동예방:
             출동예방_actions.append(formatted_TM)
 
-        if 출동예방_actions:
-            results.append(f"<출동예방>{', '.join(출동예방_actions)}")
 
         col1, col2 = st.columns(2)
         timezone = pytz.timezone('Asia/Seoul')  # 한국 시간대로 설정
