@@ -774,29 +774,8 @@ def moss_page():
                 clear_text()
 
         with col3:
-            if st.button('MOSS 회복 코드 표준'):
-                st.session_state['output_active'] = False
-                st.session_state['button_clicked'] = not st.session_state['button_clicked']
-                st.session_state['reset_active'] = False
+            st.markdown("test")
 
-        if st.session_state['button_clicked']:
-            placeholder = st.empty()
-            with placeholder.container():
-                st.markdown(
-                """
-                <style>
-                /* 데이터프레임을 전체 화면으로 보이도록 스타일 조정 */
-                .css-1l02zno {
-                    width: 200%;
-                    max-width: 100%;
-                    height: calc(100vh - 200px); /* 화면 높이에서 200px을 뺀 높이 설정 */
-                    overflow: auto; /* 스크롤이 필요한 경우 스크롤 허용 */
-                }
-                </style>
-                """,
-                unsafe_allow_html=True
-            )
-            st.dataframe(df)
 
         # 이 버튼이 클릭되면 다른 버튼이 비활성화 되도록 보장합니다.
         if st.session_state['output_active']:
