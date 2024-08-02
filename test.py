@@ -645,6 +645,16 @@ def moss_page():
         if "출동보류" in selected_actions:
             출동예방_actions.append("[NOC]출동보류")
 
+        # 현장TM_내용 추가
+        현장TM_내용 = ""
+        if "[현장TM]" in st.multiselect("현장에 대한 내용을 선택하세요:", ["[현장TM]", "주소", "연락처", "장비위치", "차단기위치", "출입방법", "기타(간단히 내용입력)"], key="selected_locations"):
+            현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+            현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
+
+            if 현장TM_내용:
+                if 현장TM_출동예방:
+                    출동예방_actions.append(f"[현장TM] {clear_tm_content(현장TM_내용)}")
+
         if 출동예방_actions:
             results.append(f"<출동예방>{', '.join(출동예방_actions)}")
 
