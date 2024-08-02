@@ -616,7 +616,7 @@ def moss_page():
                 if ddm_value:
                     기타_results.append(f"ddm: {ddm_value}")
 
-             if "어댑터 교체" in selected_actions:
+            if "어댑터 교체" in selected_actions:
                 col1, col2 = st.columns(2)
                 with col1:
                     before_adapter = st.text_input("교체 전 어댑터:")
