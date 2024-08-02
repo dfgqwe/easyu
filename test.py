@@ -633,7 +633,7 @@ def moss_page():
             results.extend(기타_results)
         
 
-            filtered_actions = [action for action in selected_actions if action not in ["DB 삭제 여부", "광레벨 확인"]]
+            filtered_actions = [action for action in selected_actions if action not in ["DB 삭제 여부", "광레벨 확인", "어댑터 교체"]]
             if filtered_actions:
                 formatted_actions = ", ".join(filtered_actions)
                 results.append(f"<선조치_NOC> {formatted_actions}")
