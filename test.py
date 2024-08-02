@@ -574,14 +574,14 @@ def moss_page():
 
 
         출동예방_actions = []
-        기타_results = []
         
         adapter_info = ""  # 어댑터 정보를 저장할 변수
         
         # Show these sections only if selected_bs_format is not "[NOC_광레벨불]"
         if selected_bs_format != "[NOC_광레벨불]" and selected_bs_format != "[NOC_장비철거]":
             selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
-
+            db_results = []
+            기타_results = []
             if "DB 삭제 여부" in selected_actions:
                 if "기타_고객DB_neoss_불가" not in st.session_state:
                     st.session_state.기타_고객DB_neoss_불가 = False
@@ -598,9 +598,9 @@ def moss_page():
                 기타_neoss_완료 = st.checkbox("NeOSS 삭제 완료", key="기타_neoss_완료", on_change=기타_neoss_완료_callback)
 
                 if 기타_고객DB_neoss_불가:
-                    results.append("고객DB 존재/NeOSS 삭제 불가")
+                    db_results.append("고객DB 존재/NeOSS 삭제 불가")
                 if 기타_neoss_완료:
-                    results.append("NeOSS 삭제 완료")
+                    db_results.append("NeOSS 삭제 완료")
 
             if "광레벨 확인" in selected_actions:
                 col1, col2 = st.columns(2)
@@ -612,9 +612,9 @@ def moss_page():
             
             
                 if rssi_value:
-                    results.append(f"RSSI: {rssi_value}")
+                    _results.append(f"RSSI: {rssi_value}")
                 if ddm_value:
-                    results.append(f"ddm: {ddm_value}")
+                    _results.append(f"ddm: {ddm_value}")
 
             if "어댑터 전/후 작성" in selected_actions:
                 col1, col2 = st.columns(2)
@@ -633,8 +633,9 @@ def moss_page():
 
         # user_input에 어댑터 정보를 추가하여 출력
         results.append(user_input + adapter_info)
+        results.extend(db_results)
+        results.extend(기타_results)
         results.append("수고하셨습니다")
-
 
 
         
