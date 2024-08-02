@@ -572,8 +572,6 @@ def moss_page():
             if head_format:
                 results.append(head_format)
 
-        results.append(user_input)
-        results.append("수고하셨습니다")
 
         출동예방_actions = []
         기타_results = []
@@ -622,17 +620,24 @@ def moss_page():
                 col1, col2 = st.columns(2)
                 with col1:
                     before_adapter = st.text_input("교체 전 어댑터:")
-   
+
                 with col2:
                     after_adapter = st.text_input("교체 후 어댑터:")
-        
+
                 if before_adapter or after_adapter:
                     if before_adapter:
                         adapter_info += f"교체 전 어댑터: {before_adapter} "
                     if after_adapter:
                         adapter_info += f"/ 교체 후 어댑터: {after_adapter}"
                     adapter_info = f" ({adapter_info.strip()})"
-            results.extend(기타_results)
+
+        # user_input에 어댑터 정보를 추가하여 출력
+        results.append(user_input + adapter_info)
+        results.append("수고하셨습니다")
+
+        # 기타_results 출력
+        for result in 기타_results:
+            st.write(result)
 
 
         
