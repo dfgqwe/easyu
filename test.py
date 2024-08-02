@@ -612,9 +612,9 @@ def moss_page():
             
             
                 if rssi_value:
-                    _results.append(f"RSSI: {rssi_value}")
+                    기타_results.append(f"RSSI: {rssi_value}")
                 if ddm_value:
-                    _results.append(f"ddm: {ddm_value}")
+                    기타_results.append(f"ddm: {ddm_value}")
 
             if "어댑터 전/후 작성" in selected_actions:
                 col1, col2 = st.columns(2)
