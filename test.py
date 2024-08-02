@@ -638,7 +638,7 @@ def moss_page():
         results.append("수고하셨습니다")
 
 
-        # 출동예방_actions 처리
+       # 출동예방_actions 처리
         출동예방_actions = []
         if "전기작업 확인(전화)" in selected_actions:
             출동예방_actions.append("[NOC]전기작업 확인(전화)")
@@ -655,7 +655,10 @@ def moss_page():
 
         if 현장TM_출동예방 and 현장TM_내용:
             출동예방_actions.append(f"[현장TM] {clear_tm_content(현장TM_내용)}")
-    
+
+        if 출동예방_actions:
+            results.append(f"<출동예방>{', '.join(출동예방_actions)}")
+
         # 선조치_NOC 관련 결과 처리
         filtered_actions = [action for action in selected_actions if action not in ["DB 삭제 여부", "광레벨 확인", "어댑터 교체"]]
         if filtered_actions:
@@ -670,9 +673,6 @@ def moss_page():
 
         if not 현장TM_출동예방 and 현장TM_내용:
             results.append(f"<현장> [현장TM] {clear_tm_content(현장TM_내용)}")
-
-        if 출동예방_actions:
-            results.append(f"<출동예방>{', '.join(출동예방_actions)}")
 
         col1, col2 = st.columns(2)
         timezone = pytz.timezone('Asia/Seoul')  # 한국 시간대로 설정
