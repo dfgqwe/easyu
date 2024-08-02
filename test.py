@@ -166,6 +166,7 @@ B_S_head_formats = {
     "DB현행화",
     "DB 삭제 여부",
     "광레벨 확인",
+    "어댑터 교체",
     "원격조치(리부팅)",
     "원격조치(포트리셋)",
     "원격조치(포트BLK)",
@@ -614,6 +615,20 @@ def moss_page():
                     기타_results.append(f"RSSI: {rssi_value}")
                 if ddm_value:
                     기타_results.append(f"ddm: {ddm_value}")
+
+             if "어댑터 교체" in selected_actions:
+                col1, col2 = st.columns(2)
+                with col1:
+                    before_adapter = st.text_input("교체 전 어댑터:")
+       
+                with col2:
+                    after_adapter = st.text_input("교체 후 어댑터:")
+            
+            
+                if before_adapter:
+                    기타_results.append(f"교체 전 어댑터: {before_adapter}")
+                if after_adapter:
+                    기타_results.append(f"교체 후 어댑터: {after_adapter}")
 
             results.extend(기타_results)
         
