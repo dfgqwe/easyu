@@ -642,16 +642,16 @@ def moss_page():
 
         
 
-            filtered_actions = [action for action in selected_actions if action not in ["DB 삭제 여부", "광레벨 확인", "어댑터 교체"]]
-            if filtered_actions:
-                formatted_actions = ", ".join(filtered_actions)
-                results.append(f"<선조치_NOC> {formatted_actions}")
-                if "전기작업 확인(전화)" in selected_actions:
-                    출동예방_actions.append("[NOC]전기작업 확인(전화)")
-                if "출동보류" in selected_actions:
-                    출동예방_actions.append("[NOC]출동보류")
+        filtered_actions = [action for action in selected_actions if action not in ["DB 삭제 여부", "광레벨 확인", "어댑터 교체"]]
+        if filtered_actions:
+            formatted_actions = ", ".join(filtered_actions)
+            results.append(f"<선조치_NOC> {formatted_actions}")
+            if "전기작업 확인(전화)" in selected_actions:
+                출동예방_actions.append("[NOC]전기작업 확인(전화)")
+            if "출동보류" in selected_actions:
+                출동예방_actions.append("[NOC]출동보류")
 
-            현장_options = [
+        현장_options = [
                 "[현장TM]",
                 "주소",
                 "연락처",
@@ -660,32 +660,32 @@ def moss_page():
                 "출입방법",
                 "기타(간단히 내용입력)"
             ]
-            selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
+        selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
 
-            현장TM_내용 = ""
-            if "[현장TM]" in selected_locations:
-                현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
-                현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
-                cleaned_TM_내용 = clear_tm_content(현장TM_내용)
-                formatted_TM = f"[현장TM] {cleaned_TM_내용}" if cleaned_TM_내용 else "[현장TM]"
+        현장TM_내용 = ""
+        if "[현장TM]" in selected_locations:
+            현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
+            현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
+            cleaned_TM_내용 = clear_tm_content(현장TM_내용)
+            formatted_TM = f"[현장TM] {cleaned_TM_내용}" if cleaned_TM_내용 else "[현장TM]"
 
-                if len(selected_locations) > 1:  # selected_locations에 [현장TM] 이외의 항목이 포함된 경우에만 수정요청 추가
-                    formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations if location != "[현장TM]"]) + " 수정요청"
-                else:
-                    formatted_locations = f"{formatted_TM}"
+            if len(selected_locations) > 1:  # selected_locations에 [현장TM] 이외의 항목이 포함된 경우에만 수정요청 추가
+                formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations if location != "[현장TM]"]) + " 수정요청"
             else:
-                formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
-                if selected_locations:
-                    formatted_locations += " 수정요청"
+                formatted_locations = f"{formatted_TM}"
+        else:
+            formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
+            if selected_locations:
+                formatted_locations += " 수정요청"
 
-            if selected_locations or 현장TM_내용:
-                results.append(f"<현장> {formatted_locations}")
+        if selected_locations or 현장TM_내용:
+             results.append(f"<현장> {formatted_locations}")
 
-            if 현장TM_내용 and 현장TM_출동예방:
-                출동예방_actions.append(formatted_TM)
+        if 현장TM_내용 and 현장TM_출동예방:
+            출동예방_actions.append(formatted_TM)
 
-            if 출동예방_actions:
-                results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
+        if 출동예방_actions:
+            results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
 
         col1, col2 = st.columns(2)
         timezone = pytz.timezone('Asia/Seoul')  # 한국 시간대로 설정
