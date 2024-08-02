@@ -598,9 +598,9 @@ def moss_page():
                 기타_neoss_완료 = st.checkbox("NeOSS 삭제 완료", key="기타_neoss_완료", on_change=기타_neoss_완료_callback)
 
                 if 기타_고객DB_neoss_불가:
-                    기타_results.append("고객DB 존재/NeOSS 삭제 불가")
+                    results.append("고객DB 존재/NeOSS 삭제 불가")
                 if 기타_neoss_완료:
-                    기타_results.append("NeOSS 삭제 완료")
+                    results.append("NeOSS 삭제 완료")
 
             if "광레벨 확인" in selected_actions:
                 col1, col2 = st.columns(2)
@@ -612,9 +612,9 @@ def moss_page():
             
             
                 if rssi_value:
-                    기타_results.append(f"RSSI: {rssi_value}")
+                    results.append(f"RSSI: {rssi_value}")
                 if ddm_value:
-                    기타_results.append(f"ddm: {ddm_value}")
+                    results.append(f"ddm: {ddm_value}")
 
             if "어댑터 전/후 작성" in selected_actions:
                 col1, col2 = st.columns(2)
