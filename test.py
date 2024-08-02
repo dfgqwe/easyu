@@ -635,9 +635,6 @@ def moss_page():
         results.append(user_input + adapter_info)
         results.append("수고하셨습니다")
 
-        # 기타_results 출력
-        for result in 기타_results:
-            st.write(result)
 
 
         
