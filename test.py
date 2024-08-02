@@ -632,7 +632,7 @@ def moss_page():
                     if after_adapter:
                         adapter_info += f"/ 교체 후 어댑터: {after_adapter}"
                     adapter_info = f" ({adapter_info.strip()})"
-
+            results.extend(기타_results)
         # user_input에 어댑터 정보를 추가하여 출력
         if adapter_info:
             st.write(user_input + adapter_info)
@@ -645,7 +645,6 @@ def moss_page():
 
         st.write("수고하셨습니다")
 
-            results.extend(기타_results)
         
 
             filtered_actions = [action for action in selected_actions if action not in ["DB 삭제 여부", "광레벨 확인", "어댑터 교체"]]
