@@ -638,6 +638,13 @@ def moss_page():
         results.append("수고하셨습니다")
 
 
+        # 출동예방_actions 처리
+        출동예방_actions = []
+        if "전기작업 확인(전화)" in selected_actions:
+            출동예방_actions.append("[NOC]전기작업 확인(전화)")
+        if "출동보류" in selected_actions:
+            출동예방_actions.append("[NOC]출동보류")
+
         # 현장TM 관련 처리
         selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", ["[현장TM]", "주소", "연락처", "장비위치", "차단기위치", "출입방법", "기타(간단히 내용입력)"], key="selected_locations_multiselect")
 
@@ -646,12 +653,9 @@ def moss_page():
         if "[현장TM]" in selected_locations:
             현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
 
-        # Check if we need to add [현장TM] content to 출동예방_actions or <현장>
         if 현장TM_출동예방 and 현장TM_내용:
-            출동예방_actions = []
             출동예방_actions.append(f"[현장TM] {clear_tm_content(현장TM_내용)}")
-            results.append(f"<출동예방>{', '.join(출동예방_actions)}")
-
+    
         # 선조치_NOC 관련 결과 처리
         filtered_actions = [action for action in selected_actions if action not in ["DB 삭제 여부", "광레벨 확인", "어댑터 교체"]]
         if filtered_actions:
@@ -667,6 +671,8 @@ def moss_page():
         if not 현장TM_출동예방 and 현장TM_내용:
             results.append(f"<현장> [현장TM] {clear_tm_content(현장TM_내용)}")
 
+        if 출동예방_actions:
+            results.append(f"<출동예방>{', '.join(출동예방_actions)}")
 
         col1, col2 = st.columns(2)
         timezone = pytz.timezone('Asia/Seoul')  # 한국 시간대로 설정
