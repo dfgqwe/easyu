@@ -265,9 +265,10 @@ def render_sidebar():
         unsafe_allow_html=True
     )
     
-    st.sidebar.header("유관 부서 전화번호")
+    
     tab1, tab2 = st.sidebar.tabs(['Total Bill', 'Tip'])
     with tab1:
+        st.sidebar.header("유관 부서 전화번호")
         # 지역 선택 selectbox
         region_option = st.sidebar.selectbox("지역 선택", ["충청", "호남", "부산", "대구"])
     
