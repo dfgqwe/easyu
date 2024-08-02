@@ -264,46 +264,73 @@ def render_sidebar():
         """,
         unsafe_allow_html=True
     )
+    
     st.sidebar.header("유관 부서 전화번호")
+    tab1, tab2 = st.sidebar.tabs(['Total Bill', 'Tip'])
+    with tab1:
+        # 지역 선택 selectbox
+        region_option = st.sidebar.selectbox("지역 선택", ["충청", "호남", "부산", "대구"])
     
-    # 지역 선택 selectbox
-    region_option = st.sidebar.selectbox("지역 선택", ["충청", "호남", "부산", "대구"])
-    
-    st.sidebar.markdown("유관 부서 전화번호")
+        st.sidebar.markdown("유관 부서 전화번호")
 
-    common_numbers = {
-        "OSP 관제센터": "02-500-6150",
-        "IP망 관제센터": "042-478-1600",
-        "전원관제": "042-478-1800",
-        "과천 제1관제센터(교환)": "02-500-6080",
-    }
+        common_numbers = {
+            "OSP 관제센터": "02-500-6150",
+            "IP망 관제센터": "042-478-1600",
+            "전원관제": "042-478-1800",
+            "과천 제1관제센터(교환)": "02-500-6080",
+        }
 
-    unique_numbers = {
-        "충청": {"name": "교환기술부(충청)", "number": "042-255-2470"},
-        "호남": {"name": "교환기술부(호남)", "number": "062-513-1200"},
-        "부산": {"name": "교환기술부(부산)", "number": "051-464-4699"},
-        "대구": {"name": "교환기술부(대구)", "number": "053-477-3010"},
-    }
-    enter_numbers = {
+        unique_numbers = {
+            "충청": {"name": "교환기술부(충청)", "number": "042-255-2470"},
+            "호남": {"name": "교환기술부(호남)", "number": "062-513-1200"},
+            "부산": {"name": "교환기술부(부산)", "number": "051-464-4699"},
+            "대구": {"name": "교환기술부(대구)", "number": "053-477-3010"},
+        }
+        enter_numbers = {
         "충청": {"name": "분기국사출입(충청)", "number": "042-478-7550, 7540"},
         "호남": {"name": "분기국사출입(호남)", "number": "062-230-3355~7"},
         "부산": {"name": "분기국사출입(부산)", "number": "051-464-2300"},
         "대구": {"name": "분기국사출입(대구)", "number": "053-477-1984~5"},
-    }
+        }
 
-    phone_numbers = list(common_numbers.values()) + [unique_numbers[region_option]["number"]] + [enter_numbers[region_option]["number"]]
-    phone_names = list(common_numbers.keys()) + [unique_numbers[region_option]["name"]] + [enter_numbers[region_option]["name"]]
+        phone_numbers = list(common_numbers.values()) + [unique_numbers[region_option]["number"]] + [enter_numbers[region_option]["number"]]
+        phone_names = list(common_numbers.keys()) + [unique_numbers[region_option]["name"]] + [enter_numbers[region_option]["name"]]
 
-    for name, number in zip(phone_names, phone_numbers):
-        st.sidebar.markdown(f"- {name}: {number}")
+        for name, number in zip(phone_names, phone_numbers):
+            st.sidebar.markdown(f"- {name}: {number}")
 
-    st.sidebar.header("URL Navigation")
-    st.sidebar.markdown("[기상레이더센터_낙뢰](https://radar.kma.go.kr/lightning/area_lightning.do)")
-    st.sidebar.markdown("[날씨누리_레이더](https://www.weather.go.kr/w/image/radar.do)")
-    st.sidebar.markdown("[windy.com](https://www.windy.com/?37.475,126.957,5)")
-    st.sidebar.markdown("[KBS 재난포털_CCTV](https://d.kbs.co.kr/special/cctv)")
-    st.sidebar.markdown("[카카오맵](https://map.kakao.com/)")
-    st.sidebar.markdown("[네이버지도](https://map.naver.com/)")
+        st.sidebar.header("URL Navigation")
+        st.sidebar.markdown("[기상레이더센터_낙뢰](https://radar.kma.go.kr/lightning/area_lightning.do)")
+        st.sidebar.markdown("[날씨누리_레이더](https://www.weather.go.kr/w/image/radar.do)")
+        st.sidebar.markdown("[windy.com](https://www.windy.com/?37.475,126.957,5)")
+        st.sidebar.markdown("[KBS 재난포털_CCTV](https://d.kbs.co.kr/special/cctv)")
+        st.sidebar.markdown("[카카오맵](https://map.kakao.com/)")
+        st.sidebar.markdown("[네이버지도](https://map.naver.com/)")
+    with tab2:
+        if st.button('MOSS 회복 코드 표준'):
+            st.session_state['output_active'] = False
+            st.session_state['button_clicked'] = not st.session_state['button_clicked']
+            st.session_state['reset_active'] = False
+
+        if st.session_state['button_clicked']:
+            placeholder = st.empty()
+            with placeholder.container():
+                st.markdown(
+                """
+                <style>
+                /* 데이터프레임을 전체 화면으로 보이도록 스타일 조정 */
+                .css-1l02zno {
+                    width: 200%;
+                    max-width: 100%;
+                    height: calc(100vh - 200px); /* 화면 높이에서 200px을 뺀 높이 설정 */
+                    overflow: auto; /* 스크롤이 필요한 경우 스크롤 허용 */
+                }
+                </style>
+                """,
+                unsafe_allow_html=True
+            )
+            st.dataframe(df)
+
 
 
 
