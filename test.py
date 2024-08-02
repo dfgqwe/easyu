@@ -657,6 +657,7 @@ def moss_page():
         if 현장TM_출동예방 and 현장TM_내용:
             출동예방_actions.append(f"[현장TM] {clear_tm_content(현장TM_내용)}")
         elif 현장TM_내용:
+            formatted_locations = " / ".join([location for location in selected_locations if location != "[현장TM]"])
             results.append(f"<현장> [현장TM] {clear_tm_content(현장TM_내용)}")
 
         if 출동예방_actions:
@@ -669,8 +670,7 @@ def moss_page():
             results.append(f"<선조치_NOC> {formatted_actions}")
 
         # 현장 관련 처리
-        formatted_locations = ""
-        formatted_locations += " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations if location != "[현장TM]"])
+        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations if location != "[현장TM]"])
 
         if formatted_locations:
             results.append(f"<현장> {formatted_locations.strip()} 수정요청")
