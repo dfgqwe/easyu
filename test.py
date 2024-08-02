@@ -638,6 +638,8 @@ def moss_page():
         results.append("수고하셨습니다")
 
 
+        # 출동예방_actions 처리
+        출동예방_actions = []
         if "전기작업 확인(전화)" in selected_actions:
             출동예방_actions.append("[NOC]전기작업 확인(전화)")
         if "출동보류" in selected_actions:
