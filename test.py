@@ -199,7 +199,7 @@ df = pd.read_csv('head.csv', index_col=0)
 
 
 def clear_tm_content(content):
-    keywords_to_remove = ["[현장TM]", "[TM활동]", "[TM 활동]", "[현장 TM]"]
+    keywords_to_remove = ["[현장TM]", "[TM활동]", "[TM 활동]", "[현장 TM]", "[TM]"]
     for keyword in keywords_to_remove:
         content = content.replace(keyword, "")
     return content.strip()
