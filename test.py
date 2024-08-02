@@ -664,15 +664,17 @@ def moss_page():
             key="selected_locations_multiselect"
         )
 
-        # 현장TM이 선택된 경우에만 [현장TM] 체크박스와 내용 입력 필드를 표시
+        현장TM_내용 = ""
+        현장TM_출동예방 = False  # 초기화, 기본값 설정
+
         if "[현장TM]" in selected_locations:
             현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
             현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함", key="현장TM_출동예방")
-    
-            if 현장TM_출동예방 and 현장TM_내용:
-                출동예방_actions.append(f"[현장TM] {clear_tm_content(현장TM_내용)}")
 
-        # 출동예방_actions를 results에 추가
+        # 출동예방_actions 업데이트
+        if 현장TM_출동예방 and 현장TM_내용:
+            출동예방_actions.append(f"[현장TM] {clear_tm_content(현장TM_내용)}")
+
         if 출동예방_actions:
             results.append(f"<출동예방>{', '.join(출동예방_actions)}")
 
