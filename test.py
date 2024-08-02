@@ -577,7 +577,9 @@ def moss_page():
 
         출동예방_actions = []
         기타_results = []
-
+        
+        adapter_info = ""  # 어댑터 정보를 저장할 변수
+        
         # Show these sections only if selected_bs_format is not "[NOC_광레벨불]"
         if selected_bs_format != "[NOC_광레벨불]" and selected_bs_format != "[NOC_장비철거]":
             selected_actions = st.multiselect("선조치_NOC에 대한 내용을 선택하세요:", 선조치_NOC_options, key="selected_actions")
@@ -620,18 +622,28 @@ def moss_page():
                 col1, col2 = st.columns(2)
                 with col1:
                     before_adapter = st.text_input("교체 전 어댑터:")
-       
+   
                 with col2:
                     after_adapter = st.text_input("교체 후 어댑터:")
-            
-            
+        
                 if before_adapter or after_adapter:
-                    adapter_info = ""
                     if before_adapter:
                         adapter_info += f"교체 전 어댑터: {before_adapter} "
                     if after_adapter:
                         adapter_info += f"/ 교체 후 어댑터: {after_adapter}"
-                    기타_results.append(f"{user_input} ({adapter_info.strip()})")
+                    adapter_info = f" ({adapter_info.strip()})"
+
+        # user_input에 어댑터 정보를 추가하여 출력
+        if adapter_info:
+            st.write(user_input + adapter_info)
+        else:
+            st.write(user_input)
+
+        # 기타_results 출력
+        for result in 기타_results:
+            st.write(result)
+
+        st.write("수고하셨습니다")
 
             results.extend(기타_results)
         
