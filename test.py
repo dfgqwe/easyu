@@ -625,8 +625,13 @@ def moss_page():
                     after_adapter = st.text_input("교체 후 어댑터:")
             
             
-                if before_adapter and after_adapter:
-                    기타_results.append(f"{user_input} (교체 전 어댑터: {before_adapter} / 교체 후 어댑터: {after_adapter})")
+                if before_adapter or after_adapter:
+                    adapter_info = ""
+                    if before_adapter:
+                        adapter_info += f"교체 전 어댑터: {before_adapter} "
+                    if after_adapter:
+                        adapter_info += f"/ 교체 후 어댑터: {after_adapter}"
+                    기타_results.append(f"{user_input} ({adapter_info.strip()})")
 
             results.extend(기타_results)
         
