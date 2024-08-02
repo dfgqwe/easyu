@@ -645,17 +645,15 @@ def moss_page():
         if "출동보류" in selected_actions:
             출동예방_actions.append("[NOC]출동보류")
 
-         # 현장TM_내용 추가
-        현장TM_내용 = ""
+        # 현장TM_내용 추가
         selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", ["[현장TM]", "주소", "연락처", "장비위치", "차단기위치", "출입방법", "기타(간단히 내용입력)"], key="selected_locations_multiselect")
 
         if "[현장TM]" in selected_locations:
             현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
             현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함", key="현장TM_출동예방")
 
-            if 현장TM_내용:
-                if 현장TM_출동예방:
-                    출동예방_actions.append(f"[현장TM] {clear_tm_content(현장TM_내용)}")
+            if 현장TM_내용 and 현장TM_출동예방:
+                출동예방_actions.append(f"[현장TM] {clear_tm_content(현장TM_내용)}")
 
         if 출동예방_actions:
             results.append(f"<출동예방>{', '.join(출동예방_actions)}")
@@ -665,39 +663,20 @@ def moss_page():
         if filtered_actions:
             formatted_actions = ", ".join(filtered_actions)
             results.append(f"<선조치_NOC> {formatted_actions}")
-        
-        현장_options = [
-                "[현장TM]",
-                "주소",
-                "연락처",
-                "장비위치",
-                "차단기위치",
-                "출입방법",
-                "기타(간단히 내용입력)"
-            ]
-        selected_locations = st.multiselect("현장에 대한 내용을 선택하세요:", 현장_options, key="selected_locations")
 
-        현장TM_내용 = ""
+        # 현장 관련 처리
+        formatted_locations = ""
         if "[현장TM]" in selected_locations:
-            현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용")
-            현장TM_출동예방 = st.checkbox("[현장TM] 내용을 <출동예방>에 포함")
+            현장TM_내용 = st.text_input("[현장TM] 내용을 입력하세요:", key="현장TM_내용_for_현장")
             cleaned_TM_내용 = clear_tm_content(현장TM_내용)
             formatted_TM = f"[현장TM] {cleaned_TM_내용}" if cleaned_TM_내용 else "[현장TM]"
+            formatted_locations += f"{formatted_TM}, "
 
-            if len(selected_locations) > 1:  # selected_locations에 [현장TM] 이외의 항목이 포함된 경우에만 수정요청 추가
-                formatted_locations = f"{formatted_TM}, " + " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations if location != "[현장TM]"]) + " 수정요청"
-            else:
-                formatted_locations = f"{formatted_TM}"
-        else:
-            formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations])
-            if selected_locations:
-                formatted_locations += " 수정요청"
+        # Add other selected locations
+        formatted_locations += " / ".join([f"{location}" if location != "기타(간단히 내용입력)" else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})" for location in selected_locations if location != "[현장TM]"])
 
-        if selected_locations or 현장TM_내용:
-             results.append(f"<현장> {formatted_locations}")
-
-        if 현장TM_내용 and 현장TM_출동예방:
-            출동예방_actions.append(formatted_TM)
+        if formatted_locations:
+            results.append(f"<현장> {formatted_locations.strip()} 수정요청")
 
 
         col1, col2 = st.columns(2)
