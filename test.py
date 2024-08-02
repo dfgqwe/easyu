@@ -656,9 +656,10 @@ def moss_page():
         # Check if we need to add [현장TM] content to 출동예방_actions or <현장>
         if 현장TM_출동예방 and 현장TM_내용:
             출동예방_actions.append(f"[현장TM] {clear_tm_content(현장TM_내용)}")
-        elif 현장TM_내용:
+        else:
             formatted_locations = " / ".join([location for location in selected_locations if location != "[현장TM]"])
-            results.append(f"<현장> [현장TM] {clear_tm_content(현장TM_내용)}")
+            if 현장TM_내용:
+                results.append(f"<현장> [현장TM] {clear_tm_content(현장TM_내용)} {formatted_locations}")
 
         if 출동예방_actions:
             results.append(f"<출동예방>{', '.join(출동예방_actions)}")
