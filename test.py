@@ -648,7 +648,10 @@ def moss_page():
                 출동예방_actions.append("[NOC]전기작업 확인(전화)")
             if "출동보류" in selected_actions:
                 출동예방_actions.append("[NOC]출동보류")
-
+                
+        if 출동예방_actions:
+            results.append(f"<출동예방>{', '.join(출동예방_actions)}")
+        
         현장_options = [
                 "[현장TM]",
                 "주소",
@@ -683,7 +686,7 @@ def moss_page():
             출동예방_actions.append(formatted_TM)
 
         if 출동예방_actions:
-            results.insert(3, f"<출동예방>{', '.join(출동예방_actions)}")
+            results.append(f"<출동예방>{', '.join(출동예방_actions)}")
 
         col1, col2 = st.columns(2)
         timezone = pytz.timezone('Asia/Seoul')  # 한국 시간대로 설정
