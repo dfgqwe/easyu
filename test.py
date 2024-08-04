@@ -695,7 +695,7 @@ def moss_page():
         ])
 
         if not 현장TM_출동예방 and 현장TM_내용:
-            formatted_locations = f"[현장TM] {clear_tm_content(현장TM_내용)} , {formatted_locations.strip()} 수정요청"
+            formatted_locations = f"[현장TM] {clear_tm_content(현장TM_내용)}" + (f" , {formatted_locations.strip()} 수정요청" if formatted_locations else "")
         elif formatted_locations:
             formatted_locations = f"{formatted_locations.strip()} 수정요청"
 
