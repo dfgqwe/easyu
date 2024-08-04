@@ -688,19 +688,24 @@ def moss_page():
 
         # 현장 관련 처리
         formatted_locations = " / ".join([
-            f"{location}" if location != "기타(간단히 내용입력)"
-            else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})"
-            for location in selected_locations
-            if location != "[현장TM]"
-        ])
+    f"{location}" if location != "기타(간단히 내용입력)"
+    else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})"
+    for location in selected_locations
+    if location != "[현장TM]"])
 
         if not 현장TM_출동예방 and 현장TM_내용:
-            formatted_locations = f"[현장TM] {clear_tm_content(현장TM_내용)} , {formatted_locations.strip()} 수정요청"
+            formatted_locations = f"[현장TM] {clear_tm_content(현장TM_내용)} , {formatted_locations.strip()}"
+            if formatted_locations.strip() == "[현장TM]":
+                formatted_locations = f"[현장TM] {clear_tm_content(현장TM_내용)}"
+            else:
+                formatted_locations = f"[현장TM] {clear_tm_content(현장TM_내용)} , {formatted_locations.strip()} 수정요청"
         elif formatted_locations:
-            formatted_locations = f"{formatted_locations.strip()} 수정요청"
-
+            if formatted_locations.strip():
+                formatted_locations = f"{formatted_locations.strip()} 수정요청"
+                
         if formatted_locations:
             results.append(f"<현장> {formatted_locations}")
+
 
         col1, col2 = st.columns(2)
         timezone = pytz.timezone('Asia/Seoul')  # 한국 시간대로 설정
