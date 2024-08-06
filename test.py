@@ -705,10 +705,9 @@ def moss_page():
         else:
             formatted_tm_content = f"[현장TM] {clear_tm_content(현장TM_내용)}"
             if formatted_locations:
-                formatted_locations = f"{formatted_tm_content} , {formatted_locations.strip()} 수정요청"
+                formatted_locations = f"{formatted_tm_content} , {formatted_locations.strip()}"
             else:
-                formatted_locations = f"{formatted_tm_content} 수정요청"
-
+                formatted_locations = formatted_tm_content
         if formatted_locations:
             results.append(f"<현장> {formatted_locations}")
 
