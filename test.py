@@ -341,6 +341,9 @@ def home_page():
 
 
 def moss_page():
+    results = []
+    db_results = []  # 빈 리스트로 초기화
+    기타_results = []
     st.markdown(
         """
         <style>
