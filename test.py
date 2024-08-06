@@ -579,6 +579,7 @@ def moss_page():
 
 
         출동예방_actions = []
+        selected_actions = []
         
         adapter_info = ""  # 어댑터 정보를 저장할 변수
         
