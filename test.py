@@ -693,23 +693,22 @@ def moss_page():
             results.append(f"<선조치_NOC> {formatted_actions}")
 
         # 현장 관련 처리
-        formatted_locations = " / ".join([f"{location}" if location != "기타(간단히 내용입력)"
+        formatted_locations = " / ".join([
+    f"{location}" if location != "기타(간단히 내용입력)"
     else f"기타({st.text_input('기타 내용 입력', key='기타_내용')})"
     for location in selected_locations
     if location != "[현장TM]"
-  ])
+])
 
-        # 현장TM_출동예방과 관계없이 현장TM_내용이 없을 때도 [현장TM]이 출력되도록 변경
-        if 현장TM_내용:
+        if not 현장TM_내용:
+            formatted_locations = "[현장TM]"
+        else:
             formatted_tm_content = f"[현장TM] {clear_tm_content(현장TM_내용)}"
-        else:
-            formatted_tm_content = "[현장TM]"
-        
-        if formatted_locations:
-            formatted_locations = f"{formatted_tm_content} , {formatted_locations.strip()} 수정요청"
-        else:
-            formatted_locations = f"{formatted_tm_content} 수정요청"
-            
+            if formatted_locations:
+                formatted_locations = f"{formatted_tm_content} , {formatted_locations.strip()} 수정요청"
+            else:
+                formatted_locations = f"{formatted_tm_content} 수정요청"
+
         if formatted_locations:
             results.append(f"<현장> {formatted_locations}")
 
