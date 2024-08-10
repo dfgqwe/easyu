@@ -579,15 +579,22 @@ def moss_page():
 
         # 포맷팅된 결과를 저장할 리스트
         formatted_lines = []
+        combined_line = ""
 
         for i, line in enumerate(lines):
-            # "[현장]" 이후의 줄들은 줄바꿈 없이 이어붙임
-            if "[현장]" in line and i + 1 < len(lines):
-                formatted_lines.append(line + lines[i + 1])
-            elif "[현장]" not in line:
+            if "[현장]" in line:
+                # "[현장]"이 포함된 줄을 combined_line에 저장
+                combined_line = line
+            elif combined_line:
+                # combined_line이 이미 설정된 경우, 그 뒤에 이어 붙임
+                combined_line += line
+                formatted_lines.append(combined_line)
+                combined_line = ""  # 초기화하여 다음 줄 처리에 영향 주지 않도록 함
+            else:
+                # "[현장]"이 없는 일반 줄은 그대로 추가
                 formatted_lines.append(line)
 
-        # 최종적으로 포맷팅된 텍스트
+        # 리스트를 문자열로 변환
         formatted_output = "\n".join(formatted_lines)
 
         if not is_bs_checked:
