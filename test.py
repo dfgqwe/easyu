@@ -571,7 +571,7 @@ def moss_page():
 
 
 
-        user_input = st.text_input("입력란", key="user_input")
+        user_input = st.text_area("입력란", key="user_input")
 
         if not is_bs_checked:
             head_format = get_format(user_input)
