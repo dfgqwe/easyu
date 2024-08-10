@@ -571,10 +571,27 @@ def moss_page():
 
 
 
+        # 여러 줄 입력을 허용하는 입력란
         user_input = st.text_area("입력란", key="user_input")
 
+        # 텍스트를 줄 단위로 나누기
+        lines = user_input.splitlines()
+
+        # 포맷팅된 결과를 저장할 리스트
+        formatted_lines = []
+
+        for i, line in enumerate(lines):
+            # "[현장TM]" 이후의 줄들은 줄바꿈 없이 이어붙임
+            if "[현장TM]" in line and i + 1 < len(lines):
+                formatted_lines.append(line + lines[i + 1])
+            elif "[현장TM]" not in line:
+                formatted_lines.append(line)
+
+        # 최종적으로 포맷팅된 텍스트
+        formatted_output = "\n".join(formatted_lines)
+
         if not is_bs_checked:
-            head_format = get_format(user_input)
+            head_format = get_format(formatted_lines)
             if head_format:
                 results.append(head_format)
 
@@ -653,7 +670,7 @@ def moss_page():
                     adapter_info = f" ({adapter_info.strip()})"
 
         # user_input에 어댑터 정보를 추가하여 출력
-        results.append(user_input + adapter_info)
+        results.append(formatted_lines + adapter_info)
         results.extend(db_results)
         results.extend(기타_results)
         results.append("수고하셨습니다")
