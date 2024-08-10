@@ -701,8 +701,12 @@ def moss_page():
             if location != "[현장TM]"
         ])
 
-        if not 현장TM_출동예방 and 현장TM_내용:
-            formatted_locations = f"[현장TM] {clear_tm_content(현장TM_내용)}" + (f" , {formatted_locations.strip()} 수정요청" if formatted_locations else "")
+        # [현장TM]이 선택되었으나 내용이 없을 경우 처리
+        if "[현장TM]" in selected_locations and not 현장TM_출동예방:
+            if 현장TM_내용:
+                formatted_locations = f"[현장TM] {clear_tm_content(현장TM_내용)}" + (f" , {formatted_locations.strip()} 수정요청" if formatted_locations else "")
+            else:
+                formatted_locations = "[현장TM]" + (f" , {formatted_locations.strip()} 수정요청" if formatted_locations else "")
         elif formatted_locations:
             formatted_locations = f"{formatted_locations.strip()} 수정요청"
 
