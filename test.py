@@ -581,10 +581,10 @@ def moss_page():
         formatted_lines = []
 
         for i, line in enumerate(lines):
-            # "[현장TM]" 이후의 줄들은 줄바꿈 없이 이어붙임
-            if "[현장TM]" in line and i + 1 < len(lines):
+            # "[현장]" 이후의 줄들은 줄바꿈 없이 이어붙임
+            if "[현장]" in line and i + 1 < len(lines):
                 formatted_lines.append(line + lines[i + 1])
-            elif "[현장TM]" not in line:
+            elif "[현장]" not in line:
                 formatted_lines.append(line)
 
         # 최종적으로 포맷팅된 텍스트
