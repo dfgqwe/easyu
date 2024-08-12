@@ -572,25 +572,18 @@ def moss_page():
         # 여러 줄 입력을 허용하는 입력란
         user_input = st.text_area("입력란", key="user_input")
 
-        # 입력된 텍스트에서 줄바꿈을 없앰
-        user_input = user_input.replace("\n", "").replace("\r", "")
-
-        # "[현장]" 앞의 공백 제거
-        if "[현장]" in user_input:
-            user_input = user_input[user_input.index("[현장]"):]
+        # 텍스트를 줄 단위로 나누기
+        lines = user_input.splitlines()
 
         # 포맷팅된 결과를 저장할 리스트
         formatted_lines = []
         combined_line = ""
 
-        # 텍스트를 줄 단위로 나누기
-        lines = user_input.splitlines()
-
         for i, line in enumerate(lines):
             line = line.lstrip()  # 줄 앞의 공백 제거
             if "[현장]" in line:
-                # "[현장]"이 포함된 줄부터 시작
-                combined_line = line
+                # "[현장]"이 포함된 줄 앞의 공백 제거
+                combined_line = line[line.index("[현장]"):]  # "[현장]" 포함된 줄부터 시작
             elif combined_line:
                 # combined_line이 이미 설정된 경우, 그 뒤에 이어 붙임
                 combined_line += line
@@ -602,6 +595,7 @@ def moss_page():
 
         # 리스트를 문자열로 변환
         formatted_output = "\n".join(formatted_lines)
+
 
 
 
