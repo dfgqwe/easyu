@@ -582,10 +582,11 @@ def moss_page():
         for i, line in enumerate(lines):
             line = line.strip()  # 줄바꿈을 제거하여 line에 저장
             if "[현장]" in line:
-                # "[현장]"이 포함된 줄을 combined_line에 저장
+                # "[현장]"이 포함된 줄이 첫 번째 줄이면 그 앞을 제거
+                line = line[line.index("[현장]"):]  # "[현장]" 이전의 텍스트를 제거
                 combined_line = line
             elif combined_line:
-                # combined_line이 이미 설정된 경우, 그 뒤에 이어 붙
+                # combined_line이 이미 설정된 경우, 그 뒤에 이어 붙임
                 combined_line += line
                 formatted_lines.append(combined_line)
                 combined_line = ""  # 초기화하여 다음 줄 처리에 영향 주지 않도록 함
@@ -595,6 +596,7 @@ def moss_page():
 
         # 리스트를 문자열로 변환
         formatted_output = "\n".join(formatted_lines)
+
 
 
         if not is_bs_checked:
