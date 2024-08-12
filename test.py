@@ -569,32 +569,32 @@ def moss_page():
                     if selected_option:
                         results.append(selected_option)
                         
-    # 여러 줄 입력을 허용하는 입력란
-    user_input = st.text_area("입력란", key="user_input")
+        # 여러 줄 입력을 허용하는 입력란
+        user_input = st.text_area("입력란", key="user_input")
 
-    # 텍스트를 줄 단위로 나누기
-    lines = user_input.splitlines()
+        # 텍스트를 줄 단위로 나누기
+        lines = user_input.splitlines()
 
-    # 포맷팅된 결과를 저장할 리스트
-    formatted_lines = []
-    combined_line = ""
+        # 포맷팅된 결과를 저장할 리스트
+        formatted_lines = []
+        combined_line = ""
 
-    for i, line in enumerate(lines):
-        line = line.strip()  # 줄바꿈을 제거하여 line에 저장
-        if "[현장]" in line:
-            # "[현장]"이 포함된 줄을 combined_line에 저장
-            combined_line = line
-        elif combined_line:
-            # combined_line이 이미 설정된 경우, 그 뒤에 이어 붙
-            combined_line += line
-            formatted_lines.append(combined_line)
-            combined_line = ""  # 초기화하여 다음 줄 처리에 영향 주지 않도록 함
-        else:
-            # "[현장]"이 없는 일반 줄은 그대로 추가
-            formatted_lines.append(line)
+        for i, line in enumerate(lines):
+            line = line.strip()  # 줄바꿈을 제거하여 line에 저장
+            if "[현장]" in line:
+                # "[현장]"이 포함된 줄을 combined_line에 저장
+                combined_line = line
+            elif combined_line:
+                # combined_line이 이미 설정된 경우, 그 뒤에 이어 붙
+                combined_line += line
+                formatted_lines.append(combined_line)
+                combined_line = ""  # 초기화하여 다음 줄 처리에 영향 주지 않도록 함
+            else:
+                # "[현장]"이 없는 일반 줄은 그대로 추가
+                formatted_lines.append(line)
 
-    # 리스트를 문자열로 변환
-    formatted_output = "\n".join(formatted_lines)
+        # 리스트를 문자열로 변환
+        formatted_output = "\n".join(formatted_lines)
 
 
         if not is_bs_checked:
