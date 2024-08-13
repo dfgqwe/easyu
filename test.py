@@ -583,7 +583,8 @@ def moss_page():
             line = line.lstrip()  # 줄 앞의 공백 제거
             if "[현장]" in line:
                 # "[현장]"이 포함된 줄 앞의 공백 제거
-                combined_line = line[line.index("[현장]"):]  # "[현장]" 포함된 줄부터 시작
+                line = line[line.index("[현장]"):]  # "[현장]" 포함된 줄부터 시작
+                combined_line = line
             elif combined_line:
                 # combined_line이 이미 설정된 경우, 그 뒤에 이어 붙임
                 combined_line += line
@@ -595,6 +596,7 @@ def moss_page():
 
         # 리스트를 문자열로 변환
         formatted_output = "\n".join(formatted_lines)
+
 
 
 
