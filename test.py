@@ -869,7 +869,7 @@ def command_page():
         st.session_state.last_active = time.time()
 
     # 일정 시간이 경과하면 세션 초기화 (예: 10초)
-    if time.time() - st.session_state.last_active > 10:
+    if time.time() - st.session_state.last_active > 300:
         st.session_state.command_logged_in = False
 
     # 비밀번호 입력 처리
@@ -960,10 +960,10 @@ def command_page():
                 st.image(image, caption='Local Image', use_column_width=True)
                 
         if content_option == "L2":
-            L2_option = st.radio("L2", ["V2724GB", "E5624R"])
+            L2_option = st.radio("L2", ["","V2724GB", "E5624R"])
             
         if content_option == "OLT":
-            OLT = st.radio("OLT", ["동원(소)", "다산(중)", "동원(대)", "유(대)"])
+            OLT = st.radio("OLT", ["","동원(소)", "다산(중)", "동원(대)", "유(대)"])
 
 
 
@@ -983,7 +983,7 @@ def manage_page():
         st.session_state.last_active = time.time()
 
     # 일정 시간이 경과하면 세션 초기화 (예: 10초)
-    if time.time() - st.session_state.last_active > 10:
+    if time.time() - st.session_state.last_active > 300:
         st.session_state.manage_logged_in = False
 
     # 비밀번호 입력 처리
