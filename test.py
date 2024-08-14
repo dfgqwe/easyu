@@ -874,7 +874,7 @@ def command_page():
 
     # 비밀번호 입력 처리
     if not st.session_state.command_logged_in:
-        password = st.text_input("명령어 페이지 비밀번호 입력", type="password")
+        password = st.text_input("비밀번호 입력", type="password")
 
         if password == commande_password:
             st.session_state.command_logged_in = True
@@ -901,19 +901,20 @@ def command_page():
     )
 
          # 비밀번호 입력 후에만 Radio 버튼을 표시
-        content_option = st.radio("장비선택", ["저속급L2", "L2", "L3", "OLT"])
+        content_option = st.radio("장비선택", ["저속급L2", "L2", "OLT"])
 
         if content_option == "저속급":
-            low_L2_option = st.radio("저속급 L2", ["저속급", "L2", "L3", "OLT"])
+            low_L2_option = st.radio("저속급 L2", ["MVD100XX", "U3024B/48A", "EX1172/LR", "HAMX6000", "DX6524", "IRT800"])
+            if low_L2_option == "MVD100XX":
+                csv_data = st.secrets["data"]["csv"]
+                df = pd.read_csv(StringIO(csv_data))
+                st.dataframe(df)
 
         if content_option == "L2":
-            L2_option = st.radio("L2", ["저속급", "L2", "L3", "OLT"])
-
-        if content_option == "L3":
-            L3_option = st.radio("L3", ["저속급", "L2", "L3", "OLT"])
+            L2_option = st.radio("L2", ["V2724GB", "E5624R"])
             
         if content_option == "OLT":
-            OLT = st.radio("OLT", ["저속급", "L2", "L3", "OLT"])
+            OLT = st.radio("OLT", ["동원(소)", "다산(중)", "동원(대)", "유(대)"])
 
 
 
@@ -938,7 +939,7 @@ def manage_page():
 
     # 비밀번호 입력 처리
     if not st.session_state.manage_logged_in:
-        password = st.text_input("명령어 페이지 비밀번호 입력", type="password")
+        password = st.text_input("비밀번호 입력", type="password")
 
         if password == manage_password:
             st.session_state.manage_logged_in = True
