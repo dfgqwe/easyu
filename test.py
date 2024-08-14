@@ -856,8 +856,61 @@ def worksync_page():
         else:
             st.text("Work-Sync(BS업무) 점검 대상 없습니다.")
 
+def command_page():
+    st.title("명령어")
 
-manage_password = "1234"
+    # Set session_state variables
+    if 'command_logged_in' not in st.session_state:
+        st.session_state.command_logged_in = False
+    if 'last_activity_time' not in st.session_state:
+        st.session_state.last_activity_time = time.time()
+
+    # Check if timeout (5 minutes) has passed since the last activity
+    if time.time() - st.session_state.last_activity_time > 300:
+        st.session_state.command_logged_in = False
+
+    if not st.session_state.command_logged_in:
+         password1 = st.text_input("명령어 페이지 비밀번호 입력", type="password")
+
+         if password1 == commande_password:
+             st.session_state.command_logged_in = True
+         elif password1:
+             st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
+             return
+    
+    if st.session_state.command_logged_in:
+        st.markdown(
+        """
+        <style>
+        .stRadio > div {
+            display: flex;
+            flex-direction: row;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+         # 비밀번호 입력 후에만 Radio 버튼을 표시
+        content_option = st.radio("장비선택", ["저속급L2", "L2", "L3", "OLT"])
+
+        if content_option == "저속급":
+            low_L2_option = st.radio("저속급 L2", ["저속급", "L2", "L3", "OLT"])
+
+        if content_option == "L2":
+            L2_option = st.radio("L2", ["저속급", "L2", "L3", "OLT"])
+
+        if content_option == "L3":
+            L3_option = st.radio("L3", ["저속급", "L2", "L3", "OLT"])
+            
+        else:
+            OLT = st.radio("OLT", ["저속급", "L2", "L3", "OLT"])
+
+
+
+
+
+
 def manage_page():
     st.title("Manage")
 
@@ -892,17 +945,6 @@ def manage_page():
         """,
         unsafe_allow_html=True
     )
-
-         # 비밀번호 입력 후에만 Radio 버튼을 표시
-        content_option = st.radio("인수 인계", ["주간", "야간"])
-
-        if content_option == "주간":
-            st.header("주간")
-            st.session_state.day_content = st.text_area("주간->야간 인수인계", st.session_state.get("day_content", ""), height=200)
-            st.write("재난 상황 : 7월 2일 ~ 7월 8일 ")
-        else:
-            st.header("야간")
-            st.session_state.night_content = st.text_area("야간->주간 인수인계", st.session_state.get("night_content", ""), height=200)
 
     if st.session_state.manage_logged_in:
          # IP 입력 받기
@@ -958,8 +1000,8 @@ def manage_page():
 if __name__ == "__main__":
     selected = option_menu(
         menu_title=None,  # 메뉴 제목 (원하지 않으면 None)
-        options=["Home", "MOSS", "Worksync", "Manage"],  # 옵션 이름들
-        icons=["house", "box-arrow-down", "calendar2-check", "gear"],  # 각 옵션에 해당하는 아이콘
+        options=["Home", "MOSS", "Worksync", "명령어", "Manage"],  # 옵션 이름들
+        icons=["house", "box-arrow-down", "calendar2-check", "menu-up", "gear"],  # 각 옵션에 해당하는 아이콘
         menu_icon="cast",  # 메뉴 아이콘
         default_index=0,  # 기본 선택 옵션
         orientation="horizontal"  # 메뉴 방향 (수평)
@@ -973,5 +1015,7 @@ if __name__ == "__main__":
         moss_page()
     elif selected == "Worksync":
         worksync_page()
+    elif selected == "명령어":
+        command_page()
     elif selected == "Manage":
         manage_page()
