@@ -907,9 +907,8 @@ def command_page():
         if content_option == "저속급L2":
             low_L2_option = st.radio("저속급 L2", ["MVD100XX", "U3024B/48A", "EX1172/LR", "HAMX6000", "DX6524", "IRT800"])
             if low_L2_option == "MVD100XX":
-                csv_data = st.secrets["data"]["csv"]
-                df = pd.read_csv(StringIO(csv_data))
-                st.dataframe(df)
+                low_L2 = pd.read_csv('com.csv', index_col=0)
+                st.dataframe(low_L2)
 
         if content_option == "L2":
             L2_option = st.radio("L2", ["V2724GB", "E5624R"])
