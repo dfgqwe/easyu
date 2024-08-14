@@ -880,6 +880,7 @@ def command_page():
             st.session_state.command_logged_in = True
             st.session_state.last_active = time.time()
             st.success("로그인 성공")
+            st.experimental_rerun()
         elif password:
             st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
     else:
@@ -944,6 +945,7 @@ def manage_page():
             st.session_state.manage_logged_in = True
             st.session_state.last_active = time.time()
             st.success("로그인 성공")
+            st.experimental_rerun()
         elif password:
             st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
     else:
