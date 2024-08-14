@@ -940,7 +940,7 @@ def manage_page():
     if not st.session_state.manage_logged_in:
         password = st.text_input("명령어 페이지 비밀번호 입력", type="password")
 
-        if password == commande_password:
+        if password == manage_password:
             st.session_state.manage_logged_in = True
             st.session_state.last_active = time.time()
             st.success("로그인 성공")
