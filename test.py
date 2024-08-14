@@ -910,7 +910,7 @@ def command_page():
 def manage_page():
     st.title("Manage")
     # secrets.toml 파일에서 비밀번호 가져오기
-    commande_password = st.secrets["manage"]["password"]
+    manage_password = st.secrets["manage"]["password"]
 
     if "manage_logged_in" not in st.session_state:
         st.session_state.manage_logged_in = False
