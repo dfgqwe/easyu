@@ -884,7 +884,6 @@ def command_page():
         elif password:
             st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
     else:
-        st.write("명령어 페이지에 접근할 수 있습니다.")
         st.session_state.last_active = time.time()  # 사용자가 페이지에 있을 때 시간 갱신
 
     
@@ -949,7 +948,6 @@ def manage_page():
         elif password:
             st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
     else:
-        st.write("명령어 페이지에 접근할 수 있습니다.")
         st.session_state.last_active = time.time()  # 사용자가 페이지에 있을 때 시간 갱신
     
     if st.session_state.manage_logged_in:
