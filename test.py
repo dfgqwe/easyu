@@ -901,10 +901,10 @@ def command_page():
     )
 
          # 비밀번호 입력 후에만 Radio 버튼을 표시
-        content_option = st.radio("장비선택", ["저속급L2", "L2", "OLT"])
+        content_option = st.radio("장비선택", ["","저속급L2", "L2", "OLT"])
 
         if content_option == "저속급L2":
-            low_L2_option = st.radio("저속급 L2", ["MVD100XX", "U3024B/48A", "EX1172/LR", "HAMX6000", "DX5624", "IRT800"])
+            low_L2_option = st.radio("저속급 L2", ["","MVD100XX", "U3024B/48A", "EX1172/LR", "HAMX6000", "DX5624", "IRT800"])
             if low_L2_option == "MVD100XX":
                 image_path = 'mvd.png'
 
