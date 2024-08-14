@@ -906,7 +906,7 @@ def command_page():
         if content_option == "저속급L2":
             low_L2_option = st.radio("저속급 L2", ["MVD100XX", "U3024B/48A", "EX1172/LR", "HAMX6000", "DX6524", "IRT800"])
             if low_L2_option == "MVD100XX":
-                image_path = 'mvd.jpg'
+                image_path = 'mvd.png'
 
                 # 이미지 열기
                 image = Image.open(image_path)
