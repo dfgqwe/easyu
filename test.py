@@ -13,7 +13,7 @@ from PIL import Image
 from io import BytesIO
 import traceback
 from datetime import datetime
-import openpyxl
+import pytz
 
 # 포맷 데이터 포멧
 formats = {
