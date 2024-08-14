@@ -861,17 +861,28 @@ def command_page():
     # secrets.toml 파일에서 비밀번호 가져오기
     commande_password = st.secrets["command"]["PASSWORD"]
 
+    # 'command_logged_in' 초기화
     if "command_logged_in" not in st.session_state:
         st.session_state.command_logged_in = False
+        st.session_state.last_active = time.time()
 
-    if not st.session_state.command_logged_in:
-        password1 = st.text_input("명령어 페이지 비밀번호 입력", type="password")
+    # 일정 시간이 경과하면 세션 초기화 (예: 10초)
+    if time.time() - st.session_state.last_active > 10:
+        st.session_state.command_logged_in = False
 
-        if password1 == commande_password:
+    # 비밀번호 입력 처리
+    if not st.session_state.manage_logged_in:
+        password = st.text_input("관리 페이지 비밀번호 입력", type="password")
+
+        if password == command_password:
             st.session_state.command_logged_in = True
+            st.session_state.last_active = time.time()
             st.success("로그인 성공")
-        elif password1:
+        elif password:
             st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
+    else:
+        st.write("관리 페이지에 접근할 수 있습니다.")
+        st.session_state.last_active = time.time()  # 사용자가 페이지에 있을 때 시간 갱신
 
     
     if st.session_state.command_logged_in:
@@ -912,17 +923,28 @@ def manage_page():
     # secrets.toml 파일에서 비밀번호 가져오기
     manage_password = st.secrets["manage"]["password"]
 
+    # 'manage_logged_in' 초기화
     if "manage_logged_in" not in st.session_state:
         st.session_state.manage_logged_in = False
+        st.session_state.last_active = time.time()
 
+    # 일정 시간이 경과하면 세션 초기화 (예: 10초)
+    if time.time() - st.session_state.last_active > 10:
+        st.session_state.manage_logged_in = False
+
+    # 비밀번호 입력 처리
     if not st.session_state.manage_logged_in:
-        password = st.text_input("명령어 페이지 비밀번호 입력", type="password")
+        password = st.text_input("관리 페이지 비밀번호 입력", type="password")
 
         if password == manage_password:
             st.session_state.manage_logged_in = True
+            st.session_state.last_active = time.time()
             st.success("로그인 성공")
         elif password:
             st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
+    else:
+        st.write("관리 페이지에 접근할 수 있습니다.")
+        st.session_state.last_active = time.time()  # 사용자가 페이지에 있을 때 시간 갱신
     
     if st.session_state.manage_logged_in:
         st.markdown(
