@@ -915,7 +915,7 @@ def command_page():
                 st.image(image, caption='Local Image', use_column_width=True)
 
             if low_L2_option == "U3024B/48A":
-                image_path = 'u3024B.png'
+                image_path = 'u3024.png'
 
                 # 이미지 열기
                 image = Image.open(image_path)
@@ -933,7 +933,7 @@ def command_page():
                 st.image(image, caption='Local Image', use_column_width=True)
 
             if low_L2_option == "HAMX6000":
-                image_path = 'HAMX6000.png'
+                image_path = 'haxm.png'
 
                 # 이미지 열기
                 image = Image.open(image_path)
