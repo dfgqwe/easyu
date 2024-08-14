@@ -896,7 +896,7 @@ def command_page():
         if content_option == "L3":
             L3_option = st.radio("L3", ["저속급", "L2", "L3", "OLT"])
             
-        else:
+        if content_option == "OLT":
             OLT = st.radio("OLT", ["저속급", "L2", "L3", "OLT"])
 
 
