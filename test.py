@@ -861,6 +861,9 @@ def command_page():
     # secrets.toml 파일에서 비밀번호 가져오기
     commande_password = st.secrets["command"]["PASSWORD"]
 
+    if "command_logged_in" not in st.session_state:
+        st.session_state.command_logged_in = False
+
     if not st.session_state.command_logged_in:
         password1 = st.text_input("명령어 페이지 비밀번호 입력", type="password")
 
@@ -909,6 +912,9 @@ def manage_page():
     # secrets.toml 파일에서 비밀번호 가져오기
     commande_password = st.secrets["manage"]["password"]
 
+    if "manage_logged_in" not in st.session_state:
+        st.session_state.manage_logged_in = False
+
     if not st.session_state.manage_logged_in:
         password = st.text_input("명령어 페이지 비밀번호 입력", type="password")
 
@@ -917,27 +923,6 @@ def manage_page():
             st.success("로그인 성공")
         elif password:
             st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
-
-
-
-    # Set session_state variables
-    if 'manage_logged_in' not in st.session_state:
-        st.session_state.manage_logged_in = False
-    if 'last_activity_time' not in st.session_state:
-        st.session_state.last_activity_time = time.time()
-
-    # Check if timeout (5 minutes) has passed since the last activity
-    if time.time() - st.session_state.last_activity_time > 300:
-        st.session_state.manage_logged_in = False
-
-    if not st.session_state.manage_logged_in:
-         password = st.text_input("Manage 페이지 비밀번호 입력", type="password")
-
-         if password == manage_password:
-             st.session_state.manage_logged_in = True
-         elif password:
-             st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
-             return
     
     if st.session_state.manage_logged_in:
         st.markdown(
