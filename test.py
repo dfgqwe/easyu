@@ -903,12 +903,29 @@ def command_page():
 
          # 비밀번호 입력 후에만 Radio 버튼을 표시
         content_option = st.radio("장비선택", ["저속급L2", "L2", "OLT"])
+        file_path = 'cpmm.xlsx
 
         if content_option == "저속급L2":
             low_L2_option = st.radio("저속급 L2", ["MVD100XX", "U3024B/48A", "EX1172/LR", "HAMX6000", "DX6524", "IRT800"])
             if low_L2_option == "MVD100XX":
-                low_L2 = pd.read_excel("cpmm.xlsx", sheet_name='U3024B')
-                st.dataframe(low_L2)
+                # 파일 경로에서 Excel 파일 로드
+                wb = openpyxl.load_workbook(file_path, data_only=True)
+
+                # 모든 시트 이름 가져오기
+                sheet_names = wb.sheetnames
+
+                # 'U3024B' 시트가 존재하는지 확인
+                if "U3024B" in sheet_names:
+                    selected_sheet = "U3024B"
+                    sheet = wb[selected_sheet]
+    
+                    # 시트의 데이터프레임 생성
+                    data = sheet.values
+                    columns = next(data)  # 헤더 추출
+                    df = pd.DataFrame(data, columns=columns)
+    
+                    # 데이터프레임을 화면에 표시
+                    st.dataframe(df)
 
         if content_option == "L2":
             L2_option = st.radio("L2", ["V2724GB", "E5624R"])
