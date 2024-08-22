@@ -667,21 +667,44 @@ def moss_page():
 
             if "CRC" in selected_actions:
                 crc_input = st.text_area("CRC 정보 입력:")
-                # Sum 값을 추출하는 정규 표현식
-                ul_rx_sum_pattern = re.compile(r'UL Rx\s+\d+\s+(\d+)\s+\d+')
-                dl_rx_sum_pattern = re.compile(r'DL Rx\s+\d+\s+(\d+)\s+\d+')
+                # 결과를 저장할 리스트
+                기타_results = []
 
-                ul_rx_sum_match = ul_rx_sum_pattern.search(crc_input)
-                dl_rx_sum_match = dl_rx_sum_pattern.search(crc_input)
+                # 형식 1: Upstream CRC32 / Downstream CRC32 형식
+                upstream_downstream_pattern = re.compile(r'\bUpstream CRC32\s+\|\s+Downstream CRC32\b')
+                upstream_crc_pattern = re.compile(r'\d+\s+\|\s+\d+')
 
-                if ul_rx_sum_match and dl_rx_sum_match:
-                    ul_rx_sum = ul_rx_sum_match.group(1)
-                    dl_rx_sum = dl_rx_sum_match.group(1)
- 
-                    기타_results.append(f"UL Rx: {ul_rx_sum}")
-                    기타_results.append(f"DL Rx: {dl_rx_sum}")
+                # 형식 2: UL Rx / DL Rx 형식
+                ul_rx_pattern = re.compile(r'UL Rx\s+\d+\s+(\d+)\s+\d+')
+                dl_rx_pattern = re.compile(r'DL Rx\s+\d+\s+(\d+)\s+\d+')
+
+                # 형식 1에 맞는지 확인
+                if upstream_downstream_pattern.search(crc_input):
+                    upstream_crc_match = upstream_crc_pattern.findall(crc_input)
+                    if upstream_crc_match:
+                        # 각 CRC 값 추출
+                        upstream_crc, downstream_crc = upstream_crc_match[0].split("|")
+                        기타_results.append(f"Upstream CRC32: {upstream_crc.strip()}")
+                        기타_results.append(f"Downstream CRC32: {downstream_crc.strip()}")
+                    else:
+                        기타_results.append("No matching Upstream/Downstream CRC32 data found.")
+    
+                # 형식 2에 맞는지 확인
+                elif ul_rx_pattern.search(crc_input) and dl_rx_pattern.search(crc_input):
+                    ul_rx_sum_match = ul_rx_pattern.search(crc_input)
+                    dl_rx_sum_match = dl_rx_pattern.search(crc_input)
+                    if ul_rx_sum_match and dl_rx_sum_match:
+                        ul_rx_sum = ul_rx_sum_match.group(1)
+                        dl_rx_sum = dl_rx_sum_match.group(1)
+                        기타_results.append(f"UL Rx Sum: {ul_rx_sum}")
+                        기타_results.append(f"DL Rx Sum: {dl_rx_sum}")
+                    
+                    else:
+                        기타_results.append("No matching UL Rx or DL Rx Sum data found.")
+    
+                # 아무 형식도 매칭되지 않을 경우
                 else:
-                    기타_results.append("No matching Sum data found.")
+                    기타_results.append("No matching data found.")
 
                     
             if "어댑터 전/후 작성" in selected_actions:
