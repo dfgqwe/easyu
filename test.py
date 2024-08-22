@@ -696,8 +696,8 @@ def moss_page():
                     if ul_rx_sum_match and dl_rx_sum_match:
                         ul_rx_sum = ul_rx_sum_match.group(1)
                         dl_rx_sum = dl_rx_sum_match.group(1)
-                        기타_results.append(f"UL Rx Sum: {ul_rx_sum}")
-                        기타_results.append(f"DL Rx Sum: {dl_rx_sum}")
+                        기타_results.append(f"UL Rx: {ul_rx_sum}")
+                        기타_results.append(f"DL Rx: {dl_rx_sum}")
                     
                     else:
                         기타_results.append("No matching UL Rx or DL Rx Sum data found.")
