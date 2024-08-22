@@ -667,20 +667,22 @@ def moss_page():
 
             if "CRC" in selected_actions:
                 crc_input = st.text_area("CRC 정보 입력:")
-                ul_rx_pattern = re.compile(r'UL Rx\s+(\d+)\s+(\d+)\s+(\d+)')
-                dl_rx_pattern = re.compile(r'DL Rx\s+(\d+)\s+(\d+)\s+(\d+)')
+                # Sum 값을 추출하는 정규 표현식
+                ul_rx_sum_pattern = re.compile(r'UL Rx\s+\d+\s+(\d+)\s+\d+')
+                dl_rx_sum_pattern = re.compile(r'DL Rx\s+\d+\s+(\d+)\s+\d+')
 
-                ul_rx_match = ul_rx_pattern.search(crc_input)
-                dl_rx_match = dl_rx_pattern.search(crc_input)
+                ul_rx_sum_match = ul_rx_sum_pattern.search(crc_input)
+                dl_rx_sum_match = dl_rx_sum_pattern.search(crc_input)
 
-                if ul_rx_match and dl_rx_match:
-                    ul_rx_values = ul_rx_match.groups()
-                    dl_rx_values = dl_rx_match.groups()
-
-                    기타_results.append(f"UL Rx Values: {ul_rx_values}")
-                    기타_results.append(f"DL Rx Values: {dl_rx_values}")
+                if ul_rx_sum_match and dl_rx_sum_match:
+                    ul_rx_sum = ul_rx_sum_match.group(1)
+                    dl_rx_sum = dl_rx_sum_match.group(1)
+ 
+                    기타_results.append(f"UL Rx Sum: {ul_rx_sum}")
+                    기타_results.append(f"DL Rx Sum: {dl_rx_sum}")
                 else:
-                    기타_results.append("UL Rx or DL Rx data found.")
+                    기타_results.append("No matching Sum data found.")
+
                     
             if "어댑터 전/후 작성" in selected_actions:
                 col1, col2 = st.columns(2)
