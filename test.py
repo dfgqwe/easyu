@@ -167,6 +167,7 @@ B_S_head_formats = {
     "DB 삭제 여부",
     "광레벨 확인",
     "어댑터 전/후 작성",
+    "CRC"
     "원격조치(리부팅)",
     "원격조치(포트리셋)",
     "원격조치(포트BLK)",
@@ -663,6 +664,23 @@ def moss_page():
                         combined_values += f"ddm: {ddm_value}"
         
                     기타_results.append(combined_values)
+
+            if "CRC" in selected_actions:
+                crc_input = st.text_area("CRC 정보 입력:")
+                ul_rx_pattern = re.compile(r'UL Rx\s+(\d+)\s+(\d+)\s+(\d+)')
+                dl_rx_pattern = re.compile(r'DL Rx\s+(\d+)\s+(\d+)\s+(\d+)')
+
+                ul_rx_match = ul_rx_pattern.search(crc_input)
+                dl_rx_match = dl_rx_pattern.search(crc_input)
+
+                if ul_rx_match and dl_rx_match:
+                    ul_rx_values = ul_rx_match.groups()
+                    dl_rx_values = dl_rx_match.groups()
+
+                    기타_results.append(f"UL Rx Values: {ul_rx_values}")
+                    기타_results.append(f"DL Rx Values: {dl_rx_values}")
+                else:
+                    기타_results.append("UL Rx or DL Rx data found.")
                     
             if "어댑터 전/후 작성" in selected_actions:
                 col1, col2 = st.columns(2)
