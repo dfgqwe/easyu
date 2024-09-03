@@ -870,7 +870,7 @@ def moss_page():
 
                 
 # Worksync 페이지
-def worksync_page():  
+def worksync_page():
     st.title("Worksync")
 
     # 데이터 파일 불러오기
@@ -891,13 +891,18 @@ def worksync_page():
         if ip_input in df_no_duplicates['장비ID'].values:
             # 해당 IP의 사업장 찾기
             address = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]['사업장'].values[0]
-            st.write("★동일국소 점검 대상★")
-            
-            same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
-            for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
-                st.text(f"{idx}.{row['장비명/국사명']} - {row['업무명']}({row['장비ID']})")
+
+            # Check if the address is "#VALUE!"
+            if address == "#VALUE!":
+                st.text("Work-Sync(BS업무) 점검 대상 없습니다.")
+            else:
+                st.write("★동일국소 점검 대상★")
+                same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
+                for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
+                    st.text(f"{idx}.{row['장비명/국사명']} - {row['업무명']}({row['장비ID']})")
         else:
             st.text("Work-Sync(BS업무) 점검 대상 없습니다.")
+
 
 def command_page():
     st.title("명령어")
