@@ -894,7 +894,7 @@ def worksync_page():
 
             # Check if the address is "#VALUE!"
             if address == "#VALUE!":
-                st.text("Work-Sync(BS업무) 점검 대상 없습니다.")
+                st.text("데이터 값 오류(#VALUE!)")
             else:
                 st.write("★동일국소 점검 대상★")
                 same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
