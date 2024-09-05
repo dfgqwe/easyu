@@ -895,17 +895,17 @@ def worksync_page():
             # Check if the address is "#VALUE!"
             if address == "#VALUE!":
                 result_text = "데이터 값 오류(#VALUE!)"
-                st.text(result_text)
+ 
             else:
                 result_text = "★동일국소 점검 대상★\n"
                 same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
                 for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
                     line = f"{idx}. {row['장비명/국사명']} - {row['업무명']}({row['장비ID']})"
                     result_text += line + "\n"
-                    st.text(line)
+
         else:
             result_text = "Work-Sync(BS업무) 점검 대상 없습니다."
- 
+  
 
     # 복사 버튼과 JavaScript 코드 추가
     if result_text:
