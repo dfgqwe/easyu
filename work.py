@@ -49,3 +49,17 @@ def worksync_page():
         else:
             st.text("Work-Sync(BS업무) 점검 대상 없습니다.")
 
+# Streamlit 애플리케이션 실행
+if __name__ == "__main__":
+    selected = option_menu(
+        menu_title=None,  # 메뉴 제목 (원하지 않으면 None)
+        options=["Worksync"],  # 옵션 이름들
+        icons=["calendar2-check"],  # 각 옵션에 해당하는 아이콘
+        menu_icon="cast",  # 메뉴 아이콘
+        default_index=0,  # 기본 선택 옵션
+        orientation="horizontal"  # 메뉴 방향 (수평)
+    )
+
+
+    if selected == "Worksync":
+        worksync_page()
