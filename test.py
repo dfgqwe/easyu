@@ -356,6 +356,9 @@ def moss_page():
     st.title("MOSS 회복 문구")
 
     df1 = pd.read_csv('bs_head.csv')
+    timezone = pytz.timezone('Asia/Seoul')  # 한국 시간대로 설정
+    now = datetime.now(timezone)
+    current_date = now.strftime("%y.%m.%d")
 
     # Streamlit 애플리케이션
     with st.expander('MOSS BS 발행 HEAD'):
@@ -783,13 +786,11 @@ def moss_page():
             formatted_locations = f"{formatted_locations.strip()} 수정요청"
 
         if formatted_locations:
-            results.append(f"<현장> {formatted_locations}")
+            results.append(f"[{current_date}]<현장> {formatted_locations}")
 
 
         col1, col2 = st.columns(2)
-        timezone = pytz.timezone('Asia/Seoul')  # 한국 시간대로 설정
-        now = datetime.now(timezone)
-        current_date = now.strftime("%y.%m.%d")
+        
         with col1:
            namecard_count = st.number_input("명함형 갯수:", min_value=0, step=1, key="namecard_count")
        
