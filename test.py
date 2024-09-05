@@ -867,10 +867,6 @@ def moss_page():
 
 
 
-
-
-                
-# Worksync 페이지
 def worksync_page():
     st.title("Worksync")
 
@@ -885,7 +881,10 @@ def worksync_page():
 
     # IP 입력 받기
     ip_input = st.text_input("IP 입력", "").replace(" ", "")
-    
+
+    # 결과를 저장할 빈 문자열
+    result_text = ""
+
     # IP 입력이 있을 경우
     if ip_input:
         # 입력된 IP에 해당되는 행 찾기
@@ -895,14 +894,39 @@ def worksync_page():
 
             # Check if the address is "#VALUE!"
             if address == "#VALUE!":
-                st.text("데이터 값 오류(#VALUE!)")
+                result_text = "데이터 값 오류(#VALUE!)"
+                st.text(result_text)
             else:
-                st.write("★동일국소 점검 대상★")
+                result_text = "★동일국소 점검 대상★\n"
                 same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
                 for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
-                    st.text(f"{idx}.{row['장비명/국사명']} - {row['업무명']}({row['장비ID']})")
+                    line = f"{idx}. {row['장비명/국사명']} - {row['업무명']}({row['장비ID']})"
+                    result_text += line + "\n"
+                    st.text(line)
         else:
-            st.text("Work-Sync(BS업무) 점검 대상 없습니다.")
+            result_text = "Work-Sync(BS업무) 점검 대상 없습니다."
+            st.text(result_text)
+
+    # 복사 버튼과 JavaScript 코드 추가
+    if result_text:
+        st.text_area("결과", result_text, height=200)
+        copy_button = """
+        <button onclick="copyToClipboard()">Copy to Clipboard</button>
+        <script>
+        function copyToClipboard() {
+            var copyText = document.getElementById("copy-area");
+            navigator.clipboard.writeText(copyText.value).then(function() {
+                alert('복사되었습니다!');
+            }, function(err) {
+                alert('복사 실패: ', err);
+            });
+        }
+        </script>
+        """
+
+        # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
+        st.text_area("복사할 내용", result_text, id="copy-area", height=200)
+        st.components.v1.html(copy_button, height=50)
 
 
 def command_page():
