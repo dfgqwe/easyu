@@ -910,11 +910,13 @@ def worksync_page():
     # 복사 버튼과 JavaScript 코드 추가
     if result_text:
         st.text_area("결과", result_text, height=200)
+
+        # 복사 기능을 위한 HTML 버튼과 JavaScript 코드 추가
         copy_button = """
         <button onclick="copyToClipboard()">Copy to Clipboard</button>
         <script>
         function copyToClipboard() {
-            var copyText = document.getElementById("copy-area");
+            var copyText = document.getElementById('result_area');
             navigator.clipboard.writeText(copyText.value).then(function() {
                 alert('복사되었습니다!');
             }, function(err) {
@@ -925,8 +927,10 @@ def worksync_page():
         """
 
         # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
-        st.text_area("복사할 내용", result_text, id="copy-area", height=200)
-        st.components.v1.html(copy_button, height=50)
+        st.components.v1.html(f"""
+            <textarea id="result_area" style="display:none;">{result_text}</textarea>
+            {copy_button}
+        """, height=50)
 
 
 def command_page():
