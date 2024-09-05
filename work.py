@@ -48,18 +48,22 @@ def worksync_page():
                     st.text(f"{idx}.{row['장비명/국사명']} - {row['업무명']}({row['장비ID']})")
         else:
             st.text("Work-Sync(BS업무) 점검 대상 없습니다.")
+def manage_page():
+    st.title("manage")
 
-# Streamlit 애플리케이션 실행
+
 if __name__ == "__main__":
     selected = option_menu(
         menu_title=None,  # 메뉴 제목 (원하지 않으면 None)
-        options=["Worksync"],  # 옵션 이름들
-        icons=["calendar2-check"],  # 각 옵션에 해당하는 아이콘
+        options=["Worksync", "Manage"],  # 옵션 이름들
+        icons=["calendar2-check", "gear"],  # 각 옵션에 해당하는 아이콘
         menu_icon="cast",  # 메뉴 아이콘
         default_index=0,  # 기본 선택 옵션
         orientation="horizontal"  # 메뉴 방향 (수평)
     )
 
-
     if selected == "Worksync":
         worksync_page()
+
+    elif selected == "Manage":
+        manage_page()
