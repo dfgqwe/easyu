@@ -905,7 +905,7 @@ def worksync_page():
                     st.text(line)
         else:
             result_text = "Work-Sync(BS업무) 점검 대상 없습니다."
-            st.text(result_text)
+ 
 
     # 복사 버튼과 JavaScript 코드 추가
     if result_text:
