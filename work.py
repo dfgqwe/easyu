@@ -1,34 +1,20 @@
-{
- "cells": [
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "36f6b342-19a6-4f78-9064-b8f6eb18b76a",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import streamlit as st\n",
-    "import pandas as pd\n",
-    "import pyperclip\n",
-    "import re\n",
-    "from streamlit_option_menu import option_menu\n",
-    "import os\n",
-    "import requests\n",
-    "from github import Github\n",
-    "import time\n",
-    "import xml.etree.ElementTree as ET\n",
-    "from urllib.request import urlopen\n",
-    "from PIL import Image\n",
-    "from io import BytesIO\n",
-    "import traceback\n",
-    "from datetime import datetime\n",
-    "import pytz\n",
-    "\n",
-    "\n",
-    "\n",
-    "\n",
-    "\n",
-    "                \n",
+import streamlit as st
+import pandas as pd
+import pyperclip
+import re
+from streamlit_option_menu import option_menu
+import os
+import requests
+from github import Github
+import time
+import xml.etree.ElementTree as ET
+from urllib.request import urlopen
+from PIL import Image
+from io import BytesIO
+import traceback
+from datetime import datetime
+import pytz
+
     "# Worksync 페이지\n",
     "def worksync_page():\n",
     "    st.title(\"Worksync\")\n",
