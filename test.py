@@ -954,7 +954,7 @@ def worksync_page():
         <button onclick="copyToClipboard()">복사하기</button>
         <script>
         function copyToClipboard() {
-                        var copyText = document.getElementById('output_area');
+                        var copyText = document.getElementById('result_area');
                         navigator.clipboard.writeText(copyText.value).then(function() {
                             var alertBox = document.createElement('div');
                             alertBox.textContent = '복사되었습니다!';
