@@ -827,7 +827,7 @@ def moss_page():
                 # 복사 버튼과 JavaScript 코드 추가
                 if st.session_state['output_active']:
                     copy_button = """
-                    <button onclick="copyToClipboard()">Copy to Clipboard</button>
+                    <button onclick="copyToClipboard()">복사하기</button>
                     <script>
                     function copyToClipboard() {
                         var copyText = document.getElementById('output_area');
