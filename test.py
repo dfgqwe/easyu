@@ -847,7 +847,7 @@ def moss_page():
                             // 5초 후 알림 제거
                             setTimeout(function() {
                                 alertBox.remove();
-                            }, 5000);
+                            }, 3000);
                         }, function(err) {
                             alert('복사 실패: ', err);
                         });
@@ -954,15 +954,30 @@ def worksync_page():
         <button onclick="copyToClipboard()">Copy to Clipboard</button>
         <script>
         function copyToClipboard() {
-            var copyText = document.getElementById('result_area');
-            navigator.clipboard.writeText(copyText.value).then(function() {
-                alert('복사되었습니다!');
-            }, function(err) {
-                alert('복사 실패: ', err);
-            });
-        }
-        </script>
-        """
+                        var copyText = document.getElementById('output_area');
+                        navigator.clipboard.writeText(copyText.value).then(function() {
+                            var alertBox = document.createElement('div');
+                            alertBox.textContent = '복사되었습니다!';
+                            alertBox.style.position = 'fixed';
+                            alertBox.style.bottom = '10px';
+                            alertBox.style.left = '50%';
+                            alertBox.style.transform = 'translateX(-50%)';
+                            alertBox.style.backgroundColor = '#4CAF50';
+                            alertBox.style.color = 'white';
+                            alertBox.style.padding = '10px';
+                            alertBox.style.borderRadius = '5px';
+                            document.body.appendChild(alertBox);
+
+                            // 5초 후 알림 제거
+                            setTimeout(function() {
+                                alertBox.remove();
+                            }, 3000);
+                        }, function(err) {
+                            alert('복사 실패: ', err);
+                        });
+                    }
+                    </script>
+                    """
 
         # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
         st.components.v1.html(f"""
