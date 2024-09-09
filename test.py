@@ -951,7 +951,7 @@ def worksync_page():
 
         # 복사 기능을 위한 HTML 버튼과 JavaScript 코드 추가
         copy_button = """
-        <button onclick="copyToClipboard()">Copy to Clipboard</button>
+        <button onclick="copyToClipboard()">복사하기</button>
         <script>
         function copyToClipboard() {
                         var copyText = document.getElementById('output_area');
