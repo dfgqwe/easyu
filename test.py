@@ -815,13 +815,51 @@ def moss_page():
 
         col1, col2, col3 = st.columns([2.8, 0.5, 0.7])
 
+        output_text = "\n".join(results)
+
         with col1:
             if st.button("출력"):
                 st.session_state['output_active'] = True
                 st.session_state['button_clicked'] = False
                 st.session_state['reset_active'] = False
-                output_text = "\n".join(results)  # Join results with new lines for the desired format
+
                 st.text(output_text)  # Print output_text when the "출력" button is pressed
+                # 복사 버튼과 JavaScript 코드 추가
+                if st.session_state['output_active']:
+                    copy_button = """
+                    <button onclick="copyToClipboard()">Copy to Clipboard</button>
+                    <script>
+                    function copyToClipboard() {
+                        var copyText = document.getElementById('output_area');
+                        navigator.clipboard.writeText(copyText.value).then(function() {
+                            var alertBox = document.createElement('div');
+                            alertBox.textContent = '복사되었습니다!';
+                            alertBox.style.position = 'fixed';
+                            alertBox.style.bottom = '10px';
+                            alertBox.style.left = '50%';
+                            alertBox.style.transform = 'translateX(-50%)';
+                            alertBox.style.backgroundColor = '#4CAF50';
+                            alertBox.style.color = 'white';
+                            alertBox.style.padding = '10px';
+                            alertBox.style.borderRadius = '5px';
+                            document.body.appendChild(alertBox);
+
+                            // 5초 후 알림 제거
+                            setTimeout(function() {
+                                alertBox.remove();
+                            }, 5000);
+                        }, function(err) {
+                            alert('복사 실패: ', err);
+                        });
+                    }
+                    </script>
+                    """
+
+                    # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
+                    st.components.v1.html(f"""
+                        <textarea id="output_area" style="display:none;">{output_text}</textarea>
+                        {copy_button}
+                    """, height=50)
 
 
         with col2:
