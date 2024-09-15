@@ -1079,7 +1079,7 @@ def command_page():
                 # 포트/슬롯 입력란 표시
                 if st.session_state.get("show_port_slot_input", False):
                     port_slot = st.text_input("포트/슬롯 입력 (형식: 1/3)", placeholder="예: 1/3")
-                    
+
                     if port_slot:
                         # 명령어에 포트/슬롯 입력값을 추가하여 출력
                         command1 = f"sh epon rssi rx-pwr-periodic {port_slot}"
