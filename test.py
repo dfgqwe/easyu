@@ -1036,19 +1036,19 @@ def command_page():
         # 비밀번호 입력 후에만 Radio 버튼을 표시
         content_option = st.radio("장비선택", ["", "다산", "유비쿼스"])
 
+        # 다산 선택 시 명령어 표시
         if content_option == "다산":
             if ip_address:
-                command = f"sh epon ip-macs all all | inc {ip_address}"
-                st.write(command)
+                result_text = f"sh epon ip-macs all all | inc {ip_address}"
+                st.text_area("결과", result_text, height=200)
 
-                # 명령어 복사 버튼 추가
-                copy_button = f"""
-                <textarea id="result_area" style="display:none;">{command}</textarea>
+                # 복사 기능을 위한 HTML 버튼과 JavaScript 코드 추가
+                copy_button = """
                 <button onclick="copyToClipboard()">복사하기</button>
                 <script>
-                function copyToClipboard() {{
+                function copyToClipboard() {
                     var copyText = document.getElementById('result_area');
-                    navigator.clipboard.writeText(copyText.value).then(function() {{
+                    navigator.clipboard.writeText(copyText.value).then(function() {
                         var alertBox = document.createElement('div');
                         alertBox.textContent = '복사되었습니다!';
                         alertBox.style.position = 'fixed';
@@ -1062,20 +1062,24 @@ def command_page():
                         document.body.appendChild(alertBox);
 
                         // 3초 후 알림 제거
-                        setTimeout(function() {{
+                        setTimeout(function() {
                             alertBox.remove();
-                        }}, 3000);
-                    }}, function(err) {{
+                        }, 3000);
+                    }, function(err) {
                         alert('복사 실패: ', err);
-                    }});
-                }}
+                    });
+                }
                 </script>
                 """
-                components.html(copy_button)
+
+                # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
+                st.components.v1.html(f"""
+                    <textarea id="result_area" style="display:none;">{result_text}</textarea>
+                    {copy_button}
+                """, height=50)
 
             else:
                 st.warning("IP를 입력해주세요.")
-
 
 
 
