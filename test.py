@@ -1107,7 +1107,7 @@ def command_page():
             # Port/Slot 입력 및 전체/특정 선택
             with st.container():
                 port_slot = st.text_input("Port/Slot (형식: 1/3)", "")
-                selection = st.selectbox("선택", ["전체", "특정"])
+                selection = st.radio"선택", ["전체", "특정onu"])
 
                 if port_slot:
                     if selection == "전체":
@@ -1117,9 +1117,9 @@ def command_page():
                         sh epon onu-ddm {port_slot} all
                         sh epon crc-monitoring statistics {port_slot} all
                         """
-                    elif selection == "특정":
+                    elif selection == "특정onu":
                         # 특정 선택 시 명령어 구성
-                        specific_value = st.text_input("특정 값 입력", "")
+                        specific_value = st.text_input("onu 입력", "")
                         if specific_value:
                             result_text_port_slot = f"""
                             sh epon rssi rx-pwr-periodic {port_slot} {specific_value}
@@ -1127,7 +1127,7 @@ def command_page():
                             sh epon crc-monitoring statistics {port_slot} {specific_value}
                             """
                         else:
-                            result_text_port_slot = "특정 값을 입력해 주세요."
+                            result_text_port_slot = "onu를 입력해 주세요."
 
                     st.text_area("Port/Slot 입력 결과", result_text_port_slot, height=100)
 
