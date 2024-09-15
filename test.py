@@ -989,68 +989,26 @@ def worksync_page():
 
 def command_page():
     st.title("명령어")
-    # secrets.toml 파일에서 비밀번호 가져오기
-    commande_password = st.secrets["command"]["PASSWORD"]
-
-    # 'command_logged_in' 및 'last_active' 초기화
-    if "command_logged_in" not in st.session_state:
-        st.session_state.command_logged_in = False
-
-    if "last_active" not in st.session_state:
-        st.session_state.last_active = time.time()
-
-    # 일정 시간이 경과하면 세션 초기화 (예: 10초)
-    if time.time() - st.session_state.last_active > 300:
-        st.session_state.command_logged_in = False
-
-    # 비밀번호 입력 처리
-    if not st.session_state.command_logged_in:
-        password = st.text_input("비밀번호 입력", type="password")
-
-        if password == commande_password:
-            st.session_state.command_logged_in = True
-            st.session_state.last_active = time.time()
-            st.success("로그인 성공")
-            st.experimental_rerun()
-        elif password:
-            st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
-    else:
-        st.session_state.last_active = time.time()  # 사용자가 페이지에 있을 때 시간 갱신
-
-    
-    if st.session_state.command_logged_in:
-        st.markdown(
-        """
-        <style>
-        .stRadio > div {
-            display: flex;
-            flex-direction: row;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-    if st.session_state.command_logged_in:
-        st.markdown(
-        """
-        <style>
-        .stRadio > div {
-            display: flex;
-            flex-direction: row;
-        }
-        .stButton {
-            margin: 0;
-        }
-        .command-container {
-            display: flex;
-            gap: 10px;
-        }
-        .command-item {
-            flex: 1;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
+    st.markdown(
+    """
+    <style>
+    .stRadio > div {
+         display: flex;
+          flex-direction: row;
+    }
+    .stButton {
+        margin: 0;
+    }
+     .command-container {
+           display: flex;
+           gap: 10px;
+       }
+      .command-item {
+           flex: 1;
+       }
+    </style>
+    """,
+    unsafe_allow_html=True
     )
 
     # IP 입력란 생성
