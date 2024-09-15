@@ -1030,6 +1030,29 @@ def command_page():
         """,
         unsafe_allow_html=True
     )
+    if st.session_state.command_logged_in:
+        st.markdown(
+        """
+        <style>
+        .stRadio > div {
+            display: flex;
+            flex-direction: row;
+        }
+        .stButton {
+            margin: 0;
+        }
+        .command-container {
+            display: flex;
+            gap: 10px;
+        }
+        .command-item {
+            flex: 1;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
         # IP 입력란 생성
         olt_ip_address = st.text_input("IP 입력", "")
 
@@ -1038,60 +1061,16 @@ def command_page():
 
         if content_option == "다산":
             if olt_ip_address:
+                # Create container with flex layout
+                st.markdown('<div class="command-container">', unsafe_allow_html=True)
+
                 # IP 입력에 대한 결과 출력
-                result_text_ip = "sh epon ip-macs all all | inc {}".format(olt_ip_address)
-                st.text_area("IP 입력 결과", result_text_ip, height=100)
+                with st.container():
+                    result_text_ip = "sh epon ip-macs all all | inc {}".format(olt_ip_address)
+                    st.text_area("IP 입력 결과", result_text_ip, height=100)
 
-                copy_button_ip = """
-                <button onclick="copyToClipboard('result_area_ip')">복사하기</button>
-                <script>
-                function copyToClipboard(elementId) {
-                    var copyText = document.getElementById(elementId);
-                    navigator.clipboard.writeText(copyText.value).then(function() {
-                        var alertBox = document.createElement('div');
-                        alertBox.textContent = '복사되었습니다!';
-                        alertBox.style.position = 'fixed';
-                        alertBox.style.bottom = '10px';
-                        alertBox.style.left = '50%';
-                        alertBox.style.transform = 'translateX(-50%)';
-                        alertBox.style.backgroundColor = '#4CAF50';
-                        alertBox.style.color = 'white';
-                        alertBox.style.padding = '10px';
-                        alertBox.style.borderRadius = '5px';
-                        document.body.appendChild(alertBox);
-
-                        // 5초 후 알림 제거
-                        setTimeout(function() {
-                            alertBox.remove();
-                        }, 3000);
-                    }, function(err) {
-                        alert('복사 실패: ', err);
-                    });
-                }
-                </script>
-                """
-
-                # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
-                components.html(f"""
-                    <textarea id="result_area_ip" style="display:none;">{result_text_ip}</textarea>
-                    {copy_button_ip}
-                """, height=150)
-
-                # Port/Slot 입력 및 전체/특정 선택
-                port_slot = st.text_input("Port/Slot (형식: 1/3)", "")
-                selection = st.selectbox("선택", ["전체", "특정"])
-
-                if port_slot and selection == "전체":
-                    # 전체 선택 시 명령어 구성
-                    result_text_port_slot = f"""
-                    sh epon rssi rx-pwr-periodic {port_slot} all
-                    sh epon onu-ddm {port_slot} all
-                    sh epon crc-monitoring statistics {port_slot} all
-                    """
-                    st.text_area("Port/Slot 입력 결과", result_text_port_slot, height=100)
-
-                    copy_button_port_slot = """
-                    <button onclick="copyToClipboard('result_area_port_slot')">복사하기</button>
+                    copy_button_ip = """
+                    <button onclick="copyToClipboard('result_area_ip')">복사하기</button>
                     <script>
                     function copyToClipboard(elementId) {
                         var copyText = document.getElementById(elementId);
@@ -1121,9 +1100,60 @@ def command_page():
 
                     # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
                     components.html(f"""
-                        <textarea id="result_area_port_slot" style="display:none;">{result_text_port_slot}</textarea>
-                        {copy_button_port_slot}
+                        <textarea id="result_area_ip" style="display:none;">{result_text_ip}</textarea>
+                        {copy_button_ip}
                     """, height=150)
+
+                # Port/Slot 입력 및 전체/특정 선택
+                with st.container():
+                    port_slot = st.text_input("Port/Slot (형식: 1/3)", "")
+                    selection = st.selectbox("선택", ["전체", "특정"])
+
+                    if port_slot and selection == "전체":
+                        # 전체 선택 시 명령어 구성
+                        result_text_port_slot = f"""
+                        sh epon rssi rx-pwr-periodic {port_slot} all
+                        sh epon onu-ddm {port_slot} all
+                        sh epon crc-monitoring statistics {port_slot} all
+                        """
+                        st.text_area("Port/Slot 입력 결과", result_text_port_slot, height=100)
+
+                        copy_button_port_slot = """
+                        <button onclick="copyToClipboard('result_area_port_slot')">복사하기</button>
+                        <script>
+                        function copyToClipboard(elementId) {
+                            var copyText = document.getElementById(elementId);
+                            navigator.clipboard.writeText(copyText.value).then(function() {
+                                var alertBox = document.createElement('div');
+                                alertBox.textContent = '복사되었습니다!';
+                                alertBox.style.position = 'fixed';
+                                alertBox.style.bottom = '10px';
+                                alertBox.style.left = '50%';
+                                alertBox.style.transform = 'translateX(-50%)';
+                                alertBox.style.backgroundColor = '#4CAF50';
+                                alertBox.style.color = 'white';
+                                alertBox.style.padding = '10px';
+                                alertBox.style.borderRadius = '5px';
+                                document.body.appendChild(alertBox);
+
+                                // 5초 후 알림 제거
+                                setTimeout(function() {
+                                    alertBox.remove();
+                                }, 3000);
+                            }, function(err) {
+                                alert('복사 실패: ', err);
+                            });
+                        }
+                        </script>
+                        """
+
+                        # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
+                        components.html(f"""
+                            <textarea id="result_area_port_slot" style="display:none;">{result_text_port_slot}</textarea>
+                            {copy_button_port_slot}
+                        """, height=150)
+
+                st.markdown('</div>', unsafe_allow_html=True)
 
 
 
