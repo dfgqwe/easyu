@@ -1043,61 +1043,19 @@ def command_page():
                 result_text = f"sh epon ip-macs all all | inc {ip_address}"
                 st.text_area("결과", result_text, height=200)
 
-                # 복사 기능을 위한 HTML 버튼과 JavaScript 코드 추가
-                copy_button = """
-                <button onclick="copyToClipboard()">복사하기</button>
-                <script>
-                function copyToClipboard() {
-                    var copyText = document.getElementById('result_area');
-                    navigator.clipboard.writeText(copyText.value).then(function() {
-                        var alertBox = document.createElement('div');
-                        alertBox.textContent = '복사되었습니다! 포트/슬롯을 입력하세요.';
-                        alertBox.style.position = 'fixed';
-                        alertBox.style.bottom = '10px';
-                        alertBox.style.left = '50%';
-                        alertBox.style.transform = 'translateX(-50%)';
-                        alertBox.style.backgroundColor = '#4CAF50';
-                        alertBox.style.color = 'white';
-                        alertBox.style.padding = '10px';
-                        alertBox.style.borderRadius = '5px';
-                        document.body.appendChild(alertBox);
-
-                        // 3초 후 알림 제거
-                        setTimeout(function() {
-                            alertBox.remove();
-                        }, 3000);
-                    }, function(err) {
-                        alert('복사 실패: ', err);
-                    });
-
-                    // 포트/슬롯 입력란 표시 (Streamlit 함수 호출을 위한 표시)
-                    window.parent.postMessage({'display_input': true}, '*');
-                }
-                </script>
-                """
-
-                # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
-                st.components.v1.html(f"""
-                    <textarea id="result_area" style="display:none;">{result_text}</textarea>
-                    {copy_button}
-                """, height=50)
-
-                # 포트/슬롯 입력란 표시 여부를 제어하는 상태값
-                if "display_port_slot_input" not in st.session_state:
-                    st.session_state.display_port_slot_input = False
-
-                # JavaScript에서 보낸 메시지를 처리하여 입력란을 표시
-                message = st.experimental_get_query_params().get('display_input', False)
-                if message == 'true' or st.session_state.display_port_slot_input:
-                    st.session_state.display_port_slot_input = True
-
-                # 포트/슬롯 입력란을 표시
-                if st.session_state.display_port_slot_input:
+                # 복사 기능 버튼을 누르면 상태값 변경
+                if st.button("복사하기"):
+                    st.session_state.show_port_slot_input = True
+                    st.success("복사되었습니다! 포트/슬롯을 입력하세요.")
+                
+                # 포트/슬롯 입력란 표시
+                if st.session_state.get("show_port_slot_input", False):
                     port_slot = st.text_input("포트/슬롯 입력 (형식: 1/3)", placeholder="예: 1/3")
                     if port_slot:
                         st.write(f"입력한 포트/슬롯: {port_slot}")
             else:
                 st.warning("IP를 입력해주세요.")
+
 
 
 
