@@ -1053,7 +1053,7 @@ def command_page():
         unsafe_allow_html=True
     )
 
-       # IP 입력란 생성
+        # IP 입력란 생성
         olt_ip_address = st.text_input("IP 입력", "")
 
         # 비밀번호 입력 후에만 Radio 버튼을 표시
@@ -1071,15 +1071,25 @@ def command_page():
 
                     copy_button_ip = """
                     <button onclick="copyToClipboard('result_area_ip')">복사하기</button>
-                    <div id="alert_box_ip" class="alert-box">복사되었습니다!</div>
                     <script>
                     function copyToClipboard(elementId) {
                         var copyText = document.getElementById(elementId);
                         navigator.clipboard.writeText(copyText.value).then(function() {
-                            var alertBox = document.getElementById('alert_box_ip');
-                            alertBox.style.display = 'block';
+                            var alertBox = document.createElement('div');
+                            alertBox.textContent = '복사되었습니다!';
+                            alertBox.style.position = 'fixed';
+                            alertBox.style.bottom = '10px';
+                            alertBox.style.left = '50%';
+                            alertBox.style.transform = 'translateX(-50%)';
+                            alertBox.style.backgroundColor = '#4CAF50';
+                            alertBox.style.color = 'white';
+                            alertBox.style.padding = '10px';
+                            alertBox.style.borderRadius = '5px';
+                            document.body.appendChild(alertBox);
+
+                            // 5초 후 알림 제거
                             setTimeout(function() {
-                                alertBox.style.display = 'none';
+                                alertBox.remove();
                             }, 3000);
                         }, function(err) {
                             alert('복사 실패: ', err);
@@ -1110,15 +1120,25 @@ def command_page():
 
                         copy_button_port_slot = """
                         <button onclick="copyToClipboard('result_area_port_slot')">복사하기</button>
-                        <div id="alert_box_port_slot" class="alert-box">복사되었습니다!</div>
                         <script>
                         function copyToClipboard(elementId) {
                             var copyText = document.getElementById(elementId);
                             navigator.clipboard.writeText(copyText.value).then(function() {
-                                var alertBox = document.getElementById('alert_box_port_slot');
-                                alertBox.style.display = 'block';
+                                var alertBox = document.createElement('div');
+                                alertBox.textContent = '복사되었습니다!';
+                                alertBox.style.position = 'fixed';
+                                alertBox.style.bottom = '10px';
+                                alertBox.style.left = '50%';
+                                alertBox.style.transform = 'translateX(-50%)';
+                                alertBox.style.backgroundColor = '#4CAF50';
+                                alertBox.style.color = 'white';
+                                alertBox.style.padding = '10px';
+                                alertBox.style.borderRadius = '5px';
+                                document.body.appendChild(alertBox);
+
+                                // 5초 후 알림 제거
                                 setTimeout(function() {
-                                    alertBox.style.display = 'none';
+                                    alertBox.remove();
                                 }, 3000);
                             }, function(err) {
                                 alert('복사 실패: ', err);
