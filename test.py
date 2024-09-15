@@ -1051,8 +1051,8 @@ def command_page():
 
                     <script>
                     function copyToClipboard(elementId) {
-                        var copyText = document.getElementById(elementId);
-                        navigator.clipboard.writeText(copyText.value).then(function() {
+                        var copyText = document.getElementById(elementId).value;
+                        navigator.clipboard.writeText(copyText).then(function() {
                             var alertBox = document.createElement('div');
                             alertBox.textContent = '복사되었습니다!';
                             alertBox.style.position = 'fixed';
@@ -1100,8 +1100,8 @@ def command_page():
 
                             <script>
                             function copyToClipboard(elementId) {
-                                var copyText = document.getElementById(elementId);
-                                navigator.clipboard.writeText(copyText.value).then(function() {
+                                var copyText = document.getElementById(elementId).value;
+                                navigator.clipboard.writeText(copyText).then(function() {
                                     var alertBox = document.createElement('div');
                                     alertBox.textContent = '복사되었습니다!';
                                     alertBox.style.position = 'fixed';
