@@ -1038,9 +1038,21 @@ def command_page():
 
         if content_option == "다산":
             if olt_ip_address:
-                # 결과 출력
-                result_text = "sh epon ip-macs all all | inc {}".format(olt_ip_address)
-                st.text_area("결과", result_text, height=100)  # 높이를 100픽셀로 설정
+                # Port/Slot 입력 및 전체/특정 선택
+                port_slot = st.text_input("Port/Slot (형식: 1/3)", "")
+                selection = st.selectbox("선택", ["전체", "특정"])
+
+                if port_slot and selection == "전체":
+                    # 전체 선택 시 명령어 구성
+                    result_text = f"""
+                    sh epon rssi rx-pwr-periodic {port_slot} all
+                    sh epon onu-ddm {port_slot} all
+                    sh epon crc-monitoring statistics {port_slot} all
+                    """
+                else:
+                    result_text = "Port/Slot 값을 입력해주세요."
+
+                st.text_area("결과", result_text, height=150)
 
                 copy_button = """
                 <button onclick="copyToClipboard()">복사하기</button>
@@ -1075,11 +1087,7 @@ def command_page():
                 components.html(f"""
                     <textarea id="result_area" style="display:none;">{result_text}</textarea>
                     {copy_button}
-                    <div>
-                        <label for="port-slot">Port/Slot (형식: 1/3):</label>
-                        <input type="text" id="port-slot" name="port-slot" placeholder="Port/Slot (형식: 1/3)">
-                    </div>
-                """, height=150)
+                """, height=180)
 
 
 
