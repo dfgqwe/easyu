@@ -1040,7 +1040,7 @@ def command_page():
             if ip_address:
                 # 결과 출력
                 result_text = "sh epon ip-macs all all | inc {}".format(ip_address)
-                st.text_area("결과", result_text, height=100)
+                st.text_area("결과", result_text, height=50)
                 copy_button = """
                 <button onclick="copyToClipboard()">복사하기</button>
                 <script>
