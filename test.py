@@ -1037,17 +1037,45 @@ def command_page():
         # 비밀번호 입력 후에만 Radio 버튼을 표시
         content_option = st.radio("장비선택", ["", "다산", "유비쿼스"])
 
-        # 다산 선택 시 명령어 표시
         if content_option == "다산":
             if ip_address:
+                # 결과 출력
                 result_text = f"sh epon ip-macs all all | inc {ip_address}"
                 st.text_area("결과", result_text, height=200)
 
-                # 복사 기능 버튼을 누르면 상태값 변경
-                if st.button("복사하기"):
-                    st.session_state.show_port_slot_input = True
-                    st.success("복사되었습니다! 포트/슬롯을 입력하세요.")
-                
+                # 복사 기능을 위한 HTML 버튼과 JavaScript 코드 추가
+                st.components.v1.html(f"""
+                    <textarea id="result_area" style="display:none;">{result_text}</textarea>
+
+                    <button onclick="copyToClipboard('result_area')">결과 복사하기</button>
+
+                    <script>
+                    function copyToClipboard(elementId) {
+                        var copyText = document.getElementById(elementId);
+                        navigator.clipboard.writeText(copyText.value).then(function() {
+                            var alertBox = document.createElement('div');
+                            alertBox.textContent = '복사되었습니다!';
+                            alertBox.style.position = 'fixed';
+                            alertBox.style.bottom = '10px';
+                            alertBox.style.left = '50%';
+                            alertBox.style.transform = 'translateX(-50%)';
+                            alertBox.style.backgroundColor = '#4CAF50';
+                            alertBox.style.color = 'white';
+                            alertBox.style.padding = '10px';
+                            alertBox.style.borderRadius = '5px';
+                            document.body.appendChild(alertBox);
+
+                            // 3초 후 알림 제거
+                            setTimeout(function() {
+                                alertBox.remove();
+                            }, 3000);
+                        }, function(err) {
+                            alert('복사 실패: ' + err);
+                        });
+                    }
+                    </script>
+                """, height=100)
+
                 # 포트/슬롯 입력란 표시
                 if st.session_state.get("show_port_slot_input", False):
                     port_slot = st.text_input("포트/슬롯 입력 (형식: 1/3)", placeholder="예: 1/3")
@@ -1059,9 +1087,50 @@ def command_page():
                         command3 = f"sh epon crc-monitoring statistics {port_slot}"
 
                         st.write(f"입력한 포트/슬롯: {port_slot}")
-                        st.text_area("명령어 1", command1, height=100)
-                        st.text_area("명령어 2", command2, height=100)
-                        st.text_area("명령어 3", command3, height=100)
+
+                        # 복사 기능을 위한 HTML 버튼과 JavaScript 코드 추가
+                        st.components.v1.html(f"""
+                            <textarea id="result_area_1" style="display:none;">{command1}</textarea>
+                            <textarea id="result_area_2" style="display:none;">{command2}</textarea>
+                            <textarea id="result_area_3" style="display:none;">{command3}</textarea>
+
+                            <button onclick="copyToClipboard('result_area_1')">명령어 1 복사하기</button>
+                            <button onclick="copyToClipboard('result_area_2')">명령어 2 복사하기</button>
+                            <button onclick="copyToClipboard('result_area_3')">명령어 3 복사하기</button>
+
+                            <script>
+                            function copyToClipboard(elementId) {
+                                var copyText = document.getElementById(elementId);
+                                navigator.clipboard.writeText(copyText.value).then(function() {
+                                    var alertBox = document.createElement('div');
+                                    alertBox.textContent = '복사되었습니다!';
+                                    alertBox.style.position = 'fixed';
+                                    alertBox.style.bottom = '10px';
+                                    alertBox.style.left = '50%';
+                                    alertBox.style.transform = 'translateX(-50%)';
+                                    alertBox.style.backgroundColor = '#4CAF50';
+                                    alertBox.style.color = 'white';
+                                    alertBox.style.padding = '10px';
+                                    alertBox.style.borderRadius = '5px';
+                                    document.body.appendChild(alertBox);
+
+                                    // 3초 후 알림 제거
+                                    setTimeout(function() {
+                                        alertBox.remove();
+                                    }, 3000);
+                                }, function(err) {
+                                    alert('복사 실패: ' + err);
+                                });
+                            }
+                            </script>
+                        """, height=200)
+                else:
+                    st.warning("포트/슬롯을 입력해주세요.")
+
+                # 복사하기 버튼 클릭 시 상태값 변경
+                if st.button("복사하기"):
+                    st.session_state.show_port_slot_input = True
+                    st.success("복사되었습니다! 포트/슬롯을 입력하세요.")
             else:
                 st.warning("IP를 입력해주세요.")
 
