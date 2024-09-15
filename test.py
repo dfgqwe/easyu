@@ -1332,7 +1332,7 @@ def manage_page():
 if __name__ == "__main__":
     selected = option_menu(
         menu_title=None,  # 메뉴 제목 (원하지 않으면 None)
-        options=["Home", "MOSS", "Worksync", "명령어", "Manage"],  # 옵션 이름들
+        options=["Home", "MOSS", "Worksync", "olt명령어", "Manage"],  # 옵션 이름들
         icons=["house", "box-arrow-down", "calendar2-check", "menu-up", "gear"],  # 각 옵션에 해당하는 아이콘
         menu_icon="cast",  # 메뉴 아이콘
         default_index=0,  # 기본 선택 옵션
@@ -1347,7 +1347,7 @@ if __name__ == "__main__":
         moss_page()
     elif selected == "Worksync":
         worksync_page()
-    elif selected == "명령어":
+    elif selected == "olt명령어":
         command_page()
     elif selected == "Manage":
         manage_page()
