@@ -1030,6 +1030,7 @@ def command_page():
         unsafe_allow_html=True
     )
         
+
         # IP 입력란 생성
         ip_address = st.text_input("IP 입력", "")
 
@@ -1050,7 +1051,7 @@ def command_page():
                     var copyText = document.getElementById('result_area');
                     navigator.clipboard.writeText(copyText.value).then(function() {
                         var alertBox = document.createElement('div');
-                        alertBox.textContent = '복사되었습니다!';
+                        alertBox.textContent = '복사되었습니다! 포트/슬롯을 입력하세요.';
                         alertBox.style.position = 'fixed';
                         alertBox.style.bottom = '10px';
                         alertBox.style.left = '50%';
@@ -1065,6 +1066,10 @@ def command_page():
                         setTimeout(function() {
                             alertBox.remove();
                         }, 3000);
+
+                        // 포트/슬롯 입력란을 표시
+                        var portSlotInput = document.getElementById('port_slot_input');
+                        portSlotInput.style.display = 'block';
                     }, function(err) {
                         alert('복사 실패: ', err);
                     });
@@ -1078,9 +1083,16 @@ def command_page():
                     {copy_button}
                 """, height=50)
 
+                # 포트/슬롯 입력란을 숨김 상태로 추가
+                st.markdown("""
+                <div id="port_slot_input" style="display:none;">
+                    <label for="port_slot">포트/슬롯 입력 (형식: 1/3)</label>
+                    <input type="text" id="port_slot" name="port_slot" placeholder="예: 1/3">
+                </div>
+                """, unsafe_allow_html=True)
+
             else:
                 st.warning("IP를 입력해주세요.")
-
 
 
 
