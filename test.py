@@ -1040,41 +1040,48 @@ def command_page():
             if olt_ip_address:
                 # 결과 출력
                 result_text = "sh epon ip-macs all all | inc {}".format(olt_ip_address)
-                st.text_area("결과", result_text, height=10)
+                st.text_area("결과", result_text, height=100)  # 높이를 100픽셀로 설정
+
                 copy_button = """
                 <button onclick="copyToClipboard()">복사하기</button>
                 <script>
                 function copyToClipboard() {
-                                var copyText = document.getElementById('result_area');
-                                navigator.clipboard.writeText(copyText.value).then(function() {
-                                    var alertBox = document.createElement('div');
-                                    alertBox.textContent = '복사되었습니다!';
-                                    alertBox.style.position = 'fixed';
-                                    alertBox.style.bottom = '10px';
-                                    alertBox.style.left = '50%';
-                                    alertBox.style.transform = 'translateX(-50%)';
-                                    alertBox.style.backgroundColor = '#4CAF50';
-                                    alertBox.style.color = 'white';
-                                    alertBox.style.padding = '10px';
-                                    alertBox.style.borderRadius = '5px';
-                                    document.body.appendChild(alertBox);
+                    var copyText = document.getElementById('result_area');
+                    navigator.clipboard.writeText(copyText.value).then(function() {
+                        var alertBox = document.createElement('div');
+                        alertBox.textContent = '복사되었습니다!';
+                        alertBox.style.position = 'fixed';
+                        alertBox.style.bottom = '10px';
+                        alertBox.style.left = '50%';
+                        alertBox.style.transform = 'translateX(-50%)';
+                        alertBox.style.backgroundColor = '#4CAF50';
+                        alertBox.style.color = 'white';
+                        alertBox.style.padding = '10px';
+                        alertBox.style.borderRadius = '5px';
+                        document.body.appendChild(alertBox);
 
-                                    // 5초 후 알림 제거
-                                    setTimeout(function() {
-                                        alertBox.remove();
-                                    }, 3000);
-                                }, function(err) {
-                                    alert('복사 실패: ', err);
-                                });
-                            }
-                            </script>
-                            """
+                        // 5초 후 알림 제거
+                        setTimeout(function() {
+                            alertBox.remove();
+                        }, 3000);
+                    }, function(err) {
+                        alert('복사 실패: ', err);
+                    });
+                }
+                </script>
+                """
 
                 # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
-                st.components.v1.html(f"""
+                components.html(f"""
                     <textarea id="result_area" style="display:none;">{result_text}</textarea>
                     {copy_button}
-                """, height=50)
+                    <div>
+                        <label for="port">Port:</label>
+                        <input type="text" id="port" name="port" placeholder="Port">
+                        <label for="slot">Slot:</label>
+                        <input type="text" id="slot" name="slot" placeholder="Slot">
+                    </div>
+                """, height=150)
 
 
 
