@@ -1031,15 +1031,15 @@ def command_page():
         unsafe_allow_html=True
     )
         # IP 입력란 생성
-        ip_address = st.text_input("IP 입력", "")
+        olt_ip_address = st.text_input("IP 입력", "")
 
         # 비밀번호 입력 후에만 Radio 버튼을 표시
         content_option = st.radio("장비선택", ["", "다산", "유비쿼스"])
 
         if content_option == "다산":
-            if ip_address:
+            if olt_ip_address:
                 # 결과 출력
-                result_text = "sh epon ip-macs all all | inc {}".format(ip_address)
+                result_text = "sh epon ip-macs all all | inc {}".format(olt_ip_address)
                 st.text_area("결과", result_text, height=10)
                 copy_button = """
                 <button onclick="copyToClipboard()">복사하기</button>
