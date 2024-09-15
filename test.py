@@ -1051,8 +1051,17 @@ def command_page():
                 # 포트/슬롯 입력란 표시
                 if st.session_state.get("show_port_slot_input", False):
                     port_slot = st.text_input("포트/슬롯 입력 (형식: 1/3)", placeholder="예: 1/3")
+                    
                     if port_slot:
+                        # 명령어에 포트/슬롯 입력값을 추가하여 출력
+                        command1 = f"sh epon rssi rx-pwr-periodic {port_slot}"
+                        command2 = f"sh epon onu-ddm {port_slot}"
+                        command3 = f"sh epon crc-monitoring statistics {port_slot}"
+
                         st.write(f"입력한 포트/슬롯: {port_slot}")
+                        st.text_area("명령어 1", command1, height=100)
+                        st.text_area("명령어 2", command2, height=100)
+                        st.text_area("명령어 3", command3, height=100)
             else:
                 st.warning("IP를 입력해주세요.")
 
