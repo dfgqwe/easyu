@@ -1029,71 +1029,24 @@ def command_page():
         """,
         unsafe_allow_html=True
     )
+        
+        # IP 입력란 생성
+        ip_address = st.text_input("IP 입력", "")
 
-         # 비밀번호 입력 후에만 Radio 버튼을 표시
-        content_option = st.radio("장비선택", ["","저속급L2", "L2", "OLT"])
+        # 비밀번호 입력 후에만 Radio 버튼을 표시
+        content_option = st.radio("장비선택", ["", "다산", "유비쿼스"])
 
-        if content_option == "저속급L2":
-            low_L2_option = st.radio("저속급 L2", ["","MVD100XX", "U3024B/48A", "EX1172/LR", "HAMX6000", "DX5624", "IRT800"])
-            if low_L2_option == "MVD100XX":
-                image_path = 'mvd.png'
-
-                # 이미지 열기
-                image = Image.open(image_path)
-
-                # 이미지 표시
-                st.image(image, caption='Local Image', use_column_width=True)
-
-            if low_L2_option == "U3024B/48A":
-                image_path = 'u3024.png'
-
-                # 이미지 열기
-                image = Image.open(image_path)
-
-                # 이미지 표시
-                st.image(image, caption='Local Image', use_column_width=True)
-
-            if low_L2_option == "EX1172/LR":
-                image_path = '1172.png'
-
-                # 이미지 열기
-                image = Image.open(image_path)
-
-                # 이미지 표시
-                st.image(image, caption='Local Image', use_column_width=True)
-
-            if low_L2_option == "HAMX6000":
-                image_path = 'haxm.png'
-
-                # 이미지 열기
-                image = Image.open(image_path)
-
-                # 이미지 표시
-                st.image(image, caption='Local Image', use_column_width=True)
-
-            if low_L2_option == "DX5624":
-                image_path = 'dx5624.png'
-
-                # 이미지 열기
-                image = Image.open(image_path)
-
-                # 이미지 표시
-                st.image(image, caption='Local Image', use_column_width=True)
-
-            if low_L2_option == "IRT800":
-                image_path = 'irt.png'
-
-                # 이미지 열기
-                image = Image.open(image_path)
-
-                # 이미지 표시
-                st.image(image, caption='Local Image', use_column_width=True)
-                
-        if content_option == "L2":
-            L2_option = st.radio("L2", ["","V2724GB", "E5624R"])
+        if content_option == "다산":
+            if ip_address:
+                st.write(f"sh epon ip-macs all all | inc {ip_address}")
+            else:
+                st.warning("IP를 입력해주세요.")
             
-        if content_option == "OLT":
-            OLT = st.radio("OLT", ["","동원(소)", "다산(중)", "동원(대)", "유(대)"])
+
+
+
+
+
 
 
 
