@@ -14,6 +14,7 @@ from io import BytesIO
 import traceback
 from datetime import datetime
 import pytz
+import streamlit.components.v1 as components
 
 # 포맷 데이터 포멧
 formats = {
@@ -1040,15 +1041,13 @@ content_option = st.radio("장비선택", ["", "다산", "유비쿼스"])
 if content_option == "다산":
     if ip_address:
         # 결과 출력
-        result_text = f"sh epon ip-macs all all | inc {ip_address}"
+        result_text = "sh epon ip-macs all all | inc {}".format(ip_address)
         st.text_area("결과", result_text, height=200)
 
         # 복사 기능을 위한 HTML 버튼과 JavaScript 코드 추가
-        components.html(f"""
-            <textarea id="result_area" style="display:none;">{result_text.replace('<', '\\u003c').replace('>', '\\u003e')}</textarea>
-
+        html_code = """
+            <textarea id="result_area" style="display:none;">{}</textarea>
             <button onclick="copyToClipboard('result_area')">결과 복사하기</button>
-
             <script>
             function copyToClipboard(elementId) {
                 var copyText = document.getElementById(elementId).value;
@@ -1064,7 +1063,6 @@ if content_option == "다산":
                     alertBox.style.padding = '10px';
                     alertBox.style.borderRadius = '5px';
                     document.body.appendChild(alertBox);
-
                     // 3초 후 알림 제거
                     setTimeout(function() {
                         alertBox.remove();
@@ -1074,7 +1072,9 @@ if content_option == "다산":
                 });
             }
             </script>
-        """, height=100)
+        """.format(result_text.replace('<', '&lt;').replace('>', '&gt;'))
+
+        components.html(html_code, height=100)
 
         # 포트/슬롯 입력란 표시
         if st.session_state.get("show_port_slot_input", False):
@@ -1082,22 +1082,20 @@ if content_option == "다산":
 
             if port_slot:
                 # 명령어에 포트/슬롯 입력값을 추가하여 출력
-                command1 = f"sh epon rssi rx-pwr-periodic {port_slot}"
-                command2 = f"sh epon onu-ddm {port_slot}"
-                command3 = f"sh epon crc-monitoring statistics {port_slot}"
+                command1 = "sh epon rssi rx-pwr-periodic {}".format(port_slot)
+                command2 = "sh epon onu-ddm {}".format(port_slot)
+                command3 = "sh epon crc-monitoring statistics {}".format(port_slot)
 
                 st.write(f"입력한 포트/슬롯: {port_slot}")
 
                 # 복사 기능을 위한 HTML 버튼과 JavaScript 코드 추가
-                components.html(f"""
-                    <textarea id="result_area_1" style="display:none;">{command1.replace('<', '\\u003c').replace('>', '\\u003e')}</textarea>
-                    <textarea id="result_area_2" style="display:none;">{command2.replace('<', '\\u003c').replace('>', '\\u003e')}</textarea>
-                    <textarea id="result_area_3" style="display:none;">{command3.replace('<', '\\u003c').replace('>', '\\u003e')}</textarea>
-
+                html_code = """
+                    <textarea id="result_area_1" style="display:none;">{}</textarea>
+                    <textarea id="result_area_2" style="display:none;">{}</textarea>
+                    <textarea id="result_area_3" style="display:none;">{}</textarea>
                     <button onclick="copyToClipboard('result_area_1')">명령어 1 복사하기</button>
                     <button onclick="copyToClipboard('result_area_2')">명령어 2 복사하기</button>
                     <button onclick="copyToClipboard('result_area_3')">명령어 3 복사하기</button>
-
                     <script>
                     function copyToClipboard(elementId) {
                         var copyText = document.getElementById(elementId).value;
@@ -1113,7 +1111,6 @@ if content_option == "다산":
                             alertBox.style.padding = '10px';
                             alertBox.style.borderRadius = '5px';
                             document.body.appendChild(alertBox);
-
                             // 3초 후 알림 제거
                             setTimeout(function() {
                                 alertBox.remove();
@@ -1123,7 +1120,13 @@ if content_option == "다산":
                         });
                     }
                     </script>
-                """, height=200)
+                """.format(
+                    command1.replace('<', '&lt;').replace('>', '&gt;'),
+                    command2.replace('<', '&lt;').replace('>', '&gt;'),
+                    command3.replace('<', '&lt;').replace('>', '&gt;')
+                )
+
+                components.html(html_code, height=200)
         else:
             st.warning("포트/슬롯을 입력해주세요.")
 
