@@ -1038,16 +1038,43 @@ def command_page():
 
         if content_option == "다산":
             if ip_address:
-                st.write(f"sh epon ip-macs all all | inc {ip_address}")
+                command = f"sh epon ip-macs all all | inc {ip_address}"
+                st.write(command)
+
+                # 명령어 복사 버튼 추가
+                copy_button = f"""
+                <textarea id="result_area" style="display:none;">{command}</textarea>
+                <button onclick="copyToClipboard()">복사하기</button>
+                <script>
+                function copyToClipboard() {{
+                    var copyText = document.getElementById('result_area');
+                    navigator.clipboard.writeText(copyText.value).then(function() {{
+                        var alertBox = document.createElement('div');
+                        alertBox.textContent = '복사되었습니다!';
+                        alertBox.style.position = 'fixed';
+                        alertBox.style.bottom = '10px';
+                        alertBox.style.left = '50%';
+                        alertBox.style.transform = 'translateX(-50%)';
+                        alertBox.style.backgroundColor = '#4CAF50';
+                        alertBox.style.color = 'white';
+                        alertBox.style.padding = '10px';
+                        alertBox.style.borderRadius = '5px';
+                        document.body.appendChild(alertBox);
+
+                        // 3초 후 알림 제거
+                        setTimeout(function() {{
+                            alertBox.remove();
+                        }}, 3000);
+                    }}, function(err) {{
+                        alert('복사 실패: ', err);
+                    }});
+                }}
+                </script>
+                """
+                components.html(copy_button)
+
             else:
                 st.warning("IP를 입력해주세요.")
-            
-
-
-
-
-
-
 
 
 
