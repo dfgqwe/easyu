@@ -1071,25 +1071,15 @@ def command_page():
 
                     copy_button_ip = """
                     <button onclick="copyToClipboard('result_area_ip')">복사하기</button>
+                    <div id="alert_box_ip" class="alert-box">복사되었습니다!</div>
                     <script>
                     function copyToClipboard(elementId) {
                         var copyText = document.getElementById(elementId);
                         navigator.clipboard.writeText(copyText.value).then(function() {
-                            var alertBox = document.createElement('div');
-                            alertBox.textContent = '복사되었습니다!';
-                            alertBox.style.position = 'fixed';
-                            alertBox.style.bottom = '10px';
-                            alertBox.style.left = '50%';
-                            alertBox.style.transform = 'translateX(-50%)';
-                            alertBox.style.backgroundColor = '#4CAF50';
-                            alertBox.style.color = 'white';
-                            alertBox.style.padding = '10px';
-                            alertBox.style.borderRadius = '5px';
-                            document.body.appendChild(alertBox);
-
-                            // 5초 후 알림 제거
+                            var alertBox = document.getElementById('alert_box_ip');
+                            alertBox.style.display = 'block';
                             setTimeout(function() {
-                                alertBox.remove();
+                                alertBox.style.display = 'none';
                             }, 3000);
                         }, function(err) {
                             alert('복사 실패: ', err);
@@ -1120,25 +1110,15 @@ def command_page():
 
                         copy_button_port_slot = """
                         <button onclick="copyToClipboard('result_area_port_slot')">복사하기</button>
+                        <div id="alert_box_port_slot" class="alert-box">복사되었습니다!</div>
                         <script>
                         function copyToClipboard(elementId) {
                             var copyText = document.getElementById(elementId);
                             navigator.clipboard.writeText(copyText.value).then(function() {
-                                var alertBox = document.createElement('div');
-                                alertBox.textContent = '복사되었습니다!';
-                                alertBox.style.position = 'fixed';
-                                alertBox.style.bottom = '10px';
-                                alertBox.style.left = '50%';
-                                alertBox.style.transform = 'translateX(-50%)';
-                                alertBox.style.backgroundColor = '#4CAF50';
-                                alertBox.style.color = 'white';
-                                alertBox.style.padding = '10px';
-                                alertBox.style.borderRadius = '5px';
-                                document.body.appendChild(alertBox);
-
-                                // 5초 후 알림 제거
+                                var alertBox = document.getElementById('alert_box_port_slot');
+                                alertBox.style.display = 'block';
                                 setTimeout(function() {
-                                    alertBox.remove();
+                                    alertBox.style.display = 'none';
                                 }, 3000);
                             }, function(err) {
                                 alert('복사 실패: ', err);
@@ -1151,6 +1131,40 @@ def command_page():
                         components.html(f"""
                             <textarea id="result_area_port_slot" style="display:none;">{result_text_port_slot}</textarea>
                             {copy_button_port_slot}
+                        """, height=150)
+
+                    elif port_slot and selection == "특정":
+                        # 특정 선택 시 명령어 구성
+                        result_text_port_slot_specific = f"""
+                        sh epon rssi rx-pwr-periodic {port_slot}
+                        sh epon onu-ddm {port_slot}
+                        sh epon crc-monitoring statistics {port_slot}
+                        """
+                        st.text_area("Port/Slot 입력 결과", result_text_port_slot_specific, height=100)
+
+                        copy_button_port_slot_specific = """
+                        <button onclick="copyToClipboard('result_area_port_slot_specific')">복사하기</button>
+                        <div id="alert_box_port_slot_specific" class="alert-box">복사되었습니다!</div>
+                        <script>
+                        function copyToClipboard(elementId) {
+                            var copyText = document.getElementById(elementId);
+                            navigator.clipboard.writeText(copyText.value).then(function() {
+                                var alertBox = document.getElementById('alert_box_port_slot_specific');
+                                alertBox.style.display = 'block';
+                                setTimeout(function() {
+                                    alertBox.style.display = 'none';
+                                }, 3000);
+                            }, function(err) {
+                                alert('복사 실패: ', err);
+                            });
+                        }
+                        </script>
+                        """
+
+                        # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
+                        components.html(f"""
+                            <textarea id="result_area_port_slot_specific" style="display:none;">{result_text_port_slot_specific}</textarea>
+                            {copy_button_port_slot_specific}
                         """, height=150)
 
                 st.markdown('</div>', unsafe_allow_html=True)
