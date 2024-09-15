@@ -1066,13 +1066,12 @@ def command_page():
                         setTimeout(function() {
                             alertBox.remove();
                         }, 3000);
-
-                        // 포트/슬롯 입력란을 표시
-                        var portSlotInput = document.getElementById('port_slot_input');
-                        portSlotInput.style.display = 'block';
                     }, function(err) {
                         alert('복사 실패: ', err);
                     });
+
+                    // 포트/슬롯 입력란 표시 (Streamlit 함수 호출을 위한 표시)
+                    window.parent.postMessage({'display_input': true}, '*');
                 }
                 </script>
                 """
@@ -1083,14 +1082,20 @@ def command_page():
                     {copy_button}
                 """, height=50)
 
-                # 포트/슬롯 입력란을 숨김 상태로 추가
-                st.markdown("""
-                <div id="port_slot_input" style="display:none;">
-                    <label for="port_slot">포트/슬롯 입력 (형식: 1/3)</label>
-                    <input type="text" id="port_slot" name="port_slot" placeholder="예: 1/3">
-                </div>
-                """, unsafe_allow_html=True)
+                # 포트/슬롯 입력란 표시 여부를 제어하는 상태값
+                if "display_port_slot_input" not in st.session_state:
+                    st.session_state.display_port_slot_input = False
 
+                # JavaScript에서 보낸 메시지를 처리하여 입력란을 표시
+                message = st.experimental_get_query_params().get('display_input', False)
+                if message == 'true' or st.session_state.display_port_slot_input:
+                    st.session_state.display_port_slot_input = True
+
+                # 포트/슬롯 입력란을 표시
+                if st.session_state.display_port_slot_input:
+                    port_slot = st.text_input("포트/슬롯 입력 (형식: 1/3)", placeholder="예: 1/3")
+                    if port_slot:
+                        st.write(f"입력한 포트/슬롯: {port_slot}")
             else:
                 st.warning("IP를 입력해주세요.")
 
