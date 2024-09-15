@@ -1076,10 +1076,8 @@ def command_page():
                     <textarea id="result_area" style="display:none;">{result_text}</textarea>
                     {copy_button}
                     <div>
-                        <label for="port">Port:</label>
-                        <input type="text" id="port" name="port" placeholder="Port">
-                        <label for="slot">Slot:</label>
-                        <input type="text" id="slot" name="slot" placeholder="Slot">
+                        <label for="port-slot">Port/Slot (형식: 1/3):</label>
+                        <input type="text" id="port-slot" name="port-slot" placeholder="Port/Slot (형식: 1/3)">
                     </div>
                 """, height=150)
 
