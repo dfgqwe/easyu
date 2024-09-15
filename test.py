@@ -1057,9 +1057,9 @@ def command_page():
     olt_ip_address = st.text_input("IP 입력", "")
 
     # 비밀번호 입력 후에만 Radio 버튼을 표시
-    content_option = st.radio("장비선택", ["", "다산", "유비쿼스"])
+    content_option = st.radio("장비선택", ["", "동원", "유비쿼스"])
 
-    if content_option == "다산":
+    if content_option == "동원":
         if olt_ip_address:
             # Create container with flex layout
             st.markdown('<div class="command-container">', unsafe_allow_html=True)
@@ -1107,7 +1107,7 @@ def command_page():
             # Port/Slot 입력 및 전체/특정 선택
             with st.container():
                 port_slot = st.text_input("Port/Slot (형식: 1/3)", "")
-                selection = st.radio"선택", ["전체", "특정onu"])
+                selection = st.radio("선택", ["전체", "특정onu"])
 
                 if port_slot:
                     if selection == "전체":
