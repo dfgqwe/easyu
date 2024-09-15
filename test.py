@@ -1045,7 +1045,7 @@ if content_option == "다산":
 
         # 복사 기능을 위한 HTML 버튼과 JavaScript 코드 추가
         components.html(f"""
-            <textarea id="result_area" style="display:none;">{result_text}</textarea>
+            <textarea id="result_area" style="display:none;">{result_text.replace('<', '\\u003c').replace('>', '\\u003e')}</textarea>
 
             <button onclick="copyToClipboard('result_area')">결과 복사하기</button>
 
@@ -1090,9 +1090,9 @@ if content_option == "다산":
 
                 # 복사 기능을 위한 HTML 버튼과 JavaScript 코드 추가
                 components.html(f"""
-                    <textarea id="result_area_1" style="display:none;">{command1}</textarea>
-                    <textarea id="result_area_2" style="display:none;">{command2}</textarea>
-                    <textarea id="result_area_3" style="display:none;">{command3}</textarea>
+                    <textarea id="result_area_1" style="display:none;">{command1.replace('<', '\\u003c').replace('>', '\\u003e')}</textarea>
+                    <textarea id="result_area_2" style="display:none;">{command2.replace('<', '\\u003c').replace('>', '\\u003e')}</textarea>
+                    <textarea id="result_area_3" style="display:none;">{command3.replace('<', '\\u003c').replace('>', '\\u003e')}</textarea>
 
                     <button onclick="copyToClipboard('result_area_1')">명령어 1 복사하기</button>
                     <button onclick="copyToClipboard('result_area_2')">명령어 2 복사하기</button>
@@ -1131,8 +1131,6 @@ if content_option == "다산":
         if st.button("복사하기"):
             st.session_state.show_port_slot_input = True
             st.success("복사되었습니다! 포트/슬롯을 입력하세요.")
-    else:
-        st.warning("IP를 입력해주세요.")
 
 
 
