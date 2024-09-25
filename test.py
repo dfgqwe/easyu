@@ -964,15 +964,13 @@ def worksync_page():
                         alertBox.style.borderRadius = '5px';
                         document.body.appendChild(alertBox);
 
-                        // 3초 후 알림 제거 및 IP 입력란 초기화
-                        setTimeout(function() {{
+                        // 5초 후 알림 제거
+                        setTimeout(function() {
                             alertBox.remove();
-                            // IP 입력란 초기화
-                            document.getElementById('ip_input_field').value = '';
-                        }}, 3000);
-                    }}, function(err) {{
+                        }, 3000);
+                    }, function(err) {
                         alert('복사 실패: ', err);
-                    }});
+                    });
                 }
                 </script>
                 """
