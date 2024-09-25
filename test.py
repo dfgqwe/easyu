@@ -947,13 +947,12 @@ def worksync_page():
   
 
     if result_text:
-    st.text_area("결과", result_text, height=200)
-
-    # 복사 기능을 위한 HTML 버튼과 JavaScript 코드 추가
-    copy_button = """
-    <button onclick="copyToClipboard()">복사하기</button>
-    <script>
-    function copyToClipboard() {
+        st.text_area("결과", result_text, height=200)
+        # 복사 기능을 위한 HTML 버튼과 JavaScript 코드 추가
+        copy_button = """
+        <button onclick="copyToClipboard()">복사하기</button>
+        <script>
+        function copyToClipboard() {
                     var copyText = document.getElementById('result_area');
                     navigator.clipboard.writeText(copyText.value).then(function() {
                         var alertBox = document.createElement('div');
