@@ -10,6 +10,6 @@ gdown==4.7.1
 openpyxl==3.0.10
 PyGithub==1.55
 requests
-Pillow==24.2
+Pillow
 datetime
 pytz
