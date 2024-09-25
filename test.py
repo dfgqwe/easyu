@@ -909,6 +909,11 @@ def moss_page():
 def worksync_page():
     st.title("Worksync")
 
+    # IP 입력란 초기화 및 session_state에서 관리
+    if 'ip_value' not in st.session_state:
+        st.session_state.ip_value = ''
+
+
     # 데이터 파일 불러오기
     work = pd.read_csv("ws_data.csv")
 
@@ -918,34 +923,14 @@ def worksync_page():
     # 장비ID 순서대로 정렬
     df_no_duplicates = df_no_duplicates.sort_values(by='장비ID')
 
-    # IP 입력 받기
-    ip_input = st.text_input("IP 입력", "").replace(" ", "")
-
-    # 결과를 저장할 빈 문자열
-    result_text = ""
-
-    # IP 입력이 있을 경우
-    if ip_input:
-        # 입력된 IP에 해당되는 행 찾기
-        if ip_input in df_no_duplicates['장비ID'].values:
-            # 해당 IP의 사업장 찾기
-            address = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]['사업장'].values[0]
-
-            # Check if the address is "#VALUE!"
-            if address == "#VALUE!":
-                result_text = "데이터 값 오류(#VALUE!)"
- 
-            else:
-                result_text = "★동일국소 점검 대상★\n"
-                same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
-                for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
-                    line = f"{idx}. {row['장비명/국사명']} - {row['업무명']}({row['장비ID']})"
-                    result_text += line + "\n"
-
-        else:
-            result_text = "Work-Sync(BS업무) 점검 대상 없습니다."
-  
-
+    # IP 입력란
+    ip_input = st.text_input("IP 입력", value=st.session_state.ip_value, key="ip_input")
+    
+    if 'result_text' not in st.session_state:
+        st.session_state.result_text = '복사할 텍스트입니다.'
+        
+    result_text = st.session_state.result_text
+    
     if result_text:
         st.text_area("결과", result_text, height=200)
         # 복사 기능을 위한 HTML 버튼과 JavaScript 코드 추가
@@ -967,13 +952,12 @@ def worksync_page():
                         alertBox.style.borderRadius = '5px';
                         document.body.appendChild(alertBox);
 
-                        // 3초 후 알림 제거 및 IP 입력란 값 제거
+                        // 3초 후 알림 제거 및 Python으로 IP 입력란 값 제거 요청
                         setTimeout(function() {
                             alertBox.remove();
-                            var ipInput = document.getElementById('ip_input');
-                            if (ipInput) {
-                                ipInput.value = '';  // IP 입력란 값 제거
-                            }
+                            // Streamlit의 session_state 값을 업데이트하는 Python 함수 호출
+                            const streamlitAPI = window.parent.streamlitApi;
+                            streamlitAPI.setComponentValue("clear_ip_input", "true");
                         }, 3000);
                     }, function(err) {
                         alert('복사 실패: ', err);
@@ -981,12 +965,16 @@ def worksync_page():
                 }
                 </script>
                 """
-
-        # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
-        st.components.v1.html(f"""
+       # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
+       st.components.v1.html(f"""
         <textarea id="result_area" style="display:none;">{result_text}</textarea>
         {copy_button}
     """, height=50)
+
+       # 복사 버튼을 누른 후 IP 입력란 값 초기화
+       if st.session_state.get("clear_ip_input", "") == "true":
+           st.session_state.ip_value = ""
+           st.session_state.clear_ip_input = "false"
 
 
 
