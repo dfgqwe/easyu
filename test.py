@@ -906,6 +906,7 @@ def moss_page():
 
 
 
+
 def worksync_page():
     st.title("Worksync")
 
@@ -925,13 +926,18 @@ def worksync_page():
     result_text = ''
 
     if ip_input:
-        # IP 입력값을 기준으로 데이터 필터링
-        filtered_df = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]
-        
-        # 필터링된 데이터가 있는 경우
-        if not filtered_df.empty:
-            # result_text에 필터링된 데이터를 문자열로 변환하여 저장
-            result_text = filtered_df.to_string(index=False)
+        # IP 입력값이 장비ID에 있는지 확인
+        if ip_input in df_no_duplicates['장비ID'].values:
+            # 해당 IP에 해당하는 사업장 찾기
+            address = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]['사업장'].values[0]
+            
+            # 동일한 사업장에 있는 장비 필터링
+            same_address_work = df_no_duplicates[df_no_duplicates['사업장'] == address]
+            
+            # 점검 대상 결과 문자열 생성
+            result_text += "★동일국소 점검 대상★\n"
+            for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
+                result_text += f"{idx}. {row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})\n"
         else:
             # IP에 해당하는 데이터가 없을 때 기본 메시지
             result_text = "Work-Sync(BS업무) 점검 대상 없습니다."
@@ -974,6 +980,7 @@ def worksync_page():
         <textarea id="result_area" style="display:none;">{result_text}</textarea>
         {copy_button}
     """, height=50)
+
 
 
 
