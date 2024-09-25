@@ -946,45 +946,51 @@ def worksync_page():
             result_text = "Work-Sync(BS업무) 점검 대상 없습니다."
   
 
-    # 복사 버튼과 JavaScript 코드 추가
     if result_text:
-        st.text_area("결과", result_text, height=200)
+    st.text_area("결과", result_text, height=200)
 
-        # 복사 기능을 위한 HTML 버튼과 JavaScript 코드 추가
-        copy_button = """
-        <button onclick="copyToClipboard()">복사하기</button>
-        <script>
-        function copyToClipboard() {
-                        var copyText = document.getElementById('result_area');
-                        navigator.clipboard.writeText(copyText.value).then(function() {
-                            var alertBox = document.createElement('div');
-                            alertBox.textContent = '복사되었습니다!';
-                            alertBox.style.position = 'fixed';
-                            alertBox.style.bottom = '10px';
-                            alertBox.style.left = '50%';
-                            alertBox.style.transform = 'translateX(-50%)';
-                            alertBox.style.backgroundColor = '#4CAF50';
-                            alertBox.style.color = 'white';
-                            alertBox.style.padding = '10px';
-                            alertBox.style.borderRadius = '5px';
-                            document.body.appendChild(alertBox);
+    # 복사 기능을 위한 HTML 버튼과 JavaScript 코드 추가
+    copy_button = """
+    <button onclick="copyToClipboard()">복사하기</button>
+    <script>
+    function copyToClipboard() {
+                    var copyText = document.getElementById('result_area');
+                    navigator.clipboard.writeText(copyText.value).then(function() {
+                        var alertBox = document.createElement('div');
+                        alertBox.textContent = '복사되었습니다!';
+                        alertBox.style.position = 'fixed';
+                        alertBox.style.bottom = '10px';
+                        alertBox.style.left = '50%';
+                        alertBox.style.transform = 'translateX(-50%)';
+                        alertBox.style.backgroundColor = '#4CAF50';
+                        alertBox.style.color = 'white';
+                        alertBox.style.padding = '10px';
+                        alertBox.style.borderRadius = '5px';
+                        document.body.appendChild(alertBox);
 
-                            // 5초 후 알림 제거
-                            setTimeout(function() {
-                                alertBox.remove();
-                            }, 3000);
-                        }, function(err) {
-                            alert('복사 실패: ', err);
-                        });
-                    }
-                    </script>
-                    """
+                        // 3초 후 알림 제거 및 IP 입력란 값 제거
+                        setTimeout(function() {
+                            alertBox.remove();
+                            var ipInput = document.getElementById('ip_input');
+                            if (ipInput) {
+                                ipInput.value = '';  // IP 입력란 값 제거
+                            }
+                        }, 3000);
+                    }, function(err) {
+                        alert('복사 실패: ', err);
+                    });
+                }
+                </script>
+                """
 
-        # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
-        st.components.v1.html(f"""
-            <textarea id="result_area" style="display:none;">{result_text}</textarea>
-            {copy_button}
-        """, height=50)
+    # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
+    st.components.v1.html(f"""
+        <textarea id="result_area" style="display:none;">{result_text}</textarea>
+        {copy_button}
+    """, height=50)
+
+
+
 
 
 def command_page():
