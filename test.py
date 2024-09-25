@@ -982,8 +982,8 @@ def worksync_page():
                 </script>
                 """
 
-    # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
-    st.components.v1.html(f"""
+        # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
+        st.components.v1.html(f"""
         <textarea id="result_area" style="display:none;">{result_text}</textarea>
         {copy_button}
     """, height=50)
