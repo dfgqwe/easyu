@@ -920,7 +920,7 @@ def worksync_page():
     df_no_duplicates = df_no_duplicates.sort_values(by='장비ID')
 
     # IP 입력란
-    ip_input = st.text_input("IP 입력", value=st.session_state.ip_value, key="ip_input")
+    ip_input = st.text_input("IP 입력", key="ip_input")
     
         
     result_text =''
