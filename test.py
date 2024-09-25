@@ -909,7 +909,6 @@ def moss_page():
 def worksync_page():
     st.title("Worksync")
 
-
     # 데이터 파일 불러오기
     work = pd.read_csv("ws_data.csv")
 
@@ -922,8 +921,8 @@ def worksync_page():
     # IP 입력란
     ip_input = st.text_input("IP 입력", key="ip_input")
     
-        
-    result_text =''
+    # 테스트용 임시 result_text
+    result_text = "테스트 결과 텍스트"
     
     if result_text:
         st.text_area("결과", result_text, height=200)
@@ -947,7 +946,7 @@ def worksync_page():
                             alertBox.style.borderRadius = '5px';
                             document.body.appendChild(alertBox);
 
-                            // 5초 후 알림 제거
+                            // 3초 후 알림 제거
                             setTimeout(function() {
                                 alertBox.remove();
                             }, 3000);
@@ -963,6 +962,7 @@ def worksync_page():
             <textarea id="result_area" style="display:none;">{result_text}</textarea>
             {copy_button}
         """, height=50)
+
 
 
 
