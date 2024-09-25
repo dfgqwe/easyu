@@ -965,15 +965,15 @@ def worksync_page():
                 }
                 </script>
                 """
-         # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
-         st.components.v1.html(f"""
-         <textarea id="result_area" style="display:none;">{result_text}</textarea>
-         {copy_button}
-         """, height=50)
-        # 복사 버튼을 누른 후 IP 입력란 값 초기화
-        if st.session_state.get("clear_ip_input", "") == "true":
-            st.session_state.ip_value = ""
-            st.session_state.clear_ip_input = "false"
+    # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
+    st.components.v1.html(f"""
+    <textarea id="result_area" style="display:none;">{result_text}</textarea>
+    {copy_button}
+    """, height=50)
+    # 복사 버튼을 누른 후 IP 입력란 값 초기화
+    if st.session_state.get("clear_ip_input", "") == "true":
+        st.session_state.ip_value = ""
+        st.session_state.clear_ip_input = "false"
 
 
 
