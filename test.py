@@ -920,15 +920,23 @@ def worksync_page():
 
     # IP 입력란
     ip_input = st.text_input("IP 입력", key="ip_input")
-    
-    # 기본적으로 빈 result_text
+
+    # 결과를 저장할 result_text 변수 초기화
     result_text = ''
 
-    # result_text가 비어있으면 기본 메시지 설정
-    if not result_text:
-        result_text = "Work-Sync(BS업무) 점검 대상 없습니다."
+    if ip_input:
+        # IP 입력값을 기준으로 데이터 필터링
+        filtered_df = df_no_duplicates[df_no_duplicates['장비ID'] == ip_input]
+        
+        # 필터링된 데이터가 있는 경우
+        if not filtered_df.empty:
+            # result_text에 필터링된 데이터를 문자열로 변환하여 저장
+            result_text = filtered_df.to_string(index=False)
+        else:
+            # IP에 해당하는 데이터가 없을 때 기본 메시지
+            result_text = "Work-Sync(BS업무) 점검 대상 없습니다."
     
-    # 결과 출력
+    # 결과 출력 (기본 메시지 또는 필터링된 데이터)
     st.text_area("결과", result_text, height=200)
 
     # 복사 기능을 위한 HTML 버튼과 JavaScript 코드 추가
@@ -966,6 +974,7 @@ def worksync_page():
         <textarea id="result_area" style="display:none;">{result_text}</textarea>
         {copy_button}
     """, height=50)
+
 
 
 
