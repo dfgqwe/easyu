@@ -1279,9 +1279,9 @@ def L2_command_page():
     copy_button_template = """
         <button onclick="copyToClipboard('{element_id}')">복사하기</button>
         <script>
-        function copyToClipboard(elementId) {
+        function copyToClipboard(elementId) {{
             var copyText = document.getElementById(elementId);
-            navigator.clipboard.writeText(copyText.value).then(function() {
+            navigator.clipboard.writeText(copyText.value).then(function() {{
                 var alertBox = document.createElement('div');
                 alertBox.textContent = '복사되었습니다!';
                 alertBox.style.position = 'fixed';
@@ -1295,13 +1295,13 @@ def L2_command_page():
                 document.body.appendChild(alertBox);
 
                 // 3초 후 알림 제거
-                setTimeout(function() {
+                setTimeout(function() {{
                     alertBox.remove();
-                }, 3000);
-            }, function(err) {
+                }}, 3000);
+            }}, function(err) {{
                 alert('복사 실패: ' + err);
-            });
-        }
+            }});
+        }}
         </script>
     """
 
