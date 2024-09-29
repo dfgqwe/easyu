@@ -1275,9 +1275,38 @@ def L2_command_page():
     # 장비 선택 라디오 버튼 (유니크 키 추가)
     L2_content_option = st.radio("장비선택", ["", "유비쿼스", "다산"], key="radio_l2_selection")
 
+    # 공통적으로 사용할 복사 버튼 HTML과 스크립트
+    copy_button_template = """
+        <button onclick="copyToClipboard('{element_id}')">복사하기</button>
+        <script>
+        function copyToClipboard(elementId) {
+            var copyText = document.getElementById(elementId);
+            navigator.clipboard.writeText(copyText.value).then(function() {
+                var alertBox = document.createElement('div');
+                alertBox.textContent = '복사되었습니다!';
+                alertBox.style.position = 'fixed';
+                alertBox.style.bottom = '10px';
+                alertBox.style.left = '50%';
+                alertBox.style.transform = 'translateX(-50%)';
+                alertBox.style.backgroundColor = '#4CAF50';
+                alertBox.style.color = 'white';
+                alertBox.style.padding = '10px';
+                alertBox.style.borderRadius = '5px';
+                document.body.appendChild(alertBox);
+
+                // 3초 후 알림 제거
+                setTimeout(function() {
+                    alertBox.remove();
+                }, 3000);
+            }, function(err) {
+                alert('복사 실패: ' + err);
+            });
+        }
+        </script>
+    """
+
     # "유비쿼스" 선택 시 명령어 리스트 및 복사 버튼 표시
     if L2_content_option == "유비쿼스":
-        # 유비쿼스 명령어 리스트
         commands = [
             "sh uptime",
             "sh port status",
@@ -1292,51 +1321,27 @@ def L2_command_page():
             "sh logging back"
         ]
 
-        # 명령어 전체 복사 버튼 추가
         all_commands = "\n".join(commands)
         components.html(f"""
-        <div style="margin-bottom: 20px;">
-            <button onclick="copyToClipboard('all_commands')">전체 복사하기</button>
-            <textarea id="all_commands" style="display:none;">{all_commands}</textarea>
-        </div>
-        <script>
-        function copyToClipboard(elementId) {{
-            var copyText = document.getElementById(elementId);
-            copyText.select();
-            copyText.setSelectionRange(0, 99999);  // 모바일 호환성
-            document.execCommand("copy");
-            alert('복사되었습니다: ' + copyText.value);
-        }}
-        </script>
-        """, height=80)
+        <textarea id="all_commands" style="display:none;">{all_commands}</textarea>
+        {copy_button_template.format(element_id='all_commands')}
+        """, height=150)
 
-        # 명령어별 복사 버튼 추가 (고유 key 추가)
+        # 명령어별 복사 버튼 추가
         for idx, command in enumerate(commands):
             command_id = f"command_{idx}"
             components.html(f"""
             <div class="command-container">
                 <div class="command-item">
                     <span>{command}</span>
-                    <button onclick="copyToClipboard('{command_id}')">복사하기</button>
+                    {copy_button_template.format(element_id=command_id)}
                 </div>
                 <textarea id="{command_id}" style="display:none;">{command}</textarea>
             </div>
-            <script>
-            function copyToClipboard(elementId) {{
-                var copyText = document.getElementById(elementId);
-                copyText.style.display = 'block';  // hidden 요소 선택 허용
-                copyText.select();
-                copyText.setSelectionRange(0, 99999);  // 모바일 호환성
-                document.execCommand("copy");
-                copyText.style.display = 'none';  // 다시 숨김
-                alert('복사되었습니다: ' + copyText.value);
-            }}
-            </script>
             """, height=80)
 
     # "다산" 선택 시 명령어 리스트 및 복사 버튼 표시
     elif L2_content_option == "다산":
-        # 다산 명령어 리스트
         commands = [
             "sh uptime",
             "sh port status",
@@ -1351,46 +1356,23 @@ def L2_command_page():
             "sh syslog l v r"
         ]
 
-        # 명령어 전체 복사 버튼 추가
         all_commands = "\n".join(commands)
         components.html(f"""
-        <div style="margin-bottom: 20px;">
-            <button onclick="copyToClipboard('all_commands_dasan')">전체 복사하기</button>
-            <textarea id="all_commands_dasan" style="display:none;">{all_commands}</textarea>
-        </div>
-        <script>
-        function copyToClipboard(elementId) {{
-            var copyText = document.getElementById(elementId);
-            copyText.select();
-            copyText.setSelectionRange(0, 99999);  // 모바일 호환성
-            document.execCommand("copy");
-            alert('복사되었습니다: ' + copyText.value);
-        }}
-        </script>
-        """, height=80)
+        <textarea id="all_commands_dasan" style="display:none;">{all_commands}</textarea>
+        {copy_button_template.format(element_id='all_commands_dasan')}
+        """, height=150)
 
-        # 명령어별 복사 버튼 추가 (고유 key 추가)
+        # 명령어별 복사 버튼 추가
         for idx, command in enumerate(commands):
             command_id = f"command_dasan_{idx}"
             components.html(f"""
             <div class="command-container">
                 <div class="command-item">
                     <span>{command}</span>
-                    <button onclick="copyToClipboard('{command_id}')">복사하기</button>
+                    {copy_button_template.format(element_id=command_id)}
                 </div>
                 <textarea id="{command_id}" style="display:none;">{command}</textarea>
             </div>
-            <script>
-            function copyToClipboard(elementId) {{
-                var copyText = document.getElementById(elementId);
-                copyText.style.display = 'block';  // hidden 요소 선택 허용
-                copyText.select();
-                copyText.setSelectionRange(0, 99999);  // 모바일 호환성
-                document.execCommand("copy");
-                copyText.style.display = 'none';  // 다시 숨김
-                alert('복사되었습니다: ' + copyText.value);
-            }}
-            </script>
             """, height=80)
 
 
