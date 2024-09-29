@@ -1404,8 +1404,6 @@ def L2_command_page():
             </div>
             """, height=80)
 
-# 실행
-L2_command_page()
 
 
 
