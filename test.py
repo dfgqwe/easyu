@@ -1241,35 +1241,35 @@ def command_page():
 
 def L2_command_page():
     st.title("L2명령어")
-    
+
     # 스타일 추가
     st.markdown(
-    """
-    <style>
-    .stRadio > div {
-         display: flex;
-         flex-direction: row;
-    }
-    .stButton {
-        margin: 0;
-    }
-     .command-container {
-           display: flex;
-           flex-direction: column;
-           gap: 10px;
-       }
-      .command-item {
-           display: flex;
-           justify-content: space-between;
-           align-items: center;
-           padding: 5px;
-           background-color: #f0f0f0;
-           border: 1px solid #ddd;
-           border-radius: 5px;
-       }
-    </style>
-    """,
-    unsafe_allow_html=True
+        """
+        <style>
+        .stRadio > div {
+             display: flex;
+             flex-direction: row;
+        }
+        .stButton {
+            margin: 0;
+        }
+         .command-container {
+               display: flex;
+               flex-direction: column;
+               gap: 10px;
+           }
+          .command-item {
+               display: flex;
+               justify-content: space-between;
+               align-items: center;
+               padding: 5px;
+               background-color: #f0f0f0;
+               border: 1px solid #ddd;
+               border-radius: 5px;
+           }
+        </style>
+        """,
+        unsafe_allow_html=True
     )
 
     # 장비 선택 라디오 버튼 (유니크 키 추가)
@@ -1303,6 +1303,7 @@ def L2_command_page():
         function copyToClipboard(elementId) {{
             var copyText = document.getElementById(elementId);
             copyText.select();
+            copyText.setSelectionRange(0, 99999);  // 모바일 호환성
             document.execCommand("copy");
             alert('복사되었습니다: ' + copyText.value);
         }}
@@ -1320,6 +1321,17 @@ def L2_command_page():
                 </div>
                 <textarea id="{command_id}" style="display:none;">{command}</textarea>
             </div>
+            <script>
+            function copyToClipboard(elementId) {{
+                var copyText = document.getElementById(elementId);
+                copyText.style.display = 'block';  // hidden 요소 선택 허용
+                copyText.select();
+                copyText.setSelectionRange(0, 99999);  // 모바일 호환성
+                document.execCommand("copy");
+                copyText.style.display = 'none';  // 다시 숨김
+                alert('복사되었습니다: ' + copyText.value);
+            }}
+            </script>
             """, height=80)
 
     # "다산" 선택 시 명령어 리스트 및 복사 버튼 표시
@@ -1350,6 +1362,7 @@ def L2_command_page():
         function copyToClipboard(elementId) {{
             var copyText = document.getElementById(elementId);
             copyText.select();
+            copyText.setSelectionRange(0, 99999);  // 모바일 호환성
             document.execCommand("copy");
             alert('복사되었습니다: ' + copyText.value);
         }}
@@ -1367,8 +1380,18 @@ def L2_command_page():
                 </div>
                 <textarea id="{command_id}" style="display:none;">{command}</textarea>
             </div>
+            <script>
+            function copyToClipboard(elementId) {{
+                var copyText = document.getElementById(elementId);
+                copyText.style.display = 'block';  // hidden 요소 선택 허용
+                copyText.select();
+                copyText.setSelectionRange(0, 99999);  // 모바일 호환성
+                document.execCommand("copy");
+                copyText.style.display = 'none';  // 다시 숨김
+                alert('복사되었습니다: ' + copyText.value);
+            }}
+            </script>
             """, height=80)
-
 
 
 
