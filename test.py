@@ -1237,93 +1237,151 @@ def command_page():
 
             st.markdown('</div>', unsafe_allow_html=True)
 
-def manage_page():
-    st.title("Manage")
-    # secrets.toml 파일에서 비밀번호 가져오기
-    manage_password = st.secrets["manage"]["password"]
-
-    # 'manage_logged_in' 및 'last_active' 초기화
-    if "manage_logged_in" not in st.session_state:
-        st.session_state.manage_logged_in = False
-
-    if "last_active" not in st.session_state:
-        st.session_state.last_active = time.time()
-
-    # 일정 시간이 경과하면 세션 초기화 (예: 10초)
-    if time.time() - st.session_state.last_active > 300:
-        st.session_state.manage_logged_in = False
-
-    # 비밀번호 입력 처리
-    if not st.session_state.manage_logged_in:
-        password = st.text_input("비밀번호 입력", type="password")
-
-        if password == manage_password:
-            st.session_state.manage_logged_in = True
-            st.session_state.last_active = time.time()
-            st.success("로그인 성공")
-            st.experimental_rerun()
-        elif password:
-            st.error("잘못된 비밀번호입니다. 다시 입력해주세요.")
-    else:
-        st.session_state.last_active = time.time()  # 사용자가 페이지에 있을 때 시간 갱신
+def L2_command_page():
+    st.title("L2명령어")
     
-    if st.session_state.manage_logged_in:
-        st.markdown(
-        """
-        <style>
-        .stRadio > div {
-            display: flex;
-            flex-direction: row;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
+    # 스타일 추가
+    st.markdown(
+    """
+    <style>
+    .stRadio > div {
+         display: flex;
+         flex-direction: row;
+    }
+    .stButton {
+        margin: 0;
+    }
+     .command-container {
+           display: flex;
+           flex-direction: column;
+           gap: 10px;
+       }
+      .command-item {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           padding: 5px;
+           background-color: #f0f0f0;
+           border: 1px solid #ddd;
+           border-radius: 5px;
+       }
+    </style>
+    """,
+    unsafe_allow_html=True
     )
 
-    if st.session_state.manage_logged_in:
-         # IP 입력 받기
-         ip_input1 = st.text_input("IP 입력", "")
-         if ip_input1:
-            # Ensure you have set your GitHub token in Streamlit secrets
-            try:
-                github_token = st.secrets["GITHUB_TOKEN"]
-            except KeyError:
-                st.error("GitHub token is not set. Please set it in Streamlit secrets.")
-                return
-        
-            repo_name = "dfgqwe/easyu"
-            file_path = "ws_data.csv"
-        
-            df_no_duplicates1 = fetch_data_from_github(repo_name, file_path, github_token)
-            if df_no_duplicates1 is None:
-                st.error("Failed to fetch data from GitHub.")
-                return
+    # 장비 선택 라디오 버튼
+    L2_content_option = st.radio("장비선택", ["", "유비쿼스", "다산"])
 
-            df_no_duplicates1 = df_no_duplicates1.drop_duplicates(subset=['장비ID', '업무명'])
-        
-            if ip_input1 in df_no_duplicates1['장비ID'].values:
-                address = df_no_duplicates1[df_no_duplicates1['장비ID'] == ip_input1]['사업장'].values[0]
-                st.write("★동일국소 점검 대상★")
-            
-                same_address_work = df_no_duplicates1[df_no_duplicates1['사업장'] == address]
-                for idx, (index, row) in enumerate(same_address_work.iterrows(), start=1):
-                    st.text(f"{idx}. {row['장비명/국사명']} - {row['장비ID']} ({row['업무명']})")
+    # "유비쿼스" 선택 시 명령어 리스트 및 복사 버튼 표시
+    if L2_content_option == "유비쿼스":
+        # 유비쿼스 명령어 리스트
+        commands = [
+            "sh uptime",
+            "sh port status",
+            "sh rate-limit",
+            "sh ip dhcp snooping binding",
+            "sh port statistics avg ty",
+            "sh ip igmp snooping table reporter",
+            "sh port statistics rmon",
+            "sh port phy-diag",
+            "sh max-hosts",
+            "sh mac",
+            "sh logging back"
+        ]
 
-                selected_tasks = st.multiselect(
-                "삭제할 업무를 선택하세요:",
-                same_address_work.index,
-                format_func=lambda x: f"{same_address_work.loc[x, '장비명/국사명']} - {same_address_work.loc[x, '장비ID']} ({same_address_work.loc[x, '업무명']})"
-            )
+        # 명령어 출력 + 복사 버튼
+        for idx, command in enumerate(commands):
+            command_id = f"command_{idx}"
+            components.html(f"""
+            <div class="command-container">
+                <div class="command-item">
+                    <span>{command}</span>
+                    <button onclick="copyToClipboard('{command_id}')">복사하기</button>
+                </div>
+                <textarea id="{command_id}" style="display:none;">{command}</textarea>
+            </div>
+            <script>
+            function copyToClipboard(elementId) {{
+                var copyText = document.getElementById(elementId);
+                navigator.clipboard.writeText(copyText.value).then(function() {{
+                    var alertBox = document.createElement('div');
+                    alertBox.textContent = '복사되었습니다!';
+                    alertBox.style.position = 'fixed';
+                    alertBox.style.bottom = '10px';
+                    alertBox.style.left = '50%';
+                    alertBox.style.transform = 'translateX(-50%)';
+                    alertBox.style.backgroundColor = '#4CAF50';
+                    alertBox.style.color = 'white';
+                    alertBox.style.padding = '10px';
+                    alertBox.style.borderRadius = '5px';
+                    document.body.appendChild(alertBox);
 
-                if st.button("선택된 업무 삭제"):
-                    if selected_tasks:
-                        st.write(f"Before deletion: {df_no_duplicates1.shape[0]} rows")
-                        df_no_duplicates1 = df_no_duplicates1.drop(selected_tasks)
-                        st.write(f"After deletion: {df_no_duplicates1.shape[0]} rows")
-                        update_data_on_github(repo_name, file_path, github_token, df_no_duplicates1)
-                        st.success("선택된 업무가 성공적으로 삭제되었습니다.")
-                    else:
-                        st.warning("삭제할 업무를 선택하세요.")
+                    // 3초 후 알림 제거
+                    setTimeout(function() {{
+                        alertBox.remove();
+                    }}, 3000);
+                }}, function(err) {{
+                    alert('복사 실패: ' + err);
+                }});
+            }}
+            </script>
+            """, height=80)
+
+    # "다산" 선택 시 명령어 리스트 및 복사 버튼 표시
+    elif L2_content_option == "다산":
+        # 다산 명령어 리스트
+        commands = [
+            "sh uptime",
+            "sh port status",
+            "sh ip dhcp snooping binding",
+            "sh rate-limit",
+            "show port statistics avg ty",
+            "show ip igmp snooping table",
+            "sh port statistics rmon",
+            "sh max-hosts",
+            "sh mac",
+            "show syslog l n r | include kernel",
+            "sh syslog l v r"
+        ]
+
+        # 명령어 출력 + 복사 버튼
+        for idx, command in enumerate(commands):
+            command_id = f"command_dasan_{idx}"
+            components.html(f"""
+            <div class="command-container">
+                <div class="command-item">
+                    <span>{command}</span>
+                    <button onclick="copyToClipboard('{command_id}')">복사하기</button>
+                </div>
+                <textarea id="{command_id}" style="display:none;">{command}</textarea>
+            </div>
+            <script>
+            function copyToClipboard(elementId) {{
+                var copyText = document.getElementById(elementId);
+                navigator.clipboard.writeText(copyText.value).then(function() {{
+                    var alertBox = document.createElement('div');
+                    alertBox.textContent = '복사되었습니다!';
+                    alertBox.style.position = 'fixed';
+                    alertBox.style.bottom = '10px';
+                    alertBox.style.left = '50%';
+                    alertBox.style.transform = 'translateX(-50%)';
+                    alertBox.style.backgroundColor = '#4CAF50';
+                    alertBox.style.color = 'white';
+                    alertBox.style.padding = '10px';
+                    alertBox.style.borderRadius = '5px';
+                    document.body.appendChild(alertBox);
+
+                    // 3초 후 알림 제거
+                    setTimeout(function() {{
+                        alertBox.remove();
+                    }}, 3000);
+                }}, function(err) {{
+                    alert('복사 실패: ' + err);
+                }});
+            }}
+            </script>
+            """, height=80)
 
 
 
@@ -1334,8 +1392,8 @@ def manage_page():
 if __name__ == "__main__":
     selected = option_menu(
         menu_title=None,  # 메뉴 제목 (원하지 않으면 None)
-        options=["Home", "MOSS", "Worksync", "olt명령어", "Manage"],  # 옵션 이름들
-        icons=["house", "box-arrow-down", "calendar2-check", "menu-up", "gear"],  # 각 옵션에 해당하는 아이콘
+        options=["Home", "MOSS", "Worksync", "olt명령어", "L2명령어"],  # 옵션 이름들
+        icons=["house", "box-arrow-down", "calendar2-check", "menu-up", "menu-up"],  # 각 옵션에 해당하는 아이콘
         menu_icon="cast",  # 메뉴 아이콘
         default_index=0,  # 기본 선택 옵션
         orientation="horizontal"  # 메뉴 방향 (수평)
@@ -1351,5 +1409,5 @@ if __name__ == "__main__":
         worksync_page()
     elif selected == "olt명령어":
         command_page()
-    elif selected == "Manage":
-        manage_page()
+    elif selected == "L2명령어":
+        L2_command_page()
