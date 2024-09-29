@@ -1259,6 +1259,9 @@ def L2_command_page():
            gap: 10px;
        }
       .command-item {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
            padding: 5px;
            background-color: #f0f0f0;
            border: 1px solid #ddd;
@@ -1301,14 +1304,23 @@ def L2_command_page():
             var copyText = document.getElementById(elementId);
             copyText.select();
             document.execCommand("copy");
-            alert('전체 명령어가 복사되었습니다!');
+            alert('복사되었습니다: ' + copyText.value);
         }}
         </script>
         """, height=80)
 
-        # 명령어 리스트 출력
-        for command in commands:
-            st.markdown(f"<div class='command-item'>{command}</div>", unsafe_allow_html=True)
+        # 명령어별 복사 버튼 추가 (고유 key 추가)
+        for idx, command in enumerate(commands):
+            command_id = f"command_{idx}"
+            components.html(f"""
+            <div class="command-container">
+                <div class="command-item">
+                    <span>{command}</span>
+                    <button onclick="copyToClipboard('{command_id}')">복사하기</button>
+                </div>
+                <textarea id="{command_id}" style="display:none;">{command}</textarea>
+            </div>
+            """, height=80)
 
     # "다산" 선택 시 명령어 리스트 및 복사 버튼 표시
     elif L2_content_option == "다산":
@@ -1339,15 +1351,23 @@ def L2_command_page():
             var copyText = document.getElementById(elementId);
             copyText.select();
             document.execCommand("copy");
-            alert('전체 명령어가 복사되었습니다!');
+            alert('복사되었습니다: ' + copyText.value);
         }}
         </script>
         """, height=80)
 
-        # 명령어 리스트 출력
-        for command in commands:
-            st.markdown(f"<div class='command-item'>{command}</div>", unsafe_allow_html=True)
-
+        # 명령어별 복사 버튼 추가 (고유 key 추가)
+        for idx, command in enumerate(commands):
+            command_id = f"command_dasan_{idx}"
+            components.html(f"""
+            <div class="command-container">
+                <div class="command-item">
+                    <span>{command}</span>
+                    <button onclick="copyToClipboard('{command_id}')">복사하기</button>
+                </div>
+                <textarea id="{command_id}" style="display:none;">{command}</textarea>
+            </div>
+            """, height=80)
 
 
 
