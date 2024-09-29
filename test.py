@@ -1237,6 +1237,9 @@ def command_page():
 
             st.markdown('</div>', unsafe_allow_html=True)
 
+import streamlit as st
+import streamlit.components.v1 as components
+
 def L2_command_page():
     st.title("L2명령어")
     
@@ -1290,7 +1293,41 @@ def L2_command_page():
             "sh logging back"
         ]
 
-        # 명령어 출력 + 복사 버튼
+        # 명령어 전체 복사 버튼 추가
+        all_commands = "\n".join(commands)
+        components.html(f"""
+        <div style="margin-bottom: 20px;">
+            <button onclick="copyToClipboard('all_commands')">전체 복사하기</button>
+            <textarea id="all_commands" style="display:none;">{all_commands}</textarea>
+        </div>
+        <script>
+        function copyToClipboard(elementId) {{
+            var copyText = document.getElementById(elementId);
+            navigator.clipboard.writeText(copyText.value).then(function() {{
+                var alertBox = document.createElement('div');
+                alertBox.textContent = '복사되었습니다!';
+                alertBox.style.position = 'fixed';
+                alertBox.style.bottom = '10px';
+                alertBox.style.left = '50%';
+                alertBox.style.transform = 'translateX(-50%)';
+                alertBox.style.backgroundColor = '#4CAF50';
+                alertBox.style.color = 'white';
+                alertBox.style.padding = '10px';
+                alertBox.style.borderRadius = '5px';
+                document.body.appendChild(alertBox);
+
+                // 3초 후 알림 제거
+                setTimeout(function() {{
+                    alertBox.remove();
+                }}, 3000);
+            }}, function(err) {{
+                alert('복사 실패: ' + err);
+            }});
+        }}
+        </script>
+        """, height=80)
+
+        # 명령어별 복사 버튼 추가
         for idx, command in enumerate(commands):
             command_id = f"command_{idx}"
             components.html(f"""
@@ -1301,31 +1338,6 @@ def L2_command_page():
                 </div>
                 <textarea id="{command_id}" style="display:none;">{command}</textarea>
             </div>
-            <script>
-            function copyToClipboard(elementId) {{
-                var copyText = document.getElementById(elementId);
-                navigator.clipboard.writeText(copyText.value).then(function() {{
-                    var alertBox = document.createElement('div');
-                    alertBox.textContent = '복사되었습니다!';
-                    alertBox.style.position = 'fixed';
-                    alertBox.style.bottom = '10px';
-                    alertBox.style.left = '50%';
-                    alertBox.style.transform = 'translateX(-50%)';
-                    alertBox.style.backgroundColor = '#4CAF50';
-                    alertBox.style.color = 'white';
-                    alertBox.style.padding = '10px';
-                    alertBox.style.borderRadius = '5px';
-                    document.body.appendChild(alertBox);
-
-                    // 3초 후 알림 제거
-                    setTimeout(function() {{
-                        alertBox.remove();
-                    }}, 3000);
-                }}, function(err) {{
-                    alert('복사 실패: ' + err);
-                }});
-            }}
-            </script>
             """, height=80)
 
     # "다산" 선택 시 명령어 리스트 및 복사 버튼 표시
@@ -1345,7 +1357,41 @@ def L2_command_page():
             "sh syslog l v r"
         ]
 
-        # 명령어 출력 + 복사 버튼
+        # 명령어 전체 복사 버튼 추가
+        all_commands = "\n".join(commands)
+        components.html(f"""
+        <div style="margin-bottom: 20px;">
+            <button onclick="copyToClipboard('all_commands_dasan')">전체 복사하기</button>
+            <textarea id="all_commands_dasan" style="display:none;">{all_commands}</textarea>
+        </div>
+        <script>
+        function copyToClipboard(elementId) {{
+            var copyText = document.getElementById(elementId);
+            navigator.clipboard.writeText(copyText.value).then(function() {{
+                var alertBox = document.createElement('div');
+                alertBox.textContent = '복사되었습니다!';
+                alertBox.style.position = 'fixed';
+                alertBox.style.bottom = '10px';
+                alertBox.style.left = '50%';
+                alertBox.style.transform = 'translateX(-50%)';
+                alertBox.style.backgroundColor = '#4CAF50';
+                alertBox.style.color = 'white';
+                alertBox.style.padding = '10px';
+                alertBox.style.borderRadius = '5px';
+                document.body.appendChild(alertBox);
+
+                // 3초 후 알림 제거
+                setTimeout(function() {{
+                    alertBox.remove();
+                }}, 3000);
+            }}, function(err) {{
+                alert('복사 실패: ' + err);
+            }});
+        }}
+        </script>
+        """, height=80)
+
+        # 명령어별 복사 버튼 추가
         for idx, command in enumerate(commands):
             command_id = f"command_dasan_{idx}"
             components.html(f"""
@@ -1356,32 +1402,11 @@ def L2_command_page():
                 </div>
                 <textarea id="{command_id}" style="display:none;">{command}</textarea>
             </div>
-            <script>
-            function copyToClipboard(elementId) {{
-                var copyText = document.getElementById(elementId);
-                navigator.clipboard.writeText(copyText.value).then(function() {{
-                    var alertBox = document.createElement('div');
-                    alertBox.textContent = '복사되었습니다!';
-                    alertBox.style.position = 'fixed';
-                    alertBox.style.bottom = '10px';
-                    alertBox.style.left = '50%';
-                    alertBox.style.transform = 'translateX(-50%)';
-                    alertBox.style.backgroundColor = '#4CAF50';
-                    alertBox.style.color = 'white';
-                    alertBox.style.padding = '10px';
-                    alertBox.style.borderRadius = '5px';
-                    document.body.appendChild(alertBox);
-
-                    // 3초 후 알림 제거
-                    setTimeout(function() {{
-                        alertBox.remove();
-                    }}, 3000);
-                }}, function(err) {{
-                    alert('복사 실패: ' + err);
-                }});
-            }}
-            </script>
             """, height=80)
+
+# 실행
+L2_command_page()
+
 
 
 
