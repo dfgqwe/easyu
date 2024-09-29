@@ -1237,8 +1237,7 @@ def command_page():
 
             st.markdown('</div>', unsafe_allow_html=True)
 
-import streamlit as st
-import streamlit.components.v1 as components
+
 
 def L2_command_page():
     st.title("L2명령어")
@@ -1273,8 +1272,8 @@ def L2_command_page():
     unsafe_allow_html=True
     )
 
-    # 장비 선택 라디오 버튼
-    L2_content_option = st.radio("장비선택", ["", "유비쿼스", "다산"])
+    # 장비 선택 라디오 버튼 (유니크 키 추가)
+    L2_content_option = st.radio("장비선택", ["", "유비쿼스", "다산"], key="radio_l2_selection")
 
     # "유비쿼스" 선택 시 명령어 리스트 및 복사 버튼 표시
     if L2_content_option == "유비쿼스":
@@ -1327,7 +1326,7 @@ def L2_command_page():
         </script>
         """, height=80)
 
-        # 명령어별 복사 버튼 추가
+        # 명령어별 복사 버튼 추가 (고유 key 추가)
         for idx, command in enumerate(commands):
             command_id = f"command_{idx}"
             components.html(f"""
@@ -1391,7 +1390,7 @@ def L2_command_page():
         </script>
         """, height=80)
 
-        # 명령어별 복사 버튼 추가
+        # 명령어별 복사 버튼 추가 (고유 key 추가)
         for idx, command in enumerate(commands):
             command_id = f"command_dasan_{idx}"
             components.html(f"""
@@ -1403,6 +1402,7 @@ def L2_command_page():
                 <textarea id="{command_id}" style="display:none;">{command}</textarea>
             </div>
             """, height=80)
+
 
 
 
