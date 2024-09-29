@@ -1302,26 +1302,9 @@ def L2_command_page():
         <script>
         function copyToClipboard(elementId) {{
             var copyText = document.getElementById(elementId);
-            navigator.clipboard.writeText(copyText.value).then(function() {{
-                var alertBox = document.createElement('div');
-                alertBox.textContent = '복사되었습니다!';
-                alertBox.style.position = 'fixed';
-                alertBox.style.bottom = '10px';
-                alertBox.style.left = '50%';
-                alertBox.style.transform = 'translateX(-50%)';
-                alertBox.style.backgroundColor = '#4CAF50';
-                alertBox.style.color = 'white';
-                alertBox.style.padding = '10px';
-                alertBox.style.borderRadius = '5px';
-                document.body.appendChild(alertBox);
-
-                // 3초 후 알림 제거
-                setTimeout(function() {{
-                    alertBox.remove();
-                }}, 3000);
-            }}, function(err) {{
-                alert('복사 실패: ' + err);
-            }});
+            copyText.select();
+            document.execCommand("copy");
+            alert('복사되었습니다: ' + copyText.value);
         }}
         </script>
         """, height=80)
@@ -1366,26 +1349,9 @@ def L2_command_page():
         <script>
         function copyToClipboard(elementId) {{
             var copyText = document.getElementById(elementId);
-            navigator.clipboard.writeText(copyText.value).then(function() {{
-                var alertBox = document.createElement('div');
-                alertBox.textContent = '복사되었습니다!';
-                alertBox.style.position = 'fixed';
-                alertBox.style.bottom = '10px';
-                alertBox.style.left = '50%';
-                alertBox.style.transform = 'translateX(-50%)';
-                alertBox.style.backgroundColor = '#4CAF50';
-                alertBox.style.color = 'white';
-                alertBox.style.padding = '10px';
-                alertBox.style.borderRadius = '5px';
-                document.body.appendChild(alertBox);
-
-                // 3초 후 알림 제거
-                setTimeout(function() {{
-                    alertBox.remove();
-                }}, 3000);
-            }}, function(err) {{
-                alert('복사 실패: ' + err);
-            }});
+            copyText.select();
+            document.execCommand("copy");
+            alert('복사되었습니다: ' + copyText.value);
         }}
         </script>
         """, height=80)
