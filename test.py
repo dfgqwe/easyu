@@ -391,8 +391,7 @@ def home_page():
 
     st.header("-야간(18:00 ~ 09:00) MOSS 발행 관련-")
     st.markdown("<span style='color:red;'>[18:00~22:00]</span> 원룸/빌라 고객5 이하(미발행). 익일 예약발행. VOC인입 시 자동발행.", unsafe_allow_html=True)
-    st.markdown("<span style='color:red;'>[22:00~07:00]</span> 숙박업소, 1등급, 주요시설(언론사,관공서,법원 등) 발행. 고객센터 인입 VOC는 발행. 일반 VOC건은 오전 07시 예약발행 발행명에'[수동_예약]", unsafe_allow_html=True)
-    st.markdown("고객센터 인입 VOC는 발행. 일반 VOC건은 오전 07시 예약발행 발행명에'[수동_예약]", unsafe_allow_html=True)
+    st.markdown("<span style='color:red;'>[22:00~07:00]</span> 숙박업소, 1등급, 주요시설(언론사,관공서,법원 등) 발행.", unsafe_allow_html=True)
     st.markdown("<span style='color:red;'>고객센터 인입 VOC는 발행. 일반 VOC건은 오전 07시 예약발행 발행명에'[수동_예약]", unsafe_allow_html=True)
     
  
