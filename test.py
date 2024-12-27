@@ -389,10 +389,10 @@ def home_page():
     st.markdown("<span style='color:red; font-weight:bold;'>[국사 화재]</span> 화재감지기 작동 현장 출동중", unsafe_allow_html=True)
     st.markdown("<span style='color:red; font-weight:bold;'>[국사 침수]</span> 침수 알람 발생 현장 출동중", unsafe_allow_html=True)
 
-    st.header("-네트워트 현황보고-")
-    st.markdown("<span style='color:red;'>[MOSS 항목]</span> 전원,교환,액세스", unsafe_allow_html=True)
-    st.markdown("<span style='color:red;'>[PING경보]</span> ACCESS_XDSL,엔토피아", unsafe_allow_html=True)
-    st.markdown("<span style='color:red;'>[공사정보]</span> 작업통제_대쉬보드 총건수_1000/page설정_ 작업현황 전체복사 후 A2 주변서식에 맟추기", unsafe_allow_html=True)
+    st.header("-야간(18:00 ~ 09:00) MOSS 발행 관련-")
+    st.markdown("<span style='color:red;'>[18:00~22:00]</span> 원룸/빌라 고객5 이하(미발행). 익일 예약발행. VOC인입 시 자동발행.", unsafe_allow_html=True)
+    st.markdown("<span style='color:red;'>[22:00~07:00]</span> 숙박업소, 1등급, 주요시설(언론사,관공서,법원 등) 발행 고객센터 인입 VOC는 발행. 일반 VOC건은 오전 07시 예약발행 발행명에'[수동_예약]", unsafe_allow_html=True)
+     st.markdown("<span style='color:red;'>고객센터 인입 VOC는 발행. 일반 VOC건은 오전 07시 예약발행 발행명에'[수동_예약]", unsafe_allow_html=True)
     
  
 
