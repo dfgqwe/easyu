@@ -250,8 +250,12 @@ def get_format(text):
     matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
     if "[한전정전복구]" in matched_formats and ("[기타]" in matched_formats or "[폐문]" in matched_formats):
         return "[폐문]" if "[폐문]" in matched_formats else "[기타]"
-    elif "[한전정전복구]" in matched_formats:
-        return "[한전정전복구]"
+    elif "[한전작업]" in matched_formats:
+        return "[한전작업]"
+    elif "[한전고장]" in matched_formats:
+        return "[한전고장]"
+    elif "[일대정전]" in matched_formats:
+        return "[일대정전]"
     elif "[전원어댑터교체]" in matched_formats:
         return "[전원어댑터교체]"
     elif "[사설차단기복구]" in matched_formats:
