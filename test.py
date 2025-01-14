@@ -543,7 +543,7 @@ def moss_page():
                 nsc = get_nsc(daegu_station, station_data)
                 if nsc:
                     nsc = transform_nsc(nsc)
-                    st.write(f"[L2_정전] {nsc}/{daegu_station} L2 다량장애 {district}일대 한전정전 (추정) L2*{l2_systems}sys({customers}고객)")
+                    st.write(f"[일대정전] {nsc}/{daegu_station} L2 다량장애 {district}일대 한전정전 (추정) L2*{l2_systems}sys({customers}고객)")
 
 
         if is_line_fault_checked:
@@ -558,7 +558,7 @@ def moss_page():
                 nsc = get_nsc(honam_station, station_data)
                 if nsc:
                     nsc = transform_nsc(nsc)
-                    st.write(f"[L2_선로] {nsc}/{honam_station} 선로장애 (추정) L2*{l2_systems_line}sys({customers_line}고객)")
+                    st.write(f"[L2선로] {nsc}/{honam_station} 선로장애 (추정) L2*{l2_systems_line}sys({customers_line}고객)")
 
 
         if is_apartment_power_outage_checked:
@@ -582,7 +582,7 @@ def moss_page():
                 nsc = get_nsc(busan_station, station_data)
                 if nsc:
                     nsc = transform_nsc(nsc)
-                    st.write(f"[아파트_정전] {nsc}/{busan_station} {apartment_name} {outage_type} L2*{l2_systems_apartment}sys({customers_apartment}고객)")
+                    st.write(f"[사업장정전] {nsc}/{busan_station} {apartment_name} {outage_type} L2*{l2_systems_apartment}sys({customers_apartment}고객)")
 
 
 
