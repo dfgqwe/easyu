@@ -414,7 +414,14 @@ def moss_page():
     current_date = now.strftime("%y.%m.%d")
 
     # Streamlit 애플리케이션
-    data = {"﻿MOSS BS 발행 HEAD": ["[NOC_광레벨불]", "[NOC_CRC발생]", "[NOC_장비교체]", "[NOC_장비철거]", "[NOC_민원처리]", "[NOC_어댑터교체]", "[NOC_PLK_PSU교체]", "[NOC_PSU교체]", "[NOC_중복장애]", "[NOC_전원OFF]", "[NOC_품질개선]", "[NOC_10G(용량확대)]", "[NOC_자산관리]", "[NOC_점검정비]", "[NOC_BAT(24)]", "[NOC_kernel정비]", [NOC_형상삭제]", "[NOC_전원민원]"]}
+    data = {
+    "﻿MOSS BS 발행 HEAD": [
+        "[NOC_광레벨불]", "[NOC_CRC발생]", "[NOC_장비교체]", "[NOC_장비철거]", "[NOC_민원처리]", "[NOC_어댑터교체]",
+        "[NOC_PLK_PSU교체]", "[NOC_PSU교체]", "[NOC_중복장애]", "[NOC_전원OFF]", "[NOC_품질개선]", "[NOC_10G(용량확대)]",
+        "[NOC_자산관리]", "[NOC_점검정비]", "[NOC_BAT(24)]", "[NOC_kernel정비]", "[NOC_형상삭제]", "[NOC_전원민원]"
+    ]
+}
+}
     df1 = pd.DataFrame(data)
     # 컬럼 이름 확인 및 수정
     df1.columns = df1.columns.str.strip()  # 컬럼 이름에 있는 공백 제거
