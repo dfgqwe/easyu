@@ -421,7 +421,7 @@ def moss_page():
     df1_sorted = df1.sort_values(by=df1["column_name"].str.replace("[NOC_", "", regex=True))
 
     # Streamlit UI
-    st.expander("MOSS BS 발행 HEAD"):
+    with st.expander("MOSS BS 발행 HEAD"):
         st.dataframe(df1_sorted)
 
     # 초기값 설정
