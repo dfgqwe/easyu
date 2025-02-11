@@ -414,58 +414,58 @@ def moss_page():
     current_date = now.strftime("%y.%m.%d")
 
     
-  # 제목과 Expander를 한 줄에 배치하기 위해 st.columns 사용
-col1, col2 = st.columns([3, 2])  # 첫 번째 열은 제목, 두 번째 열은 Expander에 공간을 할당
+    # 제목과 Expander를 한 줄에 배치하기 위해 st.columns 사용
+    col1, col2 = st.columns([3, 2])  # 첫 번째 열은 제목, 두 번째 열은 Expander에 공간을 할당
 
-with col1:
-    st.title("MOSS 회복 문구")
+    with col1:
+        st.title("MOSS 회복 문구")
 
-with col2:
-    # Expander 크기를 줄이기 위한 스타일 추가
-    st.markdown(
-        """
-        <style>
-        .streamlit-expanderHeader {
-            font-size: 14px !important;  /* 제목 크기 줄이기 */
+    with col2:
+        # Expander 크기를 줄이기 위한 스타일 추가
+        st.markdown(
+            """
+            <style>
+            .streamlit-expanderHeader {
+                font-size: 14px !important;  /* 제목 크기 줄이기 */
+            }
+            </style>
+            """, unsafe_allow_html=True
+        )
+        # MOSS BS 발행 HEAD 데이터
+        data = {
+            "MOSS BS 발행 HEAD": [
+                "[NOC_광레벨불]", "[NOC_CRC발생]", "[NOC_장비교체]", "[NOC_장비철거]", "[NOC_민원처리]", "[NOC_어댑터교체]",
+                "[NOC_PLK_PSU교체]", "[NOC_PSU교체]", "[NOC_중복장애]", "[NOC_전원OFF]", "[NOC_품질개선]", "[NOC_10G(용량확대)]",
+                "[NOC_자산관리]", "[NOC_점검정비]", "[NOC_BAT(24)]", "[NOC_kernel정비]", "[NOC_형상삭제]", "[NOC_전원민원]"
+            ]
         }
-        </style>
-        """, unsafe_allow_html=True
-    )
-    # MOSS BS 발행 HEAD 데이터
-    data = {
-        "MOSS BS 발행 HEAD": [
-            "[NOC_광레벨불]", "[NOC_CRC발생]", "[NOC_장비교체]", "[NOC_장비철거]", "[NOC_민원처리]", "[NOC_어댑터교체]",
-            "[NOC_PLK_PSU교체]", "[NOC_PSU교체]", "[NOC_중복장애]", "[NOC_전원OFF]", "[NOC_품질개선]", "[NOC_10G(용량확대)]",
-            "[NOC_자산관리]", "[NOC_점검정비]", "[NOC_BAT(24)]", "[NOC_kernel정비]", "[NOC_형상삭제]", "[NOC_전원민원]"
-        ]
-    }
-    df1 = pd.DataFrame(data)
-
-    # 컬럼 이름 확인 및 수정
-    df1.columns = df1.columns.str.strip()  # 컬럼 이름에 있는 공백 제거
-    df1.columns = df1.columns.str.replace("﻿", "", regex=False)  # 특수문자 제거
-    # 정렬 기준 컬럼 생성
-    df1["정렬기준"] = df1["MOSS BS 발행 HEAD"].str.replace("[NOC_", "", regex=False)
-
-    # 데이터 3열로 나누기
-    with st.expander("MOSS BS 발행 HEAD", expanded=True):  # expander가 펼쳐졌을 때 데이터를 꽉 채우도록 expanded=True 추가
-        cols = st.columns(3)  # 3개의 열로 나누기
-        
-        num_cols = 3
-        items_per_column = len(df1) // num_cols  # 각 열에 들어갈 항목 수
-        
-        for i, col in enumerate(cols):
-            start_idx = i * items_per_column
-            if i == num_cols - 1:  # 마지막 열은 나머지 데이터 모두 출력
-                col_data = df1["MOSS BS 발행 HEAD"][start_idx:]
-            else:
-                col_data = df1["MOSS BS 발행 HEAD"][start_idx:start_idx + items_per_column]
-        
-            # 각 열에 데이터 출력 및 클릭 시 복사
-            for item in col_data:
-                if col.button(f"{item}"):  # 버튼 텍스트는 복사할 내용
-                    pyperclip.copy(item)  # 클립보드에 복사
-                    st.success(f"'{item}'이(가) 클립보드에 복사되었습니다.")  # 사용자에게 알림
+        df1 = pd.DataFrame(data)
+    
+        # 컬럼 이름 확인 및 수정
+        df1.columns = df1.columns.str.strip()  # 컬럼 이름에 있는 공백 제거
+        df1.columns = df1.columns.str.replace("﻿", "", regex=False)  # 특수문자 제거
+        # 정렬 기준 컬럼 생성
+        df1["정렬기준"] = df1["MOSS BS 발행 HEAD"].str.replace("[NOC_", "", regex=False)
+    
+        # 데이터 3열로 나누기
+        with st.expander("MOSS BS 발행 HEAD", expanded=True):  # expander가 펼쳐졌을 때 데이터를 꽉 채우도록 expanded=True 추가
+            cols = st.columns(3)  # 3개의 열로 나누기
+            
+            num_cols = 3
+            items_per_column = len(df1) // num_cols  # 각 열에 들어갈 항목 수
+            
+            for i, col in enumerate(cols):
+                start_idx = i * items_per_column
+                if i == num_cols - 1:  # 마지막 열은 나머지 데이터 모두 출력
+                    col_data = df1["MOSS BS 발행 HEAD"][start_idx:]
+                else:
+                    col_data = df1["MOSS BS 발행 HEAD"][start_idx:start_idx + items_per_column]
+            
+                # 각 열에 데이터 출력 및 클릭 시 복사
+                for item in col_data:
+                    if col.button(f"{item}"):  # 버튼 텍스트는 복사할 내용
+                        pyperclip.copy(item)  # 클립보드에 복사
+                        st.success(f"'{item}'이(가) 클립보드에 복사되었습니다.")  # 사용자에게 알림
   
     # 초기값 설정
     if "user_input" not in st.session_state:
