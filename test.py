@@ -445,7 +445,7 @@ def moss_page():
         
             # 각 열에 데이터 출력 및 클릭 시 복사
             for item in col_data:
-                if col.button(f"복사: {item}"):  # 버튼 텍스트는 복사할 내용
+                if col.button(f"{item}"):  # 버튼 텍스트는 복사할 내용
                     pyperclip.copy(item)  # 클립보드에 복사
                     st.success(f"'{item}'이(가) 클립보드에 복사되었습니다.")  # 사용자에게 알림
   
@@ -796,27 +796,30 @@ def moss_page():
 
                     
             if "어댑터 전/후 작성" in selected_actions:
-                col1, col2 = st.columns(2)
-                with col1:
-                    before_adapter = st.text_input("교체 전 어댑터:")
+    col1, col2 = st.columns(2)
+    with col1:
+        before_adapter = st.text_input("교체 전 어댑터:")
 
-                with col2:
-                    after_adapter = st.text_input("교체 후 어댑터:")
+    with col2:
+        after_adapter = st.text_input("교체 후 어댑터:")
 
-                if before_adapter or after_adapter:
-                    if before_adapter:
-                        adapter_info += f"교체 전 어댑터: {before_adapter}"
-                    if after_adapter:
-                        if before_adapter:
-                            adapter_info += " / "
-                        adapter_info += f"교체 후 어댑터: {after_adapter}"
-                    adapter_info = f" ({adapter_info.strip()})"
+    if before_adapter or after_adapter:
+        if before_adapter and after_adapter:
+            # "교체 전 어댑터"와 "교체 후 어댑터"를 "교체전 > 교체후" 형식으로 출력
+            adapter_info = f"교체전 > 교체후: {before_adapter} > {after_adapter}"
+        elif before_adapter:
+            adapter_info = f"교체전: {before_adapter}"
+        elif after_adapter:
+            adapter_info = f"교체후: {after_adapter}"
+
+    # 어댑터 정보 출력
+    adapter_info = f" ({adapter_info.strip()})"
 
         # user_input에 어댑터 정보를 추가하여 출력
         results.append(formatted_output + adapter_info)
         results.extend(db_results)
         results.extend(기타_results)
-        results.append("수고하셨습니다")
+        
 
 
         # 출동예방_actions 처리
@@ -873,7 +876,9 @@ def moss_page():
         if formatted_locations:
             results.append(f"[{current_date}]<현장> {formatted_locations}")
 
+        results.append("수고하셨습니다")
 
+        
         col1, col2 = st.columns(2)
         
         with col1:
