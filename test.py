@@ -415,12 +415,22 @@ def moss_page():
 
     
     # 제목과 Expander를 한 줄에 배치하기 위해 st.columns 사용
-    col1, col2 = st.columns([1, 4])  # 첫 번째 열은 제목, 두 번째 열은 Expander에 공간을 할당
+    col1, col2 = st.columns([3, 2])  # 첫 번째 열은 제목, 두 번째 열은 Expander에 공간을 할당
     
     with col1:
         st.title("MOSS 회복 문구")
         
     with col2:
+        # Expander 크기를 줄이기 위한 스타일 추가
+        st.markdown(
+            """
+            <style>
+            .streamlit-expanderHeader {
+                font-size: 14px !important;  /* 제목 크기 줄이기 */
+            }
+            </style>
+            """, unsafe_allow_html=True
+        )
         df1 = pd.read_csv('bs_head.csv')
         # Streamlit 애플리케이션
         data = {
