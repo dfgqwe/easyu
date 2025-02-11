@@ -414,8 +414,12 @@ def moss_page():
     current_date = now.strftime("%y.%m.%d")
 
     # Streamlit 애플리케이션
-    with st.expander('MOSS BS 발행 HEAD'):
-        st.dataframe(df1)
+    # "NOC_" 뒤의 값만 추출하여 정렬
+    df1_sorted = df1.sort_values(by=df1["MOSS BS 발행 HEAD"].str.replace("NOC_", "", regex=True))
+
+    # Streamlit UI
+    st.expander("MOSS BS 발행 HEAD"):
+        st.dataframe(df1_sorted)
 
     # 초기값 설정
     if "user_input" not in st.session_state:
