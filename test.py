@@ -1030,7 +1030,7 @@ def moss_page():
         with col3:
             if st.button('MOSS 회복 코드 표준'):
                 st.session_state['output_active'] = False
-                st.session_state['button_clicked1'] = not st.session_state['button_clicked']
+                st.session_state['button_clicked1'] = not st.session_state['button_clicked1']
                 st.session_state['reset_active'] = False
 
         if st.session_state['button_clicked1']:
