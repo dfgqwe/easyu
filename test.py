@@ -417,11 +417,9 @@ def moss_page():
     data = {"﻿MOSS BS 발행 HEAD": ["[NOC_광레벨불]", "[NOC_CRC발생]", "[NOC_중복장애]", "[NOC_장비철거]", "[NOC_PLK_PSU교체]", "[NOC_PSU교체]", "[NOC_전원OFF]", "[NOC_장비교체]", "[NOC_품질개선]", "[NOC_10G(용량확대)]", "[NOC_자산관리]", "[NOC_점검정비]", "[NOC_BAT(24)]", "[NOC_kernel정비]", "[NOC_민원처리]", "[NOC_어댑터교체]", "[NOC_전원민원]"]}
     df1 = pd.DataFrame(data)
 
-    # "NOC_" 뒤의 값만 추출하여 정렬
-    df1["정렬기준"] = df1["MOSS BS 발행 HEAD"].str.replace("NOC_", "", regex=False)  # 대괄호 제거
+    df1["정렬기준"] = df1["MOSS BS 발행 HEAD"].str.replace("[NOC_", "", regex=False)
     df1_sorted = df1.sort_values(by="정렬기준").drop(columns=["정렬기준"])
 
-    # Streamlit UI
     with st.expander("MOSS BS 발행 HEAD"):
         st.dataframe(df1_sorted)
 
