@@ -1161,6 +1161,7 @@ def command_page():
      .command-container {
            display: flex;
            gap: 10px;
+           flex-wrap: wrap;  /* 컨테이너가 한 줄로 되지 않게 설정 */
        }
       .command-item {
            flex: 1;
@@ -1184,6 +1185,9 @@ def command_page():
         selection = "전체"
     else:
         selection = st.radio("선택", ["전체", "특정onu"])
+
+    # Create container with flex layout for the results
+    st.markdown('<div class="command-container">', unsafe_allow_html=True)
 
     # IP 입력에 대한 결과 출력
     if olt_ip_address:
@@ -1283,6 +1287,9 @@ def command_page():
             <textarea id="result_area_port_slot" style="display:none;">{result_text_port_slot}</textarea>
             {copy_button_port_slot}
         """, height=150)
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
 
 
 
