@@ -1158,14 +1158,18 @@ def command_page():
     .stButton {
         margin: 0;
     }
-     .command-container {
-           display: flex;
-           gap: 10px;
-           flex-wrap: wrap;  /* 컨테이너가 한 줄로 되지 않게 설정 */
-       }
-      .command-item {
-           flex: 1;
-       }
+    .command-container {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;  /* 컨테이너가 한 줄로 되지 않게 설정 */
+    }
+    .half-container {
+        flex: 1;
+        min-width: 48%;  /* 각 영역의 최소 너비를 48%로 설정 */
+    }
+    .command-item {
+        flex: 1;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -1196,42 +1200,46 @@ def command_page():
         else:  # 유비쿼스
             result_text_ip = f"sh arp pon | inc {olt_ip_address}"
 
-        st.text_area("IP 입력 결과", result_text_ip, height=100)
+        # IP 입력 결과를 왼쪽 영역에 출력
+        with st.container():
+            st.markdown('<div class="half-container">', unsafe_allow_html=True)
+            st.text_area("IP 입력 결과", result_text_ip, height=100)
 
-        copy_button_ip = """
-        <button onclick="copyToClipboard('result_area_ip')">복사하기</button>
-        <script>
-        function copyToClipboard(elementId) {
-            var copyText = document.getElementById(elementId);
-            navigator.clipboard.writeText(copyText.value).then(function() {
-                var alertBox = document.createElement('div');
-                alertBox.textContent = '복사되었습니다!';
-                alertBox.style.position = 'fixed';
-                alertBox.style.bottom = '10px';
-                alertBox.style.left = '50%';
-                alertBox.style.transform = 'translateX(-50%)';
-                alertBox.style.backgroundColor = '#4CAF50';
-                alertBox.style.color = 'white';
-                alertBox.style.padding = '10px';
-                alertBox.style.borderRadius = '5px';
-                document.body.appendChild(alertBox);
+            copy_button_ip = """
+            <button onclick="copyToClipboard('result_area_ip')">복사하기</button>
+            <script>
+            function copyToClipboard(elementId) {
+                var copyText = document.getElementById(elementId);
+                navigator.clipboard.writeText(copyText.value).then(function() {
+                    var alertBox = document.createElement('div');
+                    alertBox.textContent = '복사되었습니다!';
+                    alertBox.style.position = 'fixed';
+                    alertBox.style.bottom = '10px';
+                    alertBox.style.left = '50%';
+                    alertBox.style.transform = 'translateX(-50%)';
+                    alertBox.style.backgroundColor = '#4CAF50';
+                    alertBox.style.color = 'white';
+                    alertBox.style.padding = '10px';
+                    alertBox.style.borderRadius = '5px';
+                    document.body.appendChild(alertBox);
 
-                // 5초 후 알림 제거
-                setTimeout(function() {
-                    alertBox.remove();
-                }, 3000);
-            }, function(err) {
-                alert('복사 실패: ', err);
-            });
-        }
-        </script>
-        """
+                    // 5초 후 알림 제거
+                    setTimeout(function() {
+                        alertBox.remove();
+                    }, 3000);
+                }, function(err) {
+                    alert('복사 실패: ', err);
+                });
+            }
+            </script>
+            """
 
-        # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
-        components.html(f"""
-            <textarea id="result_area_ip" style="display:none;">{result_text_ip}</textarea>
-            {copy_button_ip}
-        """, height=150)
+            # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
+            components.html(f"""
+                <textarea id="result_area_ip" style="display:none;">{result_text_ip}</textarea>
+                {copy_button_ip}
+            """, height=150)
+            st.markdown('</div>', unsafe_allow_html=True)
 
     # Port/Slot 입력에 대한 결과 출력
     if port_slot:
@@ -1250,45 +1258,49 @@ def command_page():
                 sh pon stats onu-crc {port_slot}
                 """
 
-        st.text_area("Port/Slot 입력 결과", result_text_port_slot, height=100)
+        # Port/Slot 입력 결과를 오른쪽 영역에 출력
+        with st.container():
+            st.markdown('<div class="half-container">', unsafe_allow_html=True)
+            st.text_area("Port/Slot 입력 결과", result_text_port_slot, height=100)
 
-        # 복사 버튼 추가
-        copy_button_port_slot = """
-        <button onclick="copyToClipboard('result_area_port_slot')">복사하기</button>
-        <script>
-        function copyToClipboard(elementId) {
-            var copyText = document.getElementById(elementId);
-            navigator.clipboard.writeText(copyText.value).then(function() {
-                var alertBox = document.createElement('div');
-                alertBox.textContent = '복사되었습니다!';
-                alertBox.style.position = 'fixed';
-                alertBox.style.bottom = '10px';
-                alertBox.style.left = '50%';
-                alertBox.style.transform = 'translateX(-50%)';
-                alertBox.style.backgroundColor = '#4CAF50';
-                alertBox.style.color = 'white';
-                alertBox.style.padding = '10px';
-                alertBox.style.borderRadius = '5px';
-                document.body.appendChild(alertBox);
+            copy_button_port_slot = """
+            <button onclick="copyToClipboard('result_area_port_slot')">복사하기</button>
+            <script>
+            function copyToClipboard(elementId) {
+                var copyText = document.getElementById(elementId);
+                navigator.clipboard.writeText(copyText.value).then(function() {
+                    var alertBox = document.createElement('div');
+                    alertBox.textContent = '복사되었습니다!';
+                    alertBox.style.position = 'fixed';
+                    alertBox.style.bottom = '10px';
+                    alertBox.style.left = '50%';
+                    alertBox.style.transform = 'translateX(-50%)';
+                    alertBox.style.backgroundColor = '#4CAF50';
+                    alertBox.style.color = 'white';
+                    alertBox.style.padding = '10px';
+                    alertBox.style.borderRadius = '5px';
+                    document.body.appendChild(alertBox);
 
-                // 5초 후 알림 제거
-                setTimeout(function() {
-                    alertBox.remove();
-                }, 3000);
-            }, function(err) {
-                alert('복사 실패: ', err);
-            });
-        }
-        </script>
-        """
+                    // 5초 후 알림 제거
+                    setTimeout(function() {
+                        alertBox.remove();
+                    }, 3000);
+                }, function(err) {
+                    alert('복사 실패: ', err);
+                });
+            }
+            </script>
+            """
 
-        # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
-        components.html(f"""
-            <textarea id="result_area_port_slot" style="display:none;">{result_text_port_slot}</textarea>
-            {copy_button_port_slot}
-        """, height=150)
+            # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
+            components.html(f"""
+                <textarea id="result_area_port_slot" style="display:none;">{result_text_port_slot}</textarea>
+                {copy_button_port_slot}
+            """, height=150)
+            st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True)
+
 
 
 
