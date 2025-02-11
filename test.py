@@ -414,8 +414,11 @@ def moss_page():
     current_date = now.strftime("%y.%m.%d")
 
     # Streamlit 애플리케이션
+    data = {"﻿MOSS BS 발행 HEAD": ["[NOC_광레벨불]", "[NOC_CRC발생]", "[NOC_중복장애]", "[NOC_장비철거]", "[NOC_PLK_PSU교체]", "[NOC_PSU교체]", "[NOC_전원OFF]", "[NOC_장비교체]", "[NOC_품질개선]", "[NOC_10G(용량확대)]", "[NOC_자산관리]", "[NOC_점검정비]", "[NOC_BAT(24)]", "[NOC_kernel정비]", "[NOC_민원처리]", "[NOC_어댑터교체]", "[NOC_전원민원]"]}
+    df1 = pd.DataFrame(data)
+
     # "NOC_" 뒤의 값만 추출하여 정렬
-    df1_sorted = df1.sort_values(by=df1["MOSS BS 발행 HEAD"].str.replace("NOC_", "", regex=True))
+    df1_sorted = df1.sort_values(by=df1["column_name"].str.replace("[NOC_", "", regex=True))
 
     # Streamlit UI
     st.expander("MOSS BS 발행 HEAD"):
