@@ -1163,11 +1163,11 @@ def command_page():
     unsafe_allow_html=True
     )
 
-    # 장비 선택
-    content_option = st.radio("장비선택", ["", "동원", "유비쿼스"])
-
     # IP 입력란 생성 (필수는 아니므로 없을 수도 있음)
     olt_ip_address = st.text_input("IP 입력", "")
+
+    # 장비 선택
+    content_option = st.radio("장비선택", ["", "동원", "유비쿼스"])
 
     # Port/Slot 입력
     port_slot = st.text_input("Port/Slot (형식: 1/3)", "")
