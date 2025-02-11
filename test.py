@@ -417,27 +417,25 @@ def moss_page():
     data = {"﻿MOSS BS 발행 HEAD": ["[NOC_광레벨불]", "[NOC_CRC발생]", "[NOC_장비교체]", "[NOC_장비철거]", "[NOC_민원처리]", "[NOC_어댑터교체]", "[NOC_PLK_PSU교체]", "[NOC_PSU교체]", "[NOC_중복장애]", "[NOC_전원OFF]", "[NOC_품질개선]", "[NOC_10G(용량확대)]", "[NOC_자산관리]", "[NOC_점검정비]", "[NOC_BAT(24)]", "[NOC_kernel정비]", "[NOC_전원민원]"]}
     df1 = pd.DataFrame(data)
 
-    # 컬럼 이름 확인 및 수정
-    df1.columns = df1.columns.str.strip()  # 컬럼 이름에 있는 공백 제거
-    df1.columns = df1.columns.str.replace("﻿", "", regex=False)  # 특수문자 제거
-
     # 정렬 기준 컬럼 생성
     df1["정렬기준"] = df1["MOSS BS 발행 HEAD"].str.replace("[NOC_", "", regex=False)
 
-    # Streamlit UI 표시
+    # 데이터 2열로 나누기
     with st.expander("MOSS BS 발행 HEAD"):
-        st.dataframe(df1, use_container_width=True)
-    
-        # 2개의 열로 나누기
         cols = st.columns(2)
     
-        # 5개씩 나누어 각 열에 표시
-        for i in range(0, len(df1), 5):
-            for j, col in enumerate(cols):
-                start_idx = i + j * (len(df1) // 2)
-                end_idx = i + (j + 1) * (len(df1) // 2)
-                subset = df1.iloc[start_idx:end_idx]
-                col.write(subset["MOSS BS 발행 HEAD"].values)
+        # 각 열에 5개씩 출력하기
+        half_len = len(df1) // 2
+        col1_data = df1["MOSS BS 발행 HEAD"][:half_len]  # 첫 번째 열 데이터
+        col2_data = df1["MOSS BS 발행 HEAD"][half_len:]  # 두 번째 열 데이터
+    
+        # 첫 번째 열에 데이터 출력
+        for item in col1_data:
+            cols[0].write(item)
+    
+        # 두 번째 열에 데이터 출력
+        for item in col2_data:
+            cols[1].write(item)
 
     
     # 초기값 설정
