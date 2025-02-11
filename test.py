@@ -441,7 +441,7 @@ def moss_page():
 
     with col2:
         if st.button('MOSS BS 발행 HEAD'):
-            st.empty()  # 여기서 공백을 추가
+            st.markdown("<br>" * 5, unsafe_allow_html=True)
             st.session_state['button_clicked'] = not st.session_state['button_clicked']  # 버튼 클릭 상태 변경
     
     # 버튼 클릭 시 데이터프레임을 화면에 전체로 보이도록 설정
