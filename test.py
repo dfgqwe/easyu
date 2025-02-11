@@ -460,9 +460,7 @@ def moss_page():
                 }
                 </style>
                 """, unsafe_allow_html=True
-            )
-            st.dataframe(df1)
-    
+            )    
     # 버튼을 클릭한 후 3열로 나누어 데이터 표시
     if st.session_state['button_clicked']:
         # 3개의 열로 나누기
