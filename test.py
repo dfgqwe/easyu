@@ -423,7 +423,18 @@ def moss_page():
     # Streamlit UI 표시
     with st.expander("MOSS BS 발행 HEAD"):
         st.dataframe(df1, use_container_width=True)
+        # 2개의 열로 나누기
+        cols = st.columns(2)
+    
+        # 5개씩 나누어 각 열에 표시
+        for i in range(0, len(df1), 5):
+            for j, col in enumerate(cols):
+                start_idx = i + j * (len(df1) // 2)
+                end_idx = i + (j + 1) * (len(df1) // 2)
+                subset = df1.iloc[start_idx:end_idx]
+                col.write(subset["MOSS BS 발행 HEAD"].values)
 
+    
     # 초기값 설정
     if "user_input" not in st.session_state:
         st.session_state.user_input = ""
