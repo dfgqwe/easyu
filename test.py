@@ -243,8 +243,11 @@ B_S_head_formats = {
 
 @st.cache_data
 def get_format(text):
-    matched_formats = [formats[keyword] for keyword in formats if keyword in text]
+    # 공백을 제거한 버전으로 비교
+    text_without_spaces = text.replace(" ", "")
+    matched_formats = [formats[keyword] for keyword in formats if keyword.replace(" ", "") in text_without_spaces]
     return matched_formats[-1] if matched_formats else "[기타]"
+
 
 
 # Load the CSV file
@@ -406,48 +409,54 @@ def moss_page():
         """,
         unsafe_allow_html=True
     )
-    st.title("MOSS 회복 문구")
-
-    df1 = pd.read_csv('bs_head.csv')
     timezone = pytz.timezone('Asia/Seoul')  # 한국 시간대로 설정
     now = datetime.now(timezone)
     current_date = now.strftime("%y.%m.%d")
 
-    # Streamlit 애플리케이션
-    data = {
-    "﻿MOSS BS 발행 HEAD": [
-        "[NOC_광레벨불]", "[NOC_CRC발생]", "[NOC_장비교체]", "[NOC_장비철거]", "[NOC_민원처리]", "[NOC_어댑터교체]",
-        "[NOC_PLK_PSU교체]", "[NOC_PSU교체]", "[NOC_중복장애]", "[NOC_전원OFF]", "[NOC_품질개선]", "[NOC_10G(용량확대)]",
-        "[NOC_자산관리]", "[NOC_점검정비]", "[NOC_BAT(24)]", "[NOC_kernel정비]", "[NOC_형상삭제]", "[NOC_전원민원]"
-    ]
-}
-    df1 = pd.DataFrame(data)
-    # 컬럼 이름 확인 및 수정
-    df1.columns = df1.columns.str.strip()  # 컬럼 이름에 있는 공백 제거
-    df1.columns = df1.columns.str.replace("﻿", "", regex=False)  # 특수문자 제거
-    # 정렬 기준 컬럼 생성
-    df1["정렬기준"] = df1["MOSS BS 발행 HEAD"].str.replace("[NOC_", "", regex=False)
-
-    # 데이터 3열로 나누기
-    with st.expander("MOSS BS 발행 HEAD"):
-        cols = st.columns(3)
     
-        # 각 열에 데이터를 나누어 출력하기
-        num_cols = 3
-        items_per_column = len(df1) // num_cols  # 각 열에 들어갈 항목 수
+    # 제목과 Expander를 한 줄에 배치하기 위해 st.columns 사용
+    col1, col2 = st.columns([1, 4])  # 첫 번째 열은 제목, 두 번째 열은 Expander에 공간을 할당
     
-        for i, col in enumerate(cols):
-            start_idx = i * items_per_column
-            if i == num_cols - 1:  # 마지막 열은 나머지 데이터 모두 출력
-                col_data = df1["MOSS BS 발행 HEAD"][start_idx:]
-            else:
-                col_data = df1["MOSS BS 발행 HEAD"][start_idx:start_idx + items_per_column]
+    with col1:
+        st.title("MOSS 회복 문구")
         
-            # 각 열에 데이터 출력 및 클릭 시 복사
-            for item in col_data:
-                if col.button(f"{item}"):  # 버튼 텍스트는 복사할 내용
-                    pyperclip.copy(item)  # 클립보드에 복사
-                    st.success(f"'{item}'이(가) 클립보드에 복사되었습니다.")  # 사용자에게 알림
+    with col2:
+        df1 = pd.read_csv('bs_head.csv')
+        # Streamlit 애플리케이션
+        data = {
+        "﻿MOSS BS 발행 HEAD": [
+            "[NOC_광레벨불]", "[NOC_CRC발생]", "[NOC_장비교체]", "[NOC_장비철거]", "[NOC_민원처리]", "[NOC_어댑터교체]",
+            "[NOC_PLK_PSU교체]", "[NOC_PSU교체]", "[NOC_중복장애]", "[NOC_전원OFF]", "[NOC_품질개선]", "[NOC_10G(용량확대)]",
+            "[NOC_자산관리]", "[NOC_점검정비]", "[NOC_BAT(24)]", "[NOC_kernel정비]", "[NOC_형상삭제]", "[NOC_전원민원]"
+        ]
+    }
+        df1 = pd.DataFrame(data)
+        # 컬럼 이름 확인 및 수정
+        df1.columns = df1.columns.str.strip()  # 컬럼 이름에 있는 공백 제거
+        df1.columns = df1.columns.str.replace("﻿", "", regex=False)  # 특수문자 제거
+        # 정렬 기준 컬럼 생성
+        df1["정렬기준"] = df1["MOSS BS 발행 HEAD"].str.replace("[NOC_", "", regex=False)
+    
+        # 데이터 3열로 나누기
+        with st.expander("MOSS BS 발행 HEAD"):
+            cols = st.columns(3)
+        
+            # 각 열에 데이터를 나누어 출력하기
+            num_cols = 3
+            items_per_column = len(df1) // num_cols  # 각 열에 들어갈 항목 수
+        
+            for i, col in enumerate(cols):
+                start_idx = i * items_per_column
+                if i == num_cols - 1:  # 마지막 열은 나머지 데이터 모두 출력
+                    col_data = df1["MOSS BS 발행 HEAD"][start_idx:]
+                else:
+                    col_data = df1["MOSS BS 발행 HEAD"][start_idx:start_idx + items_per_column]
+            
+                # 각 열에 데이터 출력 및 클릭 시 복사
+                for item in col_data:
+                    if col.button(f"{item}"):  # 버튼 텍스트는 복사할 내용
+                        pyperclip.copy(item)  # 클립보드에 복사
+                        st.success(f"'{item}'이(가) 클립보드에 복사되었습니다.")  # 사용자에게 알림
   
     # 초기값 설정
     if "user_input" not in st.session_state:
@@ -806,7 +815,7 @@ def moss_page():
                 if before_adapter or after_adapter:
                     if before_adapter and after_adapter:
                         # "교체 전 어댑터"와 "교체 후 어댑터"를 "교체전 > 교체후" 형식으로 출력
-                        adapter_info = f"교체전 > 교체후: {before_adapter} > {after_adapter}"
+                        adapter_info = f"{before_adapter} > {after_adapter}"
                     elif before_adapter:
                         adapter_info = f"교체전: {before_adapter}"
                     elif after_adapter:
