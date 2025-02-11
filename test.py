@@ -440,8 +440,9 @@ def moss_page():
             # 각 열에 데이터 출력 및 클릭 시 복사
             for item in col_data:
                 if col.button(f"복사: {item}"):  # 버튼 텍스트는 복사할 내용
-
-    
+                    pyperclip.copy(item)  # 클립보드에 복사
+                    st.success(f"'{item}'이(가) 클립보드에 복사되었습니다.")  # 사용자에게 알림
+  
     # 초기값 설정
     if "user_input" not in st.session_state:
         st.session_state.user_input = ""
