@@ -449,24 +449,25 @@ def moss_page():
     
         # 데이터 3열로 나누기
         with st.expander("MOSS BS 발행 HEAD"):
-            cols = st.columns(3)
-        
-            # 각 열에 데이터를 나누어 출력하기
-            num_cols = 3
-            items_per_column = len(df1) // num_cols  # 각 열에 들어갈 항목 수
-        
-            for i, col in enumerate(cols):
-                start_idx = i * items_per_column
-                if i == num_cols - 1:  # 마지막 열은 나머지 데이터 모두 출력
-                    col_data = df1["MOSS BS 발행 HEAD"][start_idx:]
-                else:
-                    col_data = df1["MOSS BS 발행 HEAD"][start_idx:start_idx + items_per_column]
+            with st.container():
+                cols = st.columns(3)
             
-                # 각 열에 데이터 출력 및 클릭 시 복사
-                for item in col_data:
-                    if col.button(f"{item}"):  # 버튼 텍스트는 복사할 내용
-                        pyperclip.copy(item)  # 클립보드에 복사
-                        st.success(f"'{item}'이(가) 클립보드에 복사되었습니다.")  # 사용자에게 알림
+                # 각 열에 데이터를 나누어 출력하기
+                num_cols = 3
+                items_per_column = len(df1) // num_cols  # 각 열에 들어갈 항목 수
+            
+                for i, col in enumerate(cols):
+                    start_idx = i * items_per_column
+                    if i == num_cols - 1:  # 마지막 열은 나머지 데이터 모두 출력
+                        col_data = df1["MOSS BS 발행 HEAD"][start_idx:]
+                    else:
+                        col_data = df1["MOSS BS 발행 HEAD"][start_idx:start_idx + items_per_column]
+                
+                    # 각 열에 데이터 출력 및 클릭 시 복사
+                    for item in col_data:
+                        if col.button(f"{item}"):  # 버튼 텍스트는 복사할 내용
+                            pyperclip.copy(item)  # 클립보드에 복사
+                            st.success(f"'{item}'이(가) 클립보드에 복사되었습니다.")  # 사용자에게 알림
   
     # 초기값 설정
     if "user_input" not in st.session_state:
