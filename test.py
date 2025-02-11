@@ -437,7 +437,7 @@ def moss_page():
     col1, col2 = st.columns([3, 2])  # 첫 번째 열은 제목, 두 번째 열은 Expander에 공간을 할당
 
     with col1:
-        st.header("MOSS 회복 문구")
+        st.title("MOSS 회복 문구")
 
     with col2:
         st.markdown(
@@ -1065,7 +1065,7 @@ def moss_page():
 
 
 def worksync_page():
-    st.title("Worksync")
+    st.ㅍㅍ("Worksync")
 
     # 데이터 파일 불러오기
     work = pd.read_csv("ws_data.csv")
