@@ -418,7 +418,7 @@ def moss_page():
     df1 = pd.DataFrame(data)
 
     # "NOC_" 뒤의 값만 추출하여 정렬
-    df1_sorted = df1.sort_values(by=df1["column_name"].str.replace("[NOC_", "", regex=True))
+    df1_sorted = df1.sort_values(by=df1["MOSS BS 발행 HEAD"].str.replace("[NOC_", "", regex=True))
 
     # Streamlit UI
     with st.expander("MOSS BS 발행 HEAD"):
