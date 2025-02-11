@@ -419,7 +419,8 @@ def moss_page():
 
     df1["정렬기준"] = df1["MOSS BS 발행 HEAD"].str.replace("[NOC_", "", regex=False)
     df1_sorted = df1.sort_values(by="정렬기준").drop(columns=["정렬기준"])
-
+    st.write(df1.columns.tolist())
+    
     with st.expander("MOSS BS 발행 HEAD"):
         st.dataframe(df1_sorted)
 
