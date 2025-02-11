@@ -462,22 +462,7 @@ def moss_page():
                 for item in col_data:
                     # 복사 버튼을 HTML로 만들고, JavaScript 코드 추가
                     copy_button_html = f"""
-                    <style>
-                    .copy-button {{
-                        display: inline-block;
-                        margin: 5px;
-                        padding: 10px 20px;
-                        background-color: #007BFF;
-                        color: white;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;
-                    }}
-                    .copy-button:hover {{
-                        background-color: #0056b3;
-                    }}
-                    </style>
-                    <button class="copy-button" onclick="copyToClipboard('{item}')">{item}</button>
+                    <button onclick="copyToClipboard('{item}')">{item}</button>
                     <script>
                     function copyToClipboard(text) {{
                         navigator.clipboard.writeText(text).then(function() {{
