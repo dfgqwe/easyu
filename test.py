@@ -180,19 +180,14 @@ formats = {
     "침수": "[침수피해]",
     "누수": "[누수피해]",
     "차량": "[차량피해]",
+    "sk": "[타사전환]",
+    "SK": "[타사전환]",
+    "lg": "[타사전환]",
+    "LG": "[타사전환]",
+    "타사이탈": "[타사전환]",
+    "타사 이탈": "[타사전환]",
     "타사전환": "[타사전환]",
     "타사 전환": "[타사전환]",   
-    "익일": "[기타]",
-    "담당조": "[기타]",
-    "OFF": "[기타]",
-    "off": "[기타]",
-    "예정": "[기타]",
-    "재발행": "[기타]",
-    "VOC": "[기타]",
-    "voc": "[기타]",
-    "미정": "[기타]",
-    "불가": "[기타]",
-    "예정": "[기타]",
     "접근불가": "[폐문]",
     "접근 불가": "[폐문]",
     "출입불가": "[폐문]",
@@ -231,10 +226,10 @@ B_S_head_formats = {
     "원인분석(선로)",
     "원인분석(장비)",
     "전기작업 확인(전화)",
+    "DB현행화",
     "FOLLOW추가",
     "출동보류",
     "정전알림이 등록",
-    "DB현행화",
     "DB 삭제 여부",
     "광레벨 확인",
     "어댑터 전/후 작성",
@@ -246,28 +241,10 @@ B_S_head_formats = {
 ]
 
 
-
-
 @st.cache_data
 def get_format(text):
-    matched_formats = [head_format for keyword, head_format in formats.items() if keyword in text]
-    if "[한전정전복구]" in matched_formats and ("[기타]" in matched_formats or "[폐문]" in matched_formats):
-        return "[폐문]" if "[폐문]" in matched_formats else "[기타]"
-    elif "[한전작업]" in matched_formats:
-        return "[한전작업]"
-    elif "[한전고장]" in matched_formats:
-        return "[한전고장]"
-    elif "[일대정전]" in matched_formats:
-        return "[일대정전]"
-    elif "[전원어댑터교체]" in matched_formats:
-        return "[전원어댑터교체]"
-    elif "[사설차단기복구]" in matched_formats:
-        return "[사설차단기복구]"
-    elif "[기타]" in matched_formats or "[폐문]" in matched_formats:
-        return matched_formats[-1]
-    else:
-        selected_formats = [format for format in matched_formats if format not in ["[기타]", "[폐문]"]]
-        return selected_formats[-1] if selected_formats else "[기타]"
+    matched_formats = [formats[keyword] for keyword in formats if keyword in text]
+    return matched_formats[-1] if matched_formats else "[기타]"
 
 
 # Load the CSV file
