@@ -437,7 +437,7 @@ def moss_page():
     col1, col2 = st.columns([3, 2])  # 첫 번째 열은 제목, 두 번째 열은 Expander에 공간을 할당
 
     with col1:
-        st.title("MOSS 회복 문구")
+        st.header("MOSS 회복 문구")
 
     with col2:
         if st.button('MOSS BS 발행 HEAD'):
