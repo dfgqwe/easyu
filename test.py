@@ -441,6 +441,7 @@ def moss_page():
 
     with col2:
         if st.button('MOSS BS 발행 HEAD'):
+            st.empty()  # 여기서 공백을 추가
             st.session_state['button_clicked'] = not st.session_state['button_clicked']  # 버튼 클릭 상태 변경
     
     # 버튼 클릭 시 데이터프레임을 화면에 전체로 보이도록 설정
@@ -461,26 +462,56 @@ def moss_page():
                 </style>
                 """, unsafe_allow_html=True
             )    
-    # 버튼을 클릭한 후 3열로 나누어 데이터 표시
-    if st.session_state['button_clicked']:
-        # 3개의 열로 나누기
-        with st.container():
-            cols = st.columns(3)
-            num_cols = 3
-            items_per_column = len(df1) // num_cols  # 각 열에 들어갈 항목 수
+            # 버튼 클릭 후, 데이터를 3열로 나누어 출력
+            if st.session_state['button_clicked']:
+                with st.container():
+                    cols = st.columns(3)  # 3개의 열로 나누기
+                    num_cols = 3
+                    items_per_column = len(df1) // num_cols  # 각 열에 들어갈 항목 수
             
-            for i, col in enumerate(cols):
-                start_idx = i * items_per_column
-                if i == num_cols - 1:  # 마지막 열은 나머지 데이터 모두 출력
-                    col_data = df1["MOSS BS 발행 HEAD"][start_idx:]
-                else:
-                    col_data = df1["MOSS BS 발행 HEAD"][start_idx:start_idx + items_per_column]
-    
-                # 각 열에 데이터 출력 및 클릭 시 복사
-                for item in col_data:
-                    if col.button(f"{item}"):  # 버튼 텍스트는 복사할 내용
-                        pyperclip.copy(item)  # 클립보드에 복사
-                        st.success(f"'{item}'이(가) 클립보드에 복사되었습니다.")  # 사용자에게 알림
+                    for i, col in enumerate(cols):
+                        start_idx = i * items_per_column
+                        if i == num_cols - 1:  # 마지막 열은 나머지 데이터 모두 출력
+                            col_data = df1["MOSS BS 발행 HEAD"][start_idx:]
+                        else:
+                            col_data = df1["MOSS BS 발행 HEAD"][start_idx:start_idx + items_per_column]
+            
+                        # 각 열에 데이터 출력 및 복사 버튼 생성
+                        for item in col_data:
+                            # 복사 버튼과 JavaScript 코드 추가
+                            copy_button_html = f"""
+                            <button onclick="copyToClipboard('{item}')">복사하기</button>
+                            <script>
+                            function copyToClipboard(text) {{
+                                navigator.clipboard.writeText(text).then(function() {{
+                                    var alertBox = document.createElement('div');
+                                    alertBox.textContent = '복사되었습니다!';
+                                    alertBox.style.position = 'fixed';
+                                    alertBox.style.bottom = '10px';
+                                    alertBox.style.left = '50%';
+                                    alertBox.style.transform = 'translateX(-50%)';
+                                    alertBox.style.backgroundColor = '#4CAF50';
+                                    alertBox.style.color = 'white';
+                                    alertBox.style.padding = '10px';
+                                    alertBox.style.borderRadius = '5px';
+                                    document.body.appendChild(alertBox);
+            
+                                    // 5초 후 알림 제거
+                                    setTimeout(function() {{
+                                        alertBox.remove();
+                                    }}, 3000);
+                                }}, function(err) {{
+                                    alert('복사 실패: ', err);
+                                }});
+                            }}
+                            </script>
+                            """
+            
+                            # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
+                            st.components.v1.html(f"""
+                                <textarea style="display:none;" id="output_area">{item}</textarea>
+                                {copy_button_html}
+                            """, height=50)
   
     # 초기값 설정
     if "user_input" not in st.session_state:
