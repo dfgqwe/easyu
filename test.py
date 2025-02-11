@@ -443,13 +443,16 @@ def moss_page():
         st.markdown(
         """
         <style>
-        .button-style {
-            margin-top: 50px;  /* 원하는 만큼 아래로 내릴 수 있습니다 */
+        .custom-button {
+            margin-top: 50px;  /* 원하는 만큼 버튼 위치를 조정 */
         }
         </style>
         """, unsafe_allow_html=True
     )
-        if st.button('MOSS BS 발행 HEAD', key='moss_button', help="Click to show data", css_class="button-style"):
+    
+        # 버튼을 스타일 적용 후 표시
+        st.markdown('<button class="custom-button">MOSS BS 발행 HEAD</button>', unsafe_allow_html=True)
+        if st.button('MOSS BS 발행 HEAD'):
             st.session_state['button_clicked'] = not st.session_state['button_clicked']
     
     # 버튼 클릭 시 데이터프레임을 화면에 전체로 보이도록 설정
