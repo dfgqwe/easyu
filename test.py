@@ -508,7 +508,7 @@ def moss_page():
                             """
                             
                             # `st.components.v1.html`로 HTML 삽입
-                            col.components.v1.html(copy_button_html, height=50)
+                            st.components.v1.html(copy_button_html, height=50)
   
     # 초기값 설정
     if "user_input" not in st.session_state:
