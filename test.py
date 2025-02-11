@@ -1158,6 +1158,13 @@ def command_page():
     .stButton {
         margin: 0;
     }
+    .command-container {
+        display: flex;
+        gap: 10px;
+    }
+    .command-item {
+        flex: 1;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -1168,7 +1175,7 @@ def command_page():
 
     # 장비 선택
     content_option = st.radio("장비선택", ["", "동원", "유비쿼스"])
-
+    
     # Port/Slot 입력
     port_slot = st.text_input("Port/Slot (형식: 1/3)", "")
     
@@ -1291,6 +1298,7 @@ def command_page():
                 <textarea id="result_area_port_slot" style="display:none;">{result_text_port_slot}</textarea>
                 {copy_button_port_slot}
             """, height=150)
+
 
 
 
