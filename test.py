@@ -447,50 +447,65 @@ def moss_page():
     # 버튼 클릭 시 데이터프레임을 화면에 전체로 보이도록 설정
     if st.session_state['button_clicked']:
         with st.container():
-            cols = st.columns(3)  # 3개의 열로 나누기
-            num_cols = 3
-            items_per_column = len(df1) // num_cols  # 각 열에 들어갈 항목 수
+            # 3열로 나누기 위한 HTML과 CSS 코드
+            copy_button_html = """
+            <style>
+            .button-container {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);  /* 3열로 나누기 */
+                gap: 10px;  /* 버튼 간의 간격 */
+            }
+            .copy-button {
+                padding: 10px;
+                font-size: 14px;
+                cursor: pointer;
+                text-align: center;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+            }
+            </style>
+            <div class="button-container">
+            """
     
-            for i, col in enumerate(cols):
-                start_idx = i * items_per_column
-                if i == num_cols - 1:  # 마지막 열은 나머지 데이터 모두 출력
-                    col_data = df1["MOSS BS 발행 HEAD"][start_idx:]
-                else:
-                    col_data = df1["MOSS BS 발행 HEAD"][start_idx:start_idx + items_per_column]
+            # 각 데이터 항목에 대해 버튼 생성
+            for item in df1["MOSS BS 발행 HEAD"]:
+                copy_button_html += f"""
+                <button class="copy-button" onclick="copyToClipboard('{item}')">{item}</button>
+                """
     
-                # 각 열에 데이터 출력 및 복사 버튼 생성
-                for item in col_data:
-                    # 복사 버튼을 HTML로 만들고, JavaScript 코드 추가
-                    copy_button_html = f"""
-                    <button onclick="copyToClipboard('{item}')">{item}</button>
-                    <script>
-                    function copyToClipboard(text) {{
-                        navigator.clipboard.writeText(text).then(function() {{
-                            var alertBox = document.createElement('div');
-                            alertBox.textContent = '복사되었습니다!';
-                            alertBox.style.position = 'fixed';
-                            alertBox.style.bottom = '10px';
-                            alertBox.style.left = '50%';
-                            alertBox.style.transform = 'translateX(-50%)';
-                            alertBox.style.backgroundColor = '#4CAF50';
-                            alertBox.style.color = 'white';
-                            alertBox.style.padding = '10px';
-                            alertBox.style.borderRadius = '5px';
-                            document.body.appendChild(alertBox);
+            # JavaScript 코드 (클립보드 복사 기능)
+            copy_button_html += """
+            </div>
+            <script>
+            function copyToClipboard(text) {
+                navigator.clipboard.writeText(text).then(function() {
+                    var alertBox = document.createElement('div');
+                    alertBox.textContent = '복사되었습니다!';
+                    alertBox.style.position = 'fixed';
+                    alertBox.style.bottom = '10px';
+                    alertBox.style.left = '50%';
+                    alertBox.style.transform = 'translateX(-50%)';
+                    alertBox.style.backgroundColor = '#4CAF50';
+                    alertBox.style.color = 'white';
+                    alertBox.style.padding = '10px';
+                    alertBox.style.borderRadius = '5px';
+                    document.body.appendChild(alertBox);
     
-                            // 5초 후 알림 제거
-                            setTimeout(function() {{
-                                alertBox.remove();
-                            }}, 3000);
-                        }}, function(err) {{
-                            alert('복사 실패: ', err);
-                        }});
-                    }}
-                    </script>
-                    """
-                    
-                    # 각 열에 버튼을 추가
-                    st.components.v1.html(copy_button_html, height=50)
+                    // 5초 후 알림 제거
+                    setTimeout(function() {
+                        alertBox.remove();
+                    }, 3000);
+                }, function(err) {
+                    alert('복사 실패: ', err);
+                });
+            }
+            </script>
+            """
+    
+            # `st.components.v1.html`로 HTML 삽입
+            st.components.v1.html(copy_button_html, height=300)  # 높이는 적당히 설정
   
     # 초기값 설정
     if "user_input" not in st.session_state:
