@@ -413,6 +413,25 @@ def moss_page():
     now = datetime.now(timezone)
     current_date = now.strftime("%y.%m.%d")
 
+    data = {
+    "MOSS BS 발행 HEAD": [
+        "[NOC_광레벨불]", "[NOC_CRC발생]", "[NOC_장비교체]", "[NOC_장비철거]", "[NOC_민원처리]", "[NOC_어댑터교체]",
+        "[NOC_PLK_PSU교체]", "[NOC_PSU교체]", "[NOC_중복장애]", "[NOC_전원OFF]", "[NOC_품질개선]", "[NOC_10G(용량확대)]",
+        "[NOC_자산관리]", "[NOC_점검정비]", "[NOC_BAT(24)]", "[NOC_kernel정비]", "[NOC_형상삭제]", "[NOC_전원민원]"
+        ]
+    }
+    df1 = pd.DataFrame(data)
+    
+    # 컬럼 이름 확인 및 수정
+    df1.columns = df1.columns.str.strip()  # 컬럼 이름에 있는 공백 제거
+    df1.columns = df1.columns.str.replace("﻿", "", regex=False)  # 특수문자 제거
+    # 정렬 기준 컬럼 생성
+    df1["정렬기준"] = df1["MOSS BS 발행 HEAD"].str.replace("[NOC_", "", regex=False)
+    
+    # 세션 상태 초기화
+    if 'button_clicked' not in st.session_state:
+        st.session_state['button_clicked'] = False
+    
     
     # 제목과 Expander를 한 줄에 배치하기 위해 st.columns 사용
     col1, col2 = st.columns([3, 2])  # 첫 번째 열은 제목, 두 번째 열은 Expander에 공간을 할당
@@ -421,46 +440,34 @@ def moss_page():
         st.title("MOSS 회복 문구")
 
     with col2:
-        # Expander 크기를 줄이기 위한 스타일 추가
-        st.markdown(
-            """
-            <style>
-            .streamlit-expanderHeader {
-                font-size: 14px !important;  /* 제목 크기 줄이기 */
-            }
-            </style>
-            """, unsafe_allow_html=True
-        )
-        # MOSS BS 발행 HEAD 데이터
-        data = {
-            "MOSS BS 발행 HEAD": [
-                "[NOC_광레벨불]", "[NOC_CRC발생]", "[NOC_장비교체]", "[NOC_장비철거]", "[NOC_민원처리]", "[NOC_어댑터교체]",
-                "[NOC_PLK_PSU교체]", "[NOC_PSU교체]", "[NOC_중복장애]", "[NOC_전원OFF]", "[NOC_품질개선]", "[NOC_10G(용량확대)]",
-                "[NOC_자산관리]", "[NOC_점검정비]", "[NOC_BAT(24)]", "[NOC_kernel정비]", "[NOC_형상삭제]", "[NOC_전원민원]"
-            ]
-        }
-        df1 = pd.DataFrame(data)
+        if st.button('MOSS BS 발행 HEAD'):
+            st.session_state['button_clicked'] = not st.session_state['button_clicked']  # 버튼 클릭 상태 변경
     
-        # 컬럼 이름 확인 및 수정
-        df1.columns = df1.columns.str.strip()  # 컬럼 이름에 있는 공백 제거
-        df1.columns = df1.columns.str.replace("﻿", "", regex=False)  # 특수문자 제거
-        # 정렬 기준 컬럼 생성
-        df1["정렬기준"] = df1["MOSS BS 발행 HEAD"].str.replace("[NOC_", "", regex=False)
-    
-        # 데이터 3열로 나누기
-        with st.expander("MOSS BS 발행 HEAD"):  # expander가 펼쳐졌을 때 데이터를 꽉 채우도록 expanded=True 추가
+    # 버튼 클릭 시 데이터프레임을 화면에 전체로 보이도록 설정
+    if st.session_state['button_clicked']:
+        placeholder = st.empty()
+        with placeholder.container():
+            # 전체 화면에 보이도록 스타일 적용
             st.markdown(
-            """
-            <style>
-            .streamlit-expander {
-                height: auto;
-                max-height: none;
-            }
-            </style>
-            """, unsafe_allow_html=True
-        )
-            cols = st.columns(3)  # 3개의 열로 나누기
-            
+                """
+                <style>
+                /* 데이터프레임을 전체 화면으로 보이도록 스타일 조정 */
+                .css-1l02zno {
+                    width: 200%;
+                    max-width: 100%;
+                    height: calc(100vh - 200px); /* 화면 높이에서 200px을 뺀 높이 설정 */
+                    overflow: auto; /* 스크롤이 필요한 경우 스크롤 허용 */
+                }
+                </style>
+                """, unsafe_allow_html=True
+            )
+            st.dataframe(df1)
+    
+    # 버튼을 클릭한 후 3열로 나누어 데이터 표시
+    if st.session_state['button_clicked']:
+        # 3개의 열로 나누기
+        with st.container():
+            cols = st.columns(3)
             num_cols = 3
             items_per_column = len(df1) // num_cols  # 각 열에 들어갈 항목 수
             
@@ -470,7 +477,7 @@ def moss_page():
                     col_data = df1["MOSS BS 발행 HEAD"][start_idx:]
                 else:
                     col_data = df1["MOSS BS 발행 HEAD"][start_idx:start_idx + items_per_column]
-            
+    
                 # 각 열에 데이터 출력 및 클릭 시 복사
                 for item in col_data:
                     if col.button(f"{item}"):  # 버튼 텍스트는 복사할 내용
