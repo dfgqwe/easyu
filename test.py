@@ -1173,226 +1173,90 @@ def command_page():
     # IP 입력란 생성
     olt_ip_address = st.text_input("IP 입력", "")
 
-    # 비밀번호 입력 후에만 Radio 버튼을 표시
+    # 장비 선택
     content_option = st.radio("장비선택", ["", "동원", "유비쿼스"])
 
-    if content_option == "동원":
-        if olt_ip_address:
-            # Create container with flex layout
-            st.markdown('<div class="command-container">', unsafe_allow_html=True)
+    if content_option in ["동원", "유비쿼스"]:
+        # Port/Slot 입력 및 전체/특정 선택
+        port_slot = st.text_input("Port/Slot (형식: 1/3)", "")
+        selection = st.radio("선택", ["전체", "특정onu"])
 
-            # IP 입력에 대한 결과 출력
-            with st.container():
-                result_text_ip = "sh epon ip-macs all all | inc {}".format(olt_ip_address)
-                st.text_area("IP 입력 결과", result_text_ip, height=100)
-
-                copy_button_ip = """
-                <button onclick="copyToClipboard('result_area_ip')">복사하기</button>
-                <script>
-                function copyToClipboard(elementId) {
-                    var copyText = document.getElementById(elementId);
-                    navigator.clipboard.writeText(copyText.value).then(function() {
-                        var alertBox = document.createElement('div');
-                        alertBox.textContent = '복사되었습니다!';
-                        alertBox.style.position = 'fixed';
-                        alertBox.style.bottom = '10px';
-                        alertBox.style.left = '50%';
-                        alertBox.style.transform = 'translateX(-50%)';
-                        alertBox.style.backgroundColor = '#4CAF50';
-                        alertBox.style.color = 'white';
-                        alertBox.style.padding = '10px';
-                        alertBox.style.borderRadius = '5px';
-                        document.body.appendChild(alertBox);
-
-                        // 5초 후 알림 제거
-                        setTimeout(function() {
-                            alertBox.remove();
-                        }, 3000);
-                    }, function(err) {
-                        alert('복사 실패: ', err);
-                    });
-                }
-                </script>
-                """
-
-                # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
-                components.html(f"""
-                    <textarea id="result_area_ip" style="display:none;">{result_text_ip}</textarea>
-                    {copy_button_ip}
-                """, height=150)
-
-            # Port/Slot 입력 및 전체/특정 선택
-            with st.container():
-                port_slot = st.text_input("Port/Slot (형식: 1/3)", "")
-                selection = st.radio("선택", ["전체", "특정onu"])
-
-                if port_slot:
-                    if selection == "전체":
-                        # 전체 선택 시 명령어 구성
-                        result_text_port_slot = f"""
-                        sh epon rssi rx-pwr-periodic {port_slot} all
-                        sh epon onu-ddm {port_slot} all
-                        sh epon crc-monitoring statistics {port_slot} all
-                        """
-                    elif selection == "특정onu":
-                        # 특정 선택 시 명령어 구성
-                        specific_value = st.text_input("onu 입력", "")
-                        if specific_value:
-                            result_text_port_slot = f"""
-                            sh epon rssi rx-pwr-periodic {port_slot} {specific_value}
-                            sh epon onu-ddm {port_slot} {specific_value}
-                            sh epon crc-monitoring statistics {port_slot} {specific_value}
-                            """
-                        else:
-                            result_text_port_slot = "onu를 입력해 주세요."
-
-                    st.text_area("Port/Slot 입력 결과", result_text_port_slot, height=100)
-
-                    copy_button_port_slot = """
-                    <button onclick="copyToClipboard('result_area_port_slot')">복사하기</button>
-                    <script>
-                    function copyToClipboard(elementId) {
-                        var copyText = document.getElementById(elementId);
-                        navigator.clipboard.writeText(copyText.value).then(function() {
-                            var alertBox = document.createElement('div');
-                            alertBox.textContent = '복사되었습니다!';
-                            alertBox.style.position = 'fixed';
-                            alertBox.style.bottom = '10px';
-                            alertBox.style.left = '50%';
-                            alertBox.style.transform = 'translateX(-50%)';
-                            alertBox.style.backgroundColor = '#4CAF50';
-                            alertBox.style.color = 'white';
-                            alertBox.style.padding = '10px';
-                            alertBox.style.borderRadius = '5px';
-                            document.body.appendChild(alertBox);
-
-                            // 5초 후 알림 제거
-                            setTimeout(function() {
-                                alertBox.remove();
-                            }, 3000);
-                        }, function(err) {
-                            alert('복사 실패: ', err);
-                        });
-                    }
-                    </script>
+        if olt_ip_address and port_slot:
+            if selection == "전체":
+                # 전체 선택 시 명령어 구성
+                if content_option == "동원":
+                    result_text_ip_port_slot = f"""
+                    sh epon ip-macs all all | inc {olt_ip_address}
+                    sh epon rssi rx-pwr-periodic {port_slot} all
+                    sh epon onu-ddm {port_slot} all
+                    sh epon crc-monitoring statistics {port_slot} all
                     """
-
-                    # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
-                    components.html(f"""
-                        <textarea id="result_area_port_slot" style="display:none;">{result_text_port_slot}</textarea>
-                        {copy_button_port_slot}
-                    """, height=150)
-
-            st.markdown('</div>', unsafe_allow_html=True)
-
-    if content_option == "유비쿼스":
-        if olt_ip_address:
-            # Create container with flex layout
-            st.markdown('<div class="command-container">', unsafe_allow_html=True)
-
-            # IP 입력에 대한 결과 출력
-            with st.container():
-                result_text_ip = "sh arp pon | inc {}".format(olt_ip_address)
-                st.text_area("IP 입력 결과", result_text_ip, height=100)
-
-                copy_button_ip = """
-                <button onclick="copyToClipboard('result_area_ip')">복사하기</button>
-                <script>
-                function copyToClipboard(elementId) {
-                    var copyText = document.getElementById(elementId);
-                    navigator.clipboard.writeText(copyText.value).then(function() {
-                        var alertBox = document.createElement('div');
-                        alertBox.textContent = '복사되었습니다!';
-                        alertBox.style.position = 'fixed';
-                        alertBox.style.bottom = '10px';
-                        alertBox.style.left = '50%';
-                        alertBox.style.transform = 'translateX(-50%)';
-                        alertBox.style.backgroundColor = '#4CAF50';
-                        alertBox.style.color = 'white';
-                        alertBox.style.padding = '10px';
-                        alertBox.style.borderRadius = '5px';
-                        document.body.appendChild(alertBox);
-
-                        // 5초 후 알림 제거
-                        setTimeout(function() {
-                            alertBox.remove();
-                        }, 3000);
-                    }, function(err) {
-                        alert('복사 실패: ', err);
-                    });
-                }
-                </script>
-                """
-
-                # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
-                components.html(f"""
-                    <textarea id="result_area_ip" style="display:none;">{result_text_ip}</textarea>
-                    {copy_button_ip}
-                """, height=150)
-
-            # Port/Slot 입력 및 전체/특정 선택
-            with st.container():
-                port_slot = st.text_input("Port/Slot (형식: 1/3)", "")
-                selection = st.radio("선택", ["전체", "특정onu"])
-
-                if port_slot:
-                    if selection == "전체":
-                        # 전체 선택 시 명령어 구성
-                        result_text_port_slot = f"""
-                        sh pon topology onu {port_slot}
-                        sh pon onu-ddm {port_slot}
-                        sh pon stats onu-crc {port_slot}
-                        """
-                    elif selection == "특정onu":
-                        # 특정 선택 시 명령어 구성
-                        specific_value = st.text_input("onu 입력", "")
-                        if specific_value:
-                            result_text_port_slot = f"""
-                            sh pon topology onu {port_slot} |inc {port_slot}-{specific_value}
-                            sh pon onu-ddm {port_slot} |inc {port_slot}-{specific_value}
-                            sh pon stats onu-crc {port_slot} |inc {port_slot}-{specific_value}
-                            """
-                        else:
-                            result_text_port_slot = "onu를 입력해 주세요."
-
-                    st.text_area("Port/Slot 입력 결과", result_text_port_slot, height=100)
-
-                    copy_button_port_slot = """
-                    <button onclick="copyToClipboard('result_area_port_slot')">복사하기</button>
-                    <script>
-                    function copyToClipboard(elementId) {
-                        var copyText = document.getElementById(elementId);
-                        navigator.clipboard.writeText(copyText.value).then(function() {
-                            var alertBox = document.createElement('div');
-                            alertBox.textContent = '복사되었습니다!';
-                            alertBox.style.position = 'fixed';
-                            alertBox.style.bottom = '10px';
-                            alertBox.style.left = '50%';
-                            alertBox.style.transform = 'translateX(-50%)';
-                            alertBox.style.backgroundColor = '#4CAF50';
-                            alertBox.style.color = 'white';
-                            alertBox.style.padding = '10px';
-                            alertBox.style.borderRadius = '5px';
-                            document.body.appendChild(alertBox);
-
-                            // 5초 후 알림 제거
-                            setTimeout(function() {
-                                alertBox.remove();
-                            }, 3000);
-                        }, function(err) {
-                            alert('복사 실패: ', err);
-                        });
-                    }
-                    </script>
+                else:  # 유비쿼스
+                    result_text_ip_port_slot = f"""
+                    sh arp pon | inc {olt_ip_address}
+                    sh pon topology onu {port_slot}
+                    sh pon onu-ddm {port_slot}
+                    sh pon stats onu-crc {port_slot}
                     """
+            elif selection == "특정onu":
+                # 특정 onu 선택 시 명령어 구성
+                specific_value = st.text_input("onu 입력", "")
+                if specific_value:
+                    if content_option == "동원":
+                        result_text_ip_port_slot = f"""
+                        sh epon ip-macs all all | inc {olt_ip_address}
+                        sh epon rssi rx-pwr-periodic {port_slot} {specific_value}
+                        sh epon onu-ddm {port_slot} {specific_value}
+                        sh epon crc-monitoring statistics {port_slot} {specific_value}
+                        """
+                    else:  # 유비쿼스
+                        result_text_ip_port_slot = f"""
+                        sh arp pon | inc {olt_ip_address}
+                        sh pon topology onu {port_slot} |inc {port_slot}-{specific_value}
+                        sh pon onu-ddm {port_slot} |inc {port_slot}-{specific_value}
+                        sh pon stats onu-crc {port_slot} |inc {port_slot}-{specific_value}
+                        """
+                else:
+                    result_text_ip_port_slot = "onu를 입력해 주세요."
 
-                    # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
-                    components.html(f"""
-                        <textarea id="result_area_port_slot" style="display:none;">{result_text_port_slot}</textarea>
-                        {copy_button_port_slot}
-                    """, height=150)
+            st.text_area("IP 및 Port/Slot 입력 결과", result_text_ip_port_slot, height=100)
 
-            st.markdown('</div>', unsafe_allow_html=True)
+            # 복사 버튼 추가
+            copy_button_ip_port_slot = """
+            <button onclick="copyToClipboard('result_area_ip_port_slot')">복사하기</button>
+            <script>
+            function copyToClipboard(elementId) {
+                var copyText = document.getElementById(elementId);
+                navigator.clipboard.writeText(copyText.value).then(function() {
+                    var alertBox = document.createElement('div');
+                    alertBox.textContent = '복사되었습니다!';
+                    alertBox.style.position = 'fixed';
+                    alertBox.style.bottom = '10px';
+                    alertBox.style.left = '50%';
+                    alertBox.style.transform = 'translateX(-50%)';
+                    alertBox.style.backgroundColor = '#4CAF50';
+                    alertBox.style.color = 'white';
+                    alertBox.style.padding = '10px';
+                    alertBox.style.borderRadius = '5px';
+                    document.body.appendChild(alertBox);
+
+                    // 5초 후 알림 제거
+                    setTimeout(function() {
+                        alertBox.remove();
+                    }, 3000);
+                }, function(err) {
+                    alert('복사 실패: ', err);
+                });
+            }
+            </script>
+            """
+
+            # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
+            components.html(f"""
+                <textarea id="result_area_ip_port_slot" style="display:none;">{result_text_ip_port_slot}</textarea>
+                {copy_button_ip_port_slot}
+            """, height=150)
+
 
 
 
