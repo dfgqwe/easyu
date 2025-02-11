@@ -1158,15 +1158,6 @@ def command_page():
     .stButton {
         margin: 0;
     }
-    .command-container {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;  /* 컨테이너가 한 줄로 되지 않게 설정 */
-    }
-    .half-container {
-        flex: 1;
-        min-width: 48%;  /* 각 영역의 최소 너비를 48%로 설정 */
-    }
     </style>
     """,
     unsafe_allow_html=True
@@ -1187,19 +1178,17 @@ def command_page():
     else:
         selection = st.radio("선택", ["전체", "특정onu"])
 
-    # Create container with flex layout for the results
-    st.markdown('<div class="command-container">', unsafe_allow_html=True)
+    # 두 개의 열로 나누기
+    col1, col2 = st.columns(2)
 
-    # IP 입력에 대한 결과 출력
-    if olt_ip_address:
-        if content_option == "동원":
-            result_text_ip = f"sh epon ip-macs all all | inc {olt_ip_address}"
-        else:  # 유비쿼스
-            result_text_ip = f"sh arp pon | inc {olt_ip_address}"
+    # IP 입력에 대한 결과 출력 (왼쪽 열)
+    with col1:
+        if olt_ip_address:
+            if content_option == "동원":
+                result_text_ip = f"sh epon ip-macs all all | inc {olt_ip_address}"
+            else:  # 유비쿼스
+                result_text_ip = f"sh arp pon | inc {olt_ip_address}"
 
-        # IP 입력 결과를 왼쪽 영역에 출력
-        with st.container():
-            st.markdown('<div class="half-container">', unsafe_allow_html=True)
             st.text_area("IP 입력 결과", result_text_ip, height=100)
 
             copy_button_ip = """
@@ -1236,28 +1225,36 @@ def command_page():
                 <textarea id="result_area_ip" style="display:none;">{result_text_ip}</textarea>
                 {copy_button_ip}
             """, height=150)
-            st.markdown('</div>', unsafe_allow_html=True)
 
-    # Port/Slot 입력에 대한 결과 출력
-    if port_slot:
-        if selection == "전체":
-            # 전체 선택 시 명령어 구성
-            if content_option == "동원":
-                result_text_port_slot = f"""
-                sh epon rssi rx-pwr-periodic {port_slot} all
-                sh epon onu-ddm {port_slot} all
-                sh epon crc-monitoring statistics {port_slot} all
-                """
-            else:  # 유비쿼스
-                result_text_port_slot = f"""
-                sh pon topology onu {port_slot}
-                sh pon onu-ddm {port_slot}
-                sh pon stats onu-crc {port_slot}
-                """
+    # Port/Slot 입력에 대한 결과 출력 (오른쪽 열)
+    with col2:
+        if port_slot:
+            if selection == "전체":
+                # 전체 선택 시 명령어 구성
+                if content_option == "동원":
+                    result_text_port_slot = f"""
+                    sh epon rssi rx-pwr-periodic {port_slot} all
+                    sh epon onu-ddm {port_slot} all
+                    sh epon crc-monitoring statistics {port_slot} all
+                    """
+                else:  # 유비쿼스
+                    result_text_port_slot = f"""
+                    sh pon topology onu {port_slot}
+                    sh pon onu-ddm {port_slot}
+                    sh pon stats onu-crc {port_slot}
+                    """
+            # 특정 onu 선택 시 명령어 구성 (유비쿼스만)
+            elif selection == "특정onu" and content_option == "유비쿼스":
+                specific_value = st.text_input("onu 입력", "")
+                if specific_value:
+                    result_text_port_slot = f"""
+                    sh pon topology onu {port_slot} |inc {port_slot}-{specific_value}
+                    sh pon onu-ddm {port_slot} |inc {port_slot}-{specific_value}
+                    sh pon stats onu-crc {port_slot} |inc {port_slot}-{specific_value}
+                    """
+                else:
+                    result_text_port_slot = "onu를 입력해 주세요."
 
-        # Port/Slot 입력 결과를 오른쪽 영역에 출력
-        with st.container():
-            st.markdown('<div class="half-container">', unsafe_allow_html=True)
             st.text_area("Port/Slot 입력 결과", result_text_port_slot, height=100)
 
             copy_button_port_slot = """
@@ -1294,12 +1291,6 @@ def command_page():
                 <textarea id="result_area_port_slot" style="display:none;">{result_text_port_slot}</textarea>
                 {copy_button_port_slot}
             """, height=150)
-            st.markdown('</div>', unsafe_allow_html=True)
-
-    st.markdown('</div>', unsafe_allow_html=True)
-
-
-
 
 
 
