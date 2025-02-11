@@ -480,7 +480,7 @@ def moss_page():
                         for item in col_data:
                             # 복사 버튼과 JavaScript 코드 추가
                             copy_button_html = f"""
-                            <button onclick="copyToClipboard('{item}')">복사하기</button>
+                            <button onclick="copyToClipboard('{item}')">{item}</button>
                             <script>
                             function copyToClipboard(text) {{
                                 navigator.clipboard.writeText(text).then(function() {{
@@ -508,10 +508,10 @@ def moss_page():
                             """
             
                             # 결과 텍스트를 textarea로 출력하고 HTML 버튼을 삽입
-                            st.components.v1.html(f"""
+                            col.markdown(f"""
                                 <textarea style="display:none;" id="output_area">{item}</textarea>
                                 {copy_button_html}
-                            """, height=50)
+                            """, unsafe_allow_html=True)
   
     # 초기값 설정
     if "user_input" not in st.session_state:
