@@ -1167,9 +1167,6 @@ def command_page():
         flex: 1;
         min-width: 48%;  /* 각 영역의 최소 너비를 48%로 설정 */
     }
-    .command-item {
-        flex: 1;
-    }
     </style>
     """,
     unsafe_allow_html=True
@@ -1300,6 +1297,7 @@ def command_page():
             st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True)
+
 
 
 
