@@ -444,14 +444,13 @@ def moss_page():
         """
         <style>
         .custom-button {
-            margin-top: 50px;  /* 원하는 만큼 버튼 위치를 조정 */
+            display: none;  /* 버튼 숨기기 */
         }
         </style>
         """, unsafe_allow_html=True
     )
     
-        # 버튼을 스타일 적용 후 표시
-        st.markdown('<button class="custom-button">MOSS BS 발행 HEAD</button>', unsafe_allow_html=True)
+        # 버튼이 실제로 보이지 않도록 하고, 클릭 상태는 st.button으로 추적
         if st.button('MOSS BS 발행 HEAD'):
             st.session_state['button_clicked'] = not st.session_state['button_clicked']
     
