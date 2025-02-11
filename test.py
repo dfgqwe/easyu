@@ -421,7 +421,6 @@ def moss_page():
         "[NOC_자산관리]", "[NOC_점검정비]", "[NOC_BAT(24)]", "[NOC_kernel정비]", "[NOC_형상삭제]", "[NOC_전원민원]"
     ]
 }
-}
     df1 = pd.DataFrame(data)
     # 컬럼 이름 확인 및 수정
     df1.columns = df1.columns.str.strip()  # 컬럼 이름에 있는 공백 제거
