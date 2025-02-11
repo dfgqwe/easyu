@@ -460,7 +460,7 @@ def moss_page():
                 font-size: 14px;
                 cursor: pointer;
                 text-align: center;
-                background-color: #4CAF50;
+                background-color: #343A40;
                 color: white;
                 border: none;
                 border-radius: 5px;
