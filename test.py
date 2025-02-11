@@ -419,7 +419,7 @@ def moss_page():
 
     # 인덱스 번호 제거
     df1 = df1.reset_index(drop=True)
-
+    df1["정렬기준"] = df1["MOSS BS 발행 HEAD"].str.replace("[NOC_", "", regex=False)
     # Streamlit UI 표시
     with st.expander("MOSS BS 발행 HEAD"):
         st.dataframe(df1, use_container_width=True)
