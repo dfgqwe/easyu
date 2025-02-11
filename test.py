@@ -414,7 +414,7 @@ def moss_page():
     current_date = now.strftime("%y.%m.%d")
 
     # Streamlit 애플리케이션
-    data = {"﻿MOSS BS 발행 HEAD": ["[NOC_광레벨불]", "[NOC_CRC발생]", "[NOC_장비교체]", "[NOC_장비철거]", "[NOC_민원처리]", "[NOC_어댑터교체]", "[NOC_PLK_PSU교체]", "[NOC_PSU교체]", "[NOC_중복장애]", "[NOC_전원OFF]", "[NOC_품질개선]", "[NOC_10G(용량확대)]", "[NOC_자산관리]", "[NOC_점검정비]", "[NOC_BAT(24)]", "[NOC_kernel정비]", "[NOC_전원민원]"]}
+    data = {"﻿MOSS BS 발행 HEAD": ["[NOC_광레벨불]", "[NOC_CRC발생]", "[NOC_장비교체]", "[NOC_장비철거]", "[NOC_민원처리]", "[NOC_어댑터교체]", "[NOC_PLK_PSU교체]", "[NOC_PSU교체]", "[NOC_중복장애]", "[NOC_전원OFF]", "[NOC_품질개선]", "[NOC_10G(용량확대)]", "[NOC_자산관리]", "[NOC_점검정비]", "[NOC_BAT(24)]", "[NOC_kernel정비]", [NOC_형상삭제], "[NOC_전원민원]"]}
     df1 = pd.DataFrame(data)
     # 컬럼 이름 확인 및 수정
     df1.columns = df1.columns.str.strip()  # 컬럼 이름에 있는 공백 제거
@@ -422,22 +422,24 @@ def moss_page():
     # 정렬 기준 컬럼 생성
     df1["정렬기준"] = df1["MOSS BS 발행 HEAD"].str.replace("[NOC_", "", regex=False)
 
-    # 데이터 2열로 나누기
+    # 데이터 3열로 나누기
     with st.expander("MOSS BS 발행 HEAD"):
-        cols = st.columns(2)
+        cols = st.columns(3)
     
-        # 각 열에 5개씩 출력하기
-        half_len = len(df1) // 2
-        col1_data = df1["MOSS BS 발행 HEAD"][:half_len]  # 첫 번째 열 데이터
-        col2_data = df1["MOSS BS 발행 HEAD"][half_len:]  # 두 번째 열 데이터
+        # 각 열에 데이터를 나누어 출력하기
+        num_cols = 3
+        items_per_column = len(df1) // num_cols  # 각 열에 들어갈 항목 수
     
-        # 첫 번째 열에 데이터 출력
-        for item in col1_data:
-            cols[0].write(item)
-    
-        # 두 번째 열에 데이터 출력
-        for item in col2_data:
-            cols[1].write(item)
+        for i, col in enumerate(cols):
+            start_idx = i * items_per_column
+            if i == num_cols - 1:  # 마지막 열은 나머지 데이터 모두 출력
+                col_data = df1["MOSS BS 발행 HEAD"][start_idx:]
+            else:
+                col_data = df1["MOSS BS 발행 HEAD"][start_idx:start_idx + items_per_column]
+        
+            # 각 열에 데이터 출력 및 클릭 시 복사
+            for item in col_data:
+                if col.button(f"복사: {item}"):  # 버튼 텍스트는 복사할 내용
 
     
     # 초기값 설정
