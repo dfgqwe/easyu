@@ -414,18 +414,15 @@ def moss_page():
     current_date = now.strftime("%y.%m.%d")
 
     # Streamlit 애플리케이션
-    data = {"﻿MOSS BS 발행 HEAD": ["[NOC_광레벨불]", "[NOC_CRC발생]", "[NOC_중복장애]", "[NOC_장비철거]", "[NOC_PLK_PSU교체]", "[NOC_PSU교체]", "[NOC_전원OFF]", "[NOC_장비교체]", "[NOC_품질개선]", "[NOC_10G(용량확대)]", "[NOC_자산관리]", "[NOC_점검정비]", "[NOC_BAT(24)]", "[NOC_kernel정비]", "[NOC_민원처리]", "[NOC_어댑터교체]", "[NOC_전원민원]"]}
+    data = {"﻿MOSS BS 발행 HEAD": ["[NOC_광레벨불]", "[NOC_CRC발생]", "[NOC_장비교체]", "[NOC_장비철거]", "[NOC_민원처리]", "[NOC_어댑터교체]", "[NOC_PLK_PSU교체]", "[NOC_PSU교체]", "[NOC_중복장애]", "[NOC_전원OFF]", "[NOC_품질개선]", "[NOC_10G(용량확대)]", "[NOC_자산관리]", "[NOC_점검정비]", "[NOC_BAT(24)]", "[NOC_kernel정비]", "[NOC_전원민원]"]}
     df1 = pd.DataFrame(data)
 
-    # 컬럼명 앞뒤 공백 및 BOM 제거
-    df1.columns = df1.columns.str.strip().str.replace("\ufeff", "")
+    # 인덱스 번호 제거
+    df1 = df1.reset_index(drop=True)
 
-    # 정렬 기준 컬럼 생성 및 정렬
-    df1["정렬기준"] = df1["MOSS BS 발행 HEAD"].str.replace("[NOC_", "", regex=False)
-    df1_sorted = df1.sort_values(by="정렬기준").drop(columns=["정렬기준"])
-    
+    # Streamlit UI 표시
     with st.expander("MOSS BS 발행 HEAD"):
-        st.dataframe(df1_sorted)
+        st.dataframe(df1, use_container_width=True)
 
     # 초기값 설정
     if "user_input" not in st.session_state:
