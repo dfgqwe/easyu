@@ -448,7 +448,17 @@ def moss_page():
         df1["정렬기준"] = df1["MOSS BS 발행 HEAD"].str.replace("[NOC_", "", regex=False)
     
         # 데이터 3열로 나누기
-        with st.expander("MOSS BS 발행 HEAD", expanded=True):  # expander가 펼쳐졌을 때 데이터를 꽉 채우도록 expanded=True 추가
+        with st.expander("MOSS BS 발행 HEAD"):  # expander가 펼쳐졌을 때 데이터를 꽉 채우도록 expanded=True 추가
+            st.markdown(
+            """
+            <style>
+            .streamlit-expander {
+                height: auto;
+                max-height: none;
+            }
+            </style>
+            """, unsafe_allow_html=True
+        )
             cols = st.columns(3)  # 3개의 열로 나누기
             
             num_cols = 3
