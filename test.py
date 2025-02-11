@@ -964,8 +964,8 @@ def moss_page():
     
 
        # 버튼 클릭 상태를 저장하는 세션 상태 확인 및 초기화
-        if 'button_clicked' not in st.session_state:
-            st.session_state['button_clicked'] = False
+        if 'button_clicked1' not in st.session_state:
+            st.session_state['button_clicked1'] = False
         if 'output_active' not in st.session_state:
             st.session_state['output_active'] = False
         if 'reset_active' not in st.session_state:
@@ -978,7 +978,7 @@ def moss_page():
         with col1:
             if st.button("출력"):
                 st.session_state['output_active'] = True
-                st.session_state['button_clicked'] = False
+                st.session_state['button_clicked1'] = False
                 st.session_state['reset_active'] = False
 
                 st.text(output_text)  # Print output_text when the "출력" button is pressed
@@ -1023,17 +1023,17 @@ def moss_page():
         with col2:
             if st.button("입력란 초기화"):
                 st.session_state['output_active'] = False
-                st.session_state['button_clicked'] = False
+                st.session_state['button_clicked1'] = False
                 st.session_state['reset_active'] = True
                 clear_text()
 
         with col3:
             if st.button('MOSS 회복 코드 표준'):
                 st.session_state['output_active'] = False
-                st.session_state['button_clicked'] = not st.session_state['button_clicked']
+                st.session_state['button_clicked1'] = not st.session_state['button_clicked']
                 st.session_state['reset_active'] = False
 
-        if st.session_state['button_clicked']:
+        if st.session_state['button_clicked1']:
             placeholder = st.empty()
             with placeholder.container():
                 st.markdown(
