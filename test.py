@@ -440,9 +440,17 @@ def moss_page():
         st.header("MOSS 회복 문구")
 
     with col2:
-        if st.button('MOSS BS 발행 HEAD'):
-            st.markdown("<br>" * 15, unsafe_allow_html=True)
-            st.session_state['button_clicked'] = not st.session_state['button_clicked']  # 버튼 클릭 상태 변경
+        st.markdown(
+        """
+        <style>
+        .button-style {
+            margin-top: 50px;  /* 원하는 만큼 아래로 내릴 수 있습니다 */
+        }
+        </style>
+        """, unsafe_allow_html=True
+    )
+        if st.button('MOSS BS 발행 HEAD', key='moss_button', help="Click to show data", css_class="button-style"):
+            st.session_state['button_clicked'] = not st.session_state['button_clicked']
     
     # 버튼 클릭 시 데이터프레임을 화면에 전체로 보이도록 설정
     if st.session_state['button_clicked']:
