@@ -942,7 +942,7 @@ def moss_page():
             formatted_locations = f"{formatted_locations.strip()} 수정요청"
 
         if formatted_locations:
-            results.append(f"[{current_date}]<현장> {formatted_locations}")
+            results.append(f"<현장> {formatted_locations}")
 
         results.append("수고하셨습니다")
 
