@@ -1055,10 +1055,10 @@ def moss_page():
         # 이 버튼이 클릭되면 다른 버튼이 비활성화 되도록 보장합니다.
         if st.session_state['output_active']:
             # 표시 내용 설정이 끝난 후 초기화된 버튼의 경우
-            st.session_state['button_clicked'] = False
+            st.session_state['button_clicked1'] = False
             st.session_state['reset_active'] = False
         elif st.session_state['reset_active']:
-            st.session_state['button_clicked'] = False
+            st.session_state['button_clicked1'] = False
             st.session_state['output_active'] = False
 
 
