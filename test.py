@@ -489,8 +489,8 @@ def moss_page():
                     </script>
                     """
                     
-                    # `st.components.v1.html`로 HTML 삽입
-                    st.components.v1.html(copy_button_html, height=50)
+                    # 각 열에 버튼을 추가
+                    col.markdown(copy_button_html, unsafe_allow_html=True)
   
     # 초기값 설정
     if "user_input" not in st.session_state:
