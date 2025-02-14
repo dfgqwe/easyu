@@ -246,7 +246,7 @@ def get_format(text):
     # 공백을 제거한 버전으로 비교
     text_without_spaces = text.replace(" ", "")
     matched_formats = [formats[keyword] for keyword in formats if keyword.replace(" ", "") in text_without_spaces]
-    return matched_formats[-1] if matched_formats else "[기타]"
+    return matched_formats if matched_formats else "[기타]"
 
 
 
