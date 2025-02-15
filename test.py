@@ -160,6 +160,7 @@ formats = {
     "UTP": "[업링크_UTP]",
     "utp": "[업링크_UTP]",
     "Utp": "[업링크_UTP]",
+    "유티피피": "[업링크_UTP]",
     "포트 변경": "[업링크_UTP]",
     "포트변경": "[업링크_UTP]",
     "OJC": "[광점퍼코드]",
@@ -243,7 +244,15 @@ B_S_head_formats = {
 
 @st.cache_data
 def get_format(text):
+    # "장비철거"와 "타사전환"을 우선적으로 처리
+    priority_formats = [formats[keyword] for keyword in formats if keyword in text and keyword in ['장비철거', '타사전환']]
+    
+    if priority_formats:
+        return priority_formats[0]  # "장비철거"나 "타사전환"이 있을 경우 첫 번째 항목을 반환
+    
+    # 나머지 포맷을 처리
     matched_formats = [formats[keyword] for keyword in formats if keyword in text]
+    
     return matched_formats[-1] if matched_formats else "[기타]"
 
 
