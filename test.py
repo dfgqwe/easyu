@@ -1250,13 +1250,13 @@ def command_page():
                     sh pon stats onu-crc {port_slot}
                     """
             # 특정 onu 선택 시 명령어 구성 (유비쿼스만)
-            elif selection == "특정onu" and content_option == "유비쿼스":
+            elif selection == "특정onu" and content_option == "동원":
                 specific_value = st.text_input("onu 입력", "")
                 if specific_value:
                     result_text_port_slot = f"""
-                    sh pon topology onu {port_slot} |inc {port_slot}-{specific_value}
-                    sh pon onu-ddm {port_slot} |inc {port_slot}-{specific_value}
-                    sh pon stats onu-crc {port_slot} |inc {port_slot}-{specific_value}
+                    sh epon rssi rx-pwr-periodic {port_slot} |inc {port_slot}-{specific_value}
+                    sh epon onu-ddm {port_slot} |inc {port_slot}-{specific_value}
+                    sh epon crc-monitoring statistics {port_slot} |inc {port_slot}-{specific_value}
                     """
                 else:
                     result_text_port_slot = "onu를 입력해 주세요."
